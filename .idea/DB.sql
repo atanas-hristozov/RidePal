@@ -2,7 +2,8 @@ create table albums
 (
     id         int auto_increment
         primary key,
-    album_name varchar(255) not null
+    album_name varchar(255) not null,
+    album_url  varchar(255) null
 );
 
 create table artists
@@ -26,9 +27,10 @@ create table tracks
     title       varchar(255) not null,
     duration    int          not null,
     artist_id   int          not null,
-    album_id    int          not null,
+    album_id    int          null,
     preview_url varchar(255) null,
     genre_id    int          not null,
+    `rank`      double       null,
     constraint tracks_albums_id_fk
         foreign key (album_id) references albums (id),
     constraint tracks_artists_id_fk
@@ -49,14 +51,25 @@ create table users
     is_admin   tinyint(1)   not null
 );
 
+create table playlist_data
+(
+    playlist_id int auto_increment
+        primary key,
+    user_id     int not null,
+    track_id    int not null,
+    constraint playlist_data_tracks_id_fk
+        foreign key (track_id) references tracks (id),
+    constraint playlist_data_users_id_fk
+        foreign key (user_id) references users (id)
+);
+
 create table playlists
 (
-    id            int auto_increment
-        primary key,
-    user_id       int          not null,
+    id            int          not null,
     title         varchar(255) not null,
+    `rank`        double       null,
     playlist_time int          not null,
-    constraint playlists_users_id_fk
-        foreign key (user_id) references users (id)
+    constraint playlists_playlist_data_playlist_id_fk
+        foreign key (id) references playlist_data (playlist_id)
 );
 
