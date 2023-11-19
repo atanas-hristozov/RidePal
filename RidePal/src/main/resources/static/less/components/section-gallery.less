@@ -1,0 +1,42 @@
+@import 'var.less';
+.gallery{
+    margin-bottom: 50px;
+    h1{
+        color: @color-blue;
+        font-size: 30px;
+        margin: 50px auto 10px;
+        text-transform: uppercase;
+        text-align: center;
+        @media only screen and (min-width: @desktop){
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+    }
+    &-images{
+        column-count: 1;
+        margin: 0 auto;
+        padding: 0 20px;
+        @media only screen and (min-width: @mobile-xs){
+            column-count: 2;
+        }
+        @media only screen and (min-width: @mobile){
+            column-count: 3;
+        }
+        @media only screen and (min-width: @desktop){
+            column-count: 4;
+            max-width: @max-width;
+        }
+        a{
+            img{
+                transition: 0.4s ease-in-out;
+                width: 100%;
+                height: auto;
+                margin-bottom: 10px; 
+            }
+            img:hover{
+                transform: scale(1.05);
+                box-shadow: 0 0 20px @color-blue;
+            }
+        }
+    }
+}

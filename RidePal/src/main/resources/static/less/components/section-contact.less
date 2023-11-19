@@ -1,0 +1,97 @@
+@import 'var.less';
+
+.contacts{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    @media only screen and (min-width: @desktop){
+        margin-top: 20px;
+    }
+    h1{
+        color: @color-blue;
+        font-size: 28px;
+        text-transform: uppercase;
+        text-align: center;
+        font-weight: 500;
+        @media only screen and (min-width: @desktop){
+            font-size: 32px;
+        }
+    }
+    &-info{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 40px;
+        @media only screen and (min-width: @desktop){
+            flex-direction: row;
+            justify-content: flex-start;
+            width: 350px;
+        }
+        i{
+            display: block;
+            width: 70px;
+            height: 70px;
+            font-size: 35px;
+            text-align: center;
+            padding: auto;
+            color: @color-blue;
+            border: 1px solid @color-blue;
+            border-radius: 50%;
+            padding-top: 15px;
+            box-shadow: 0 0 10px @color-blue;
+            margin-bottom: 20px;
+            @media only screen and (min-width: @desktop){
+                margin: 0 20px 0 0;
+                font-size: 20px;
+                width: 50px;
+                height: 50px;
+                padding-top: 13px;
+            }
+            
+        }
+        p{
+            color: @color-blue;
+            font-size: 16px;
+            text-align: center;
+            font-weight: 500;
+            margin: 0;
+            @media only screen and (min-width: @desktop){
+                font-size: 20px;
+            }
+        }
+    }
+    &-links{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 50px;
+        @media only screen and (min-width: @desktop){
+                margin: 0 20px;
+            }
+        i{
+            display: block;
+            width: 60px;
+            height: 60px;
+            font-size: 35px;
+            text-align: center;
+            padding: auto;
+            color: @color-blue;
+            border: 1px solid @color-blue;
+            border-radius: 50%;
+            padding-top: 10px;
+            box-shadow: 0 0 10px @color-blue;
+            transition: 0.2s ease-in-out;
+            margin: 0 10px;
+            @media only screen and (min-width: @desktop){
+                margin: 0 20px;
+            }
+        }
+        i:hover{
+            background-color: @color-blue;
+            color: white;
+        }
+    }
+}

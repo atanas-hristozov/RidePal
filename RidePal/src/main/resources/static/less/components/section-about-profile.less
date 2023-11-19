@@ -1,0 +1,31 @@
+@import 'var.less';
+
+.about-profile{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+
+    img{
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        object-position: 50% 50%;
+        border-radius: 50%;
+        border: 5px solid @color-blue;
+        box-shadow: 0px 0px 10px @color-blue;
+    }
+    h1{
+        color: @color-blue;
+        font-size: 30px;
+        margin: 10px auto 0;
+        text-transform: uppercase;
+    }
+    h2{
+        color: @color-darker-grey;
+        font-size: 13px;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+}

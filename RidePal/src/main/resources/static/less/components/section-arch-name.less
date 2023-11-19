@@ -1,0 +1,23 @@
+@import 'var.less';
+
+.section-arch-name{
+    h2{
+        color: @color-blue;
+        font-size: 22px;
+        text-transform: uppercase;
+        margin: 50px auto 0 auto;
+        text-align: center;
+        font-weight: 500;
+        @media only screen and (min-width: @desktop){
+            font-size: 28px;
+            max-width: @max-width;
+        }
+    }
+    div{
+        height: 1px;
+        background-color: @color-blue;
+        width: 50%;
+        margin: 20px auto;
+        max-width: @max-width;
+    }
+}

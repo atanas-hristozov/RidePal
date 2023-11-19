@@ -1,0 +1,51 @@
+@import 'var.less';
+
+.section-cg-gallery-btn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0;
+    p{
+        color: @color-darker-grey;
+        font-size: 17px;
+        text-align: center;
+    }
+    a{
+        display: block;
+        color: white;
+        font-size: 22px;
+        text-transform: uppercase;
+        background-color: @color-blue;
+        padding: 15px 30px;
+        border-radius: 30px;
+        margin-top: 20px;
+        transition: 0.4s ease-in-out;
+        animation: button-gallery;
+        animation-iteration-count: infinite;
+        animation-duration: 3s;
+    }
+    a:hover{
+        box-shadow: 0 0 20px @color-blue;
+    }
+    @keyframes button-gallery {
+        0%{
+            background-color: @color-blue;
+        }
+        20%{
+            background-color: #005f96;
+        }
+        40%{
+            background-color: #3586b6;
+        }
+        60%{
+            background-color: #1f6a96;
+        }
+        80%{
+            background-color: #00a2ff;
+        }
+        100%{
+            background-color: @color-blue;
+        }
+    }
+}

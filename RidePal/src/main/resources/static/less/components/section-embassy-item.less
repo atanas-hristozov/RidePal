@@ -1,0 +1,126 @@
+@import 'var.less';
+.embassy-item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: @max-width;
+    margin: 50px 10px;
+    padding: 5px;
+    background-color:  @color-blue-background;
+    border-radius: 10px;
+    box-shadow: 0 0 5px @color-blue;
+    @media only screen and (min-width: @mobile){
+        flex-direction: row;
+        align-items: flex-start;
+        border-radius: 30px;
+        box-shadow: 0 0 10px @color-blue;
+        margin: 50px 20px;
+        padding: 20px;
+    }
+    @media only screen and (min-width: @desktop){
+        margin: 50px auto;
+    }
+    div{
+        padding: 10px;
+        h2{
+            color: @color-blue;
+            font-size: 18px;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 500;
+            margin: 10px 10px 0 10px;
+            @media only screen and (min-width: @mobile){
+                margin: 0;
+            }
+            @media only screen and (min-width: @desktop){
+                font-size: 26px;
+            }
+        }
+        p{
+            color: @color-darker-grey;
+            font-size: 17px;
+            text-align: center;
+            margin: 0;
+            @media only screen and (min-width: @mobile){
+                text-align: justify;
+                padding: 20px;
+            }
+            @media only screen and (min-width: @desktop){
+                font-size: 20px;
+            }
+        }
+    }
+    img{
+        width: 100%;
+        height: auto;
+        border-radius: 0 0 7px 7px;
+        @media only screen and (min-width: @mobile){
+            width: 50%;
+            border-radius: 15px;
+        }
+    }
+}
+
+.embassy-item-reverse{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: @max-width;
+    margin: 50px 10px;
+    padding: 5px;
+    background-color:  @color-blue-background;
+    border-radius: 10px;
+    box-shadow: 0 0 5px @color-blue;
+    @media only screen and (min-width: @mobile){
+        flex-direction: row-reverse;
+        align-items: flex-start;
+        border-radius: 30px;
+        box-shadow: 0 0 10px @color-blue;
+        margin: 50px 20px;
+        padding: 20px;
+    }
+    @media only screen and (min-width: @desktop){
+        margin: 50px auto;
+    }
+    div{
+        padding: 10px;
+        h2{
+            color: @color-blue;
+            font-size: 18px;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 500;
+            margin: 10px 10px 0 10px;
+            @media only screen and (min-width: @mobile){
+                margin: 0;
+            }
+            @media only screen and (min-width: @desktop){
+                font-size: 26px;
+            }
+        }
+        p{
+            color: @color-darker-grey;
+            font-size: 17px;
+            text-align: center;
+            margin: 0;
+            @media only screen and (min-width: @mobile){
+                text-align: justify;
+                padding: 20px;
+            }
+            @media only screen and (min-width: @desktop){
+                font-size: 20px;
+            }
+        }
+    }
+    img{
+        width: 100%;
+        height: auto;
+        border-radius: 0 0 7px 7px;
+        @media only screen and (min-width: @mobile){
+            width: 50%;
+            border-radius: 15px;
+        }
+    }
+}

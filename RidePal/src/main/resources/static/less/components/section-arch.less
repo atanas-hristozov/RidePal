@@ -1,0 +1,40 @@
+@import 'var.less';
+
+.section-arch{
+    padding: 0 10px 100px 10px;
+    background-image: url(../../img/Background_Arch.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    @media only screen and (min-width: @desktop){
+        padding: 0 10px 200px 10px;
+        max-width: @max-width;
+        margin: 0 auto;
+        box-shadow: 0 0 10px @color-blue;
+        border-radius: 0 0 20px 20px;
+    }
+    h1{
+        color: white;
+        font-size: 24px;
+        text-transform: uppercase;
+        padding-top: 50px;
+        margin: 0 auto 0 auto;
+        text-align: center;
+        font-weight: 500;
+        @media only screen and (min-width: @desktop){
+            font-size: 40px;
+            max-width: @max-width;
+        }
+    }
+    p{
+        color: white;
+        font-size: 17px;
+        text-align: center;
+        margin: 10px auto 20px auto;
+        @media only screen and (min-width: @desktop){
+            font-size: 20px;
+            max-width: @max-width;
+            padding: 0 100px;
+        }
+    }
+}

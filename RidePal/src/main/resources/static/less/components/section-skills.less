@@ -1,0 +1,74 @@
+@import 'var.less';
+
+.about-skills{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 10px 30px;
+    margin-top: 50px;
+    background-color: @color-blue-transperament;
+    h3{
+        color: @color-blue;
+        font-size: 27px;
+        margin: 10px auto 0;
+        text-transform: uppercase;
+        text-align: center;
+        @media only screen and (min-width: @desktop){
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+    }
+    &-section{
+        @media only screen and (min-width: @desktop){
+            margin-top: 30px;
+        }
+        h4{
+            color: @color-blue;
+            font-size: 24px;
+            margin: 30px auto 30px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        &-item{
+            display: grid;
+            grid-template-columns: auto;
+            @media only screen and (min-width: @mobile){
+                grid-template-columns: auto auto;
+                grid-column-gap: 50px;
+            } 
+            @media only screen and (min-width: @desktop){
+                grid-template-columns: 320px 320px 320px;
+                grid-column-gap: 100px;
+            } 
+            &-name{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                margin-bottom: 20px;
+
+                p{
+                    color: @color-darker-grey;
+                    font-size: 16px;
+                    text-transform: uppercase;
+                    width: 80%;
+                    margin: 0;
+                    max-width: 300px;
+                }
+                &-circle{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    margin-left: 20px;
+                    i{
+                        font-size: 18px;
+                        color: @color-blue;
+                        margin: 0 5px;
+                        padding-top: 2px;
+                    }
+                }
+            }
+
+        }
+    }
+}

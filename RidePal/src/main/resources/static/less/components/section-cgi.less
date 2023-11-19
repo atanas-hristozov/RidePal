@@ -1,0 +1,26 @@
+@import 'var.less';
+
+.section-cgi{
+    h1{
+        color: @color-blue;
+        font-size: 24px;
+        text-transform: uppercase;
+        margin: 20px auto 0 auto;
+        text-align: center;
+        font-weight: 500;
+        @media only screen and (min-width: @desktop){
+            font-size: 30px;
+            max-width: @max-width;
+        }
+    }
+    p{
+        color: @color-darker-grey;
+        font-size: 17px;
+        text-align: center;
+        margin: 10px auto 20px auto;
+        @media only screen and (min-width: @desktop){
+            font-size: 20px;
+            max-width: @max-width;
+        }
+    }
+}

@@ -1,0 +1,158 @@
+@import 'var.less';
+
+.section-arch-projects{
+    &-name{
+        display: flex;
+        justify-content: center;
+        margin: 50px auto 0 auto;
+        a{   
+            color: @color-blue;
+            font-size: 22px;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 500;
+            @media only screen and (min-width: @desktop){
+                font-size: 28px;
+                max-width: @max-width;
+            }
+        }
+        @media only screen and (min-width: @mobile){
+            a::after{
+                content: '';
+                width: 0;
+                display: block;
+                height: 2px;
+                background: @color-blue;
+                transition: width 0.3s;
+            }
+            a:hover::after{
+                width: 100%;
+            }
+        }
+        @media only screen and (min-width: @mobile){
+            margin: 50px auto 40px auto;
+        }
+        
+    }
+    
+    &-info{
+        display: flex;
+        flex-direction: column;
+        margin: 10px auto 20px auto;
+        align-items: flex-start;
+        @media only screen and (min-width: @mobile){
+            flex-direction: row;
+            max-width: @max-width;
+            padding: 0 20px;
+        }
+        &-desc{
+            padding: 0 10px;
+            @media only screen and (min-width: @mobile){
+                margin: 0;
+                width: 70%;
+                padding-right: 30px;
+            }
+            p{
+                color: @color-darker-grey;
+                font-size: 17px;
+                text-align: center;
+                margin-bottom: 10px;
+                @media only screen and (min-width: @mobile){
+                    font-size: 20px;
+                    text-align: justify;
+                    margin: 0 0 30px 0;
+                }
+            }
+        }
+        
+        a{
+            margin: 5px auto;
+            @media only screen and (min-width: @mobile){
+                margin: 2px;
+                overflow: hidden;
+            }
+            img{
+                width: 100%;
+                height: auto;
+                @media only screen and (min-width: @mobile){
+                    //width: 500px;
+                    object-fit: cover;
+                    object-position: 50% 50%;
+                    transition: 0.3s ease-in-out;
+                }
+                @media only screen and (min-width: @max-width){
+                    //height: 500px;  
+                }
+            }
+            @media only screen and (min-width: @mobile){
+                img:hover{
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+
+
+    &-info-reverse{
+        display: flex;
+        flex-direction: column;
+        margin: 10px auto 20px auto;
+        align-items: flex-start;
+        @media only screen and (min-width: @mobile){
+            flex-direction: row;
+            flex-direction: row-reverse;
+            max-width: @max-width;
+            padding: 0 20px;
+        }
+        &-desc{
+            padding: 0 10px;
+            @media only screen and (min-width: @mobile){
+                margin: 0;
+                width: 70%;
+                padding-left: 30px;
+            }
+            p{
+                color: @color-darker-grey;
+                font-size: 17px;
+                text-align: center;
+                margin-bottom: 10px;
+                @media only screen and (min-width: @mobile){
+                    font-size: 20px;
+                    text-align: justify;
+                    margin: 0 0 30px 0;
+                }
+            }
+        }
+        a{
+            margin: 5px auto;
+            @media only screen and (min-width: @mobile){
+                margin: 2px;
+                overflow: hidden;
+            }
+            img{
+                width: 100%;
+                height: auto;
+                @media only screen and (min-width: @mobile){
+                    //width: 500px;
+                    object-fit: cover;
+                    object-position: 50% 50%;
+                    transition: 0.3s ease-in-out;
+                }
+                @media only screen and (min-width: @max-width){
+                    //height: 500px;  
+                }
+            }
+            @media only screen and (min-width: @mobile){
+                img:hover{
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+    @media only screen and (min-width: @mobile){
+        padding: 30px 0;
+    }
+}
+#dark{
+    background-color: @color-blue-transperament;
+}
