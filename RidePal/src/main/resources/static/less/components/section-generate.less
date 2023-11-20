@@ -1,0 +1,43 @@
+@import 'var.less';
+.generate{
+    overflow: hidden;
+    height: 1200px;
+    @media only screen and (min-width: @mobile){
+        height: 100vh;
+    }
+    &-video-top{
+        width:100%;
+        height:100%;
+        display:block;
+        object-fit:cover;
+        object-position:50% 50%;
+        transform: translate(0, -20%) rotate(180deg);
+        mix-blend-mode: screen;
+    }
+    &-video-bot{
+        width:100%;
+        height:100%;
+        display:block;
+        object-fit:cover;
+        object-position:50% 50%;
+        margin-top: -700px;
+    }
+    &-content{
+        position: absolute;
+        top: 20%; 
+        left: 50%; 
+        transform: translate(-50%, -5%);
+        z-index: 2; 
+        @media only screen and (min-width: @mobile){
+            top: 50%; 
+            transform: translate(-50%, -50%);
+            max-width: 100vw;
+        }
+        h2{
+            color: @color-yellow;
+        }
+        p{
+            color: @color-yellow;
+        }
+    }
+}

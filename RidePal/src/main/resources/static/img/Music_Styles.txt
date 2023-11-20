@@ -1,0 +1,6 @@
+kids 
+rock 
+pop 
+hiphop 
+rnb
+classical
