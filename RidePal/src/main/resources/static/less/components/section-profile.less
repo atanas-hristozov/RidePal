@@ -54,7 +54,7 @@
             @media only screen and (min-width: @desktop){
                 flex-direction: row;
                 width: 100vw;
-                align-items: center;
+                align-items: flex-end;
                 justify-content: center;
             }
             &-text{
@@ -120,7 +120,7 @@
                         background: none;
                         cursor: pointer;
                         border: none;
-            
+                        margin-right: 50px;
                         span {
                             position: absolute;
                             display: block;
@@ -284,4 +284,10 @@
             }
         }
     }
+}
+.profile-content-picture{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
