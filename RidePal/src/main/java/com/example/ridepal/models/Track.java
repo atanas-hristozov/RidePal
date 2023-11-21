@@ -2,6 +2,8 @@ package com.example.ridepal.models;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "tracks")
 public class Track {
@@ -26,6 +28,9 @@ public class Track {
     @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
+
+    /*@ManyToMany(mappedBy = "tracks", cascade = CascadeType.ALL)
+    private Set<Playlist> playlists;*/
 
     public Track() {
     }
