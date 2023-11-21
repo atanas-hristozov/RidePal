@@ -1,44 +1,25 @@
-package com.example.ridepal.models;
+package com.example.ridepal.models.userDtos;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-import java.util.Set;
-
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @Column(name = "id")
-    private int id;
-    @Column(name = "first_name")
+public class UserCreateDto {
+    @NotNull(message = "Name can't be empty")
+    @Size(min = 3, max = 32, message = "First name must be between 3 and 32 symbols.")
     private String firstName;
-    @Column(name = "last_name")
+    @NotNull(message = "Name can't be empty")
+    @Size(min = 3, max = 32, message = "First name must be between 3 and 32 symbols.")
     private String lastName;
-    @Column(name = "username")
+    @NotNull(message = "Username can't be empty")
     private String username;
-    @Column(name = "password")
+    @NotNull(message = "Password can't be empty")
     private String password;
-    @Column(name = "email")
+    @NotNull
     private String email;
-    @Column(name = "is_admin")
     private boolean isAdmin;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @Column(name = "user_photo")
     private String userPhoto;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
-    private Set<Playlist> playlists;
-
-    public User() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public UserCreateDto() {
     }
 
     public String getFirstName() {
@@ -87,14 +68,6 @@ public class User {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
-    }
-
-    public Set<Playlist> getPlaylists() {
-        return playlists;
-    }
-
-    public void setPlaylists(Set<Playlist> playlists) {
-        this.playlists = playlists;
     }
 
     public String getUserPhoto() {

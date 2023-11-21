@@ -6,6 +6,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "playlists")
+@SecondaryTable(name = "playlist_data",
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class Playlist {
 @Id
 @Column(name = "id")
@@ -16,8 +18,17 @@ private String title;
 private double rank;
 @Column(name = "playlist_time")
 private int playlistTime;
-@ManyToMany(mappedBy = "Playlists")
-private Set<User> users;
+@ManyToOne
+@JoinColumn(name = "user_id")
+private User user;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "playlist_data",
+            joinColumns = {@JoinColumn(name = "playlist_id")},
+            inverseJoinColumns = {@JoinColumn(name = "track_id")}
+    )
+    private Set<Track> tracks;
 
     public Playlist() {
     }
@@ -54,11 +65,19 @@ private Set<User> users;
         this.playlistTime = playlistTime;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Track> getTracks() {
+        return tracks;
+    }
+
+    public void setTracks(Set<Track> tracks) {
+        this.tracks = tracks;
     }
 }
