@@ -1,0 +1,28 @@
+@import 'var.less';
+
+.allPlaylists{
+
+    &-video {
+        position: fixed;
+        min-width: 100%; 
+        min-height: 100%;
+        z-index: -1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        //filter: hue-rotate(240deg) contrast(1.1);
+    }
+    &-content{
+        position: relative;
+        width: 100%;
+        padding: 20px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        @media only screen and (min-width: @mobile){
+            margin: 50px 0;
+        }
+    }
+}

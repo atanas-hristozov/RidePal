@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="shortcut icon" type="image/png" href="../static/img/Logo_Title.png">
-    <title>Generate_Tracks</title>
+    <title>Contacts</title>
 </head>
 <body>
     <div class="container">
@@ -21,91 +21,109 @@
                   <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
                   <ul class="menu">
                     <li><a href="Index.html">Home</a></li>
-                    <li><a href="Portfolio.html">Work</a></li>
+                    <li><a href="Generate_tracks.html">Create</a></li>
+                    <li><a href="All_Playlists.html">Browse</a></li>
                     <li><a href="About.html">About</a></li>
                     <li><a href="Contacts.html">Contact</a></li>
                     <li><a href="My_Profile.html">My Profile</a></li>
                   </ul>
                 </div> 
             </header>
-
             <section class="generate">
-                <video class="about-video-top" src="../static/video/Wave_01.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
-                <section class="generate-content">
-                    <section class="portfolio">
-                        <div class="portfolio-section">
-                        <a class="portfolio-section-cover" href="Architecture.html">
-                            <img src="../static/img/rock-music-wallpaper.jpg" alt="Rock">
-                            <div class="portfolio-section-cover-text">
-                            <h2>Rock</h2>
-                            <p>bon jovi</p>
-                            <p>scorpios</p>
-                            <p>queen</p>
+                <video class="generate-video" src="../static/video/Wave_05.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
+                <div class="generate-content">
+                    <form class="generate-content-form">
+                        <div class="generate-root">
+                            <h2>Enter Root</h2>
+                            <div class="generate-root-box">
+                                <input type="text" name="" required="">
+                                <label>Start destination</label>
                             </div>
-                        </a>
-                        </div>
-                        <div class="portfolio-section">
-                        <a class="portfolio-section-cover" href="CGart.html">
-                            <img src="../static/img/pop-music-wallpaper.jpg" alt="Pop">
-                            <div class="portfolio-section-cover-text">
-                            <h2>Pop</h2>
-                            <p>taylor swift</p>
-                            <p>katy perry</p>
-                            <p>dua lipa</p>
+                            <div class="generate-root-box">
+                                <input type="text" name="" required="">
+                                <label>End destination</label>
                             </div>
-                        </a>
                         </div>
-                        <div class="portfolio-section">
-                        <a class="portfolio-section-cover" href="Web_development.html">
-                            <img src="../static/img/classical_02-music-wallpaper.jpg" alt="Classical">
-                            <div class="portfolio-section-cover-text">
-                            <h2>Classical</h2>
-                            <p>Bach</p>
-                            <p>Mozart</p>
-                            <p>Beethoven</p>
+                        <fieldset class="checkbox-group">
+                            <legend class="checkbox-group-legend">Select Music</legend>
+                            <div class="checkbox">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" class="checkbox-input" name="rock" id="rock">
+                                    <span class="checkbox-tile">
+                                        <span class="checkbox-icon">
+                                            <img src="../static/img/rock-music-wallpaper.jpg" alt="Rock Music">
+                                        </span>
+                                        <span class="checkbox-label">Rock</span>
+                                    </span>
+                                </label>
                             </div>
-                        </a>
-                        </div>
-                    </section>
-                    <section class="portfolio">
-                        <div class="portfolio-section">
-                        <a class="portfolio-section-cover" href="Architecture.html">
-                            <img src="../static/img/hiphop-music-wallpaper.jpg" alt="Rock">
-                            <div class="portfolio-section-cover-text">
-                            <h2>Hip Hop</h2>
-                            <p>bon jovi</p>
-                            <p>scorpios</p>
-                            <p>queen</p>
+                            <div class="checkbox">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" class="checkbox-input" name="pop" id="pop">
+                                    <span class="checkbox-tile">
+                                        <span class="checkbox-icon">
+                                            <img src="../static/img/pop-music-wallpaper.jpg" alt="Pop Music">
+                                        </span>
+                                        <span class="checkbox-label">Pop</span>
+                                    </span>
+                                </label>
                             </div>
-                        </a>
-                        </div>
-                        <div class="portfolio-section">
-                        <a class="portfolio-section-cover" href="CGart.html">
-                            <img src="../static/img/rnb-music-wallpaper.jpg" alt="Pop">
-                            <div class="portfolio-section-cover-text">
-                            <h2>RnB</h2>
-                            <p>taylor swift</p>
-                            <p>katy perry</p>
-                            <p>dua lipa</p>
+                            <div class="checkbox">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" class="checkbox-input" name="hiphop" id="hiphop">
+                                    <span class="checkbox-tile">
+                                        <span class="checkbox-icon">
+                                            <img src="../static/img/hiphop-music-wallpaper.jpg" alt="Hiphop Music">
+                                        </span>
+                                        <span class="checkbox-label">Hip Hop</span>
+                                    </span>
+                                </label>
                             </div>
-                        </a>
-                        </div>
-                        <div class="portfolio-section">
-                        <a class="portfolio-section-cover" href="Web_development.html">
-                            <img src="../static/img/kids-music-wallpaper.jpg" alt="Classical">
-                            <div class="portfolio-section-cover-text">
-                            <h2>Kids music</h2>
-                            <p>Bach</p>
-                            <p>Mozart</p>
-                            <p>Beethoven</p>
+                            <div class="checkbox">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" class="checkbox-input" name="classical" id="classical">
+                                    <span class="checkbox-tile">
+                                        <span class="checkbox-icon">
+                                            <img src="../static/img/classical_02-music-wallpaper.jpg" alt="Classical Music">
+                                        </span>
+                                        <span class="checkbox-label">Classical</span>
+                                    </span>
+                                </label>
                             </div>
-                        </a>
-                        </div>
-                    </section>
-                </section>
-                <h2>Choose your styles</h2>
-                <video class="about-video-bot" src="../static/video/Wave_01.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
+                            <div class="checkbox">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" class="checkbox-input" name="rnb" id="rnb">
+                                    <span class="checkbox-tile">
+                                        <span class="checkbox-icon">
+                                            <img src="../static/img/rnb-music-wallpaper.jpg" alt="Rnb Music">
+                                        </span>
+                                        <span class="checkbox-label">RNB</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" class="checkbox-input" name="kids" id="kids">
+                                    <span class="checkbox-tile">
+                                        <span class="checkbox-icon">
+                                            <img src="../static/img/kids-music-wallpaper.jpg" alt="Kids Music">
+                                        </span>
+                                        <span class="checkbox-label">Kids</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </fieldset>
+                        <button class="generate-button" type="submit">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            Generate
+                        </button>
+                    </form>
+                </div>
             </section>
+
         </div>
     </div>
     <footer class="footer">
@@ -119,9 +137,9 @@
             <li class="footer-cover-links-nav-item"><a href="Contacts.html">Contact</a></li>
             </ul>
             <div class="footer-cover-links-contacts">
-            <a class="footer-cover-links-contacts-icons" href="https://www.linkedin.com/in/atanas-hristozov-b657a11a9/" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-            <a class="footer-cover-links-contacts-icons" href="https://www.behance.net/atanashrisb749?tracking_source=search_users_recommended%7Catanas%20hristozov" target="_blank"><i class="fa fa-behance" aria-hidden="true"></i></a>
-            <a class="footer-cover-links-contacts-icons" href="https://github.com/atanas-hristozov" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
+            <a class="footer-cover-links-contacts-icons" href="#" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+            <a class="footer-cover-links-contacts-icons" href="#" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+            <a class="footer-cover-links-contacts-icons" href="#" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
             </div>
         </div>
         <div class="footer-cover-line"></div>
