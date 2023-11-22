@@ -33,35 +33,26 @@
                 <video class="photo-video" src="../static/video/Wave_03.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
                 <div class="photo-content">
 
-                    <div class="upload-container">
-                        <input type="file" id="imageInput" accept="image/*">
-                        <label for="imageInput" class="upload-button">Select Image</label>
-                        <div class="preview">
-                          <img id="previewImage" src="#" alt="Image Preview">
-                        </div>
-                        <form>
-                            <button class="login-button">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                Upload
-                            </button>
-                        </form>
+                  <form class="upload-container">
+                      <input type="file" id="imageInput" accept="image/*">
+                      <label for="imageInput"  class="login-button"><span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>Select Image</label>
+                      <div class="preview">
+                        <img id="previewImage" src="../static/img/placeholder-update-image.png" alt="Image Preview">
                       </div>
-                    
-                      <script>
-                        document.getElementById('imageInput').addEventListener('change', function(event) {
-                          const file = event.target.files[0];
-                          const reader = new FileReader();
-                    
-                          reader.onload = function(e) {
-                            document.getElementById('previewImage').setAttribute('src', e.target.result);
-                          }
-                    
-                          reader.readAsDataURL(file);
-                        });
-                      </script>
+                      <div>
+                          <button class="login-button">
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                              Upload
+                          </button>
+                        </div>
+                    </form>
+                    <script src="../static/Js/upload-photo.js"></script>
 
                     
                 
@@ -74,11 +65,11 @@
         <div class="footer-cover">
         <div class="footer-cover-links">
             <ul class="footer-cover-links-nav">
-            <li class="footer-cover-links-nav-item"><a href="Index.html">Home</a></li>
-            <li class="footer-cover-links-nav-item"><a href="Portfolio.html">Work</a></li>
-            <li class="footer-cover-links-nav-item"><a href="Services.html">Services</a></li>
-            <li class="footer-cover-links-nav-item"><a href="About.html">About</a></li>
-            <li class="footer-cover-links-nav-item"><a href="Contacts.html">Contact</a></li>
+              <li class="footer-cover-links-nav-item"><a href="Index.html">Home</a></li>
+              <li class="footer-cover-links-nav-item"><a href="Generate_tracks.html">Create</a></li>
+              <li class="footer-cover-links-nav-item"><a href="All_Playlists.html">Browse</a></li>
+              <li class="footer-cover-links-nav-item"><a href="About.html">About</a></li>
+              <li class="footer-cover-links-nav-item"><a href="Contacts.html">Contact</a></li>
             </ul>
             <div class="footer-cover-links-contacts">
             <a class="footer-cover-links-contacts-icons" href="#" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
