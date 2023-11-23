@@ -5,10 +5,7 @@ import com.example.ridepal.models.Album;
 import com.example.ridepal.models.Artist;
 import com.example.ridepal.models.Genre;
 import com.example.ridepal.models.Track;
-import com.example.ridepal.repositories.contracts.AlbumRepository;
-import com.example.ridepal.repositories.contracts.ArtistRepository;
-import com.example.ridepal.repositories.contracts.GenreRepository;
-import com.example.ridepal.repositories.contracts.TrackRepository;
+import com.example.ridepal.repositories.contracts.*;
 import com.example.ridepal.services.contracts.DeezerDataImporter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,20 +19,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeezerDataImporterImpl implements DeezerDataImporter {
 
-    private final GenreRepository genreRepository;
-    private final ArtistRepository artistRepository;
-    private final AlbumRepository albumRepository;
-    private final TrackRepository trackRepository;
+    private final BaseCreateReadRepository<Genre> genreBaseCreateReadRepository;
+    private final BaseCreateReadRepository<Artist> artistBaseCreateReadRepository;
+    private final BaseCreateReadRepository<Album> albumBaseCreateReadRepository;
+    private final BaseCreateReadRepository<Track> trackBaseCreateReadRepository;
 
     @Autowired
-    public DeezerDataImporterImpl(GenreRepository genreRepository,
-                                  ArtistRepository artistRepository,
-                                  AlbumRepository albumRepository,
-                                  TrackRepository trackRepository) {
-        this.genreRepository = genreRepository;
-        this.artistRepository = artistRepository;
-        this.albumRepository = albumRepository;
-        this.trackRepository = trackRepository;
+    public DeezerDataImporterImpl(BaseCreateReadRepository<Genre> genreBaseCreateReadRepository,
+                                  BaseCreateReadRepository<Artist> artistBaseCreateReadRepository,
+                                  BaseCreateReadRepository<Album> albumBaseCreateReadRepository,
+                                  BaseCreateReadRepository<Track> trackBaseCreateReadRepository) {
+        this.genreBaseCreateReadRepository = genreBaseCreateReadRepository;
+        this.artistBaseCreateReadRepository = artistBaseCreateReadRepository;
+        this.albumBaseCreateReadRepository = albumBaseCreateReadRepository;
+        this.trackBaseCreateReadRepository = trackBaseCreateReadRepository;
     }
 
     @Override
@@ -123,7 +120,7 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
         int trackId = item.get("id").asInt();
         Album album;
         try {
-            trackRepository.getById(trackId);
+            trackBaseCreateReadRepository.getById(trackId);
 
         } catch (EntityNotFoundException e) {
             String title = item.get("title").asText();
@@ -142,16 +139,16 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
             track.setPreviewUrl(previewUrl);
             track.setArtist(artist);
             track.setAlbum(album);
-            track.setGenre(genreRepository.getById(genreId));
+            track.setGenre(genreBaseCreateReadRepository.getById(genreId));
 
-            trackRepository.create(track);
+            trackBaseCreateReadRepository.create(track);
         }
     }
 
     private Album createAlbum(JsonNode item, int genreId) {
         int albumId = item.get("id").asInt();
         try {
-            albumRepository.getById(albumId);
+            albumBaseCreateReadRepository.getById(albumId);
         } catch (EntityNotFoundException e) {
             String albumName = item.get("title").asText();
             String albumTracklist = item.get("tracklist").asText();
@@ -160,10 +157,10 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
             album.setAlbumId(albumId);
             album.setAlbumName(albumName);
             album.setTracklistUrl(albumTracklist);
-            album.setGenre(genreRepository.getById(genreId));
+            album.setGenre(genreBaseCreateReadRepository.getById(genreId));
 
-            albumRepository.create(album);
-            return albumRepository.getById(albumId);
+            albumBaseCreateReadRepository.create(album);
+            return albumBaseCreateReadRepository.getById(albumId);
         }
         return null;
     }
@@ -171,7 +168,7 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
     private void createArtist(JsonNode item, int genreId) {
         int artistId = item.get("id").asInt();
         try {
-            artistRepository.getById(artistId);
+            artistBaseCreateReadRepository.getById(artistId);
         } catch (EntityNotFoundException e) {
             String artistName = item.get("name").asText();
             String artistPhoto = item.get("picture").asText();
@@ -183,7 +180,7 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
             artist.setArtistName(artistName);
             artist.setArtistTracklist(artistTracklist);
 
-            artistRepository.create(artist);
+            artistBaseCreateReadRepository.create(artist);
             importTracksForArtist(artist, genreId);
         }
     }
@@ -191,7 +188,7 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
     private void createGenre(JsonNode item) {
         int genreId = item.get("id").asInt();
         try {
-            genreRepository.getById(genreId);
+            genreBaseCreateReadRepository.getById(genreId);
         } catch (EntityNotFoundException e) {
             String genreName = item.get("name").asText();
 
@@ -200,7 +197,7 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
             genreEntity.setGenreId(genreId);
             genreEntity.setGenreName(genreName);
 
-            genreRepository.create(genreEntity);
+            genreBaseCreateReadRepository.create(genreEntity);
         }
     }
 

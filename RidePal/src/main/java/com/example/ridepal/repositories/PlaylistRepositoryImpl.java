@@ -1,15 +1,15 @@
 package com.example.ridepal.repositories;
 
-import com.example.ridepal.models.Album;
+import com.example.ridepal.models.Playlist;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AlbumRepositoryImpl extends AbstractCreateReadRepository<Album> {
+public class PlaylistRepositoryImpl extends AbstractUpdateDeleteRepository<Playlist> {
 
     @Autowired
-    public AlbumRepositoryImpl(SessionFactory sessionFactory, Class<Album> clazz) {
+    public PlaylistRepositoryImpl(SessionFactory sessionFactory, Class<Playlist> clazz) {
         super(sessionFactory, clazz);
     }
 }

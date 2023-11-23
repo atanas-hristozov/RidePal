@@ -1,8 +1,6 @@
 package com.example.ridepal.repositories.contracts;
 
-public interface BaseCrudRepository<T> extends BaseReadRepository<T> {
-
+public interface BaseUpdateDeleteRepository<T> extends BaseCreateReadRepository<T> {
     void delete(int id);
-    void create(T entity);
     void update(T entity);
 }
