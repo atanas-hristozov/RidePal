@@ -10,6 +10,94 @@
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="shortcut icon" type="image/png" href="../static/img/Logo_Title.png">
     <title>Contacts</title>
+
+    <script type='text/javascript'>
+        var map1, map2;
+
+        function GetMaps() {
+            map1 = new Microsoft.Maps.Map('#myMap1', {});
+            map2 = new Microsoft.Maps.Map('#myMap2', {});
+
+            setupAutoSuggest('#searchBox1', '#searchBoxContainer1', map1);
+            setupAutoSuggest('#searchBox2', '#searchBoxContainer2', map2);
+        }
+
+        function setupAutoSuggest(inputBox, container, map) {
+            Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', function () {
+                var manager = new Microsoft.Maps.AutosuggestManager({ map: map });
+                manager.attachAutosuggest(inputBox, container, function (result) {
+                    map.entities.clear();
+                    var pin = new Microsoft.Maps.Pushpin(result.location);
+                    map.entities.push(pin);
+                    map.setView({ bounds: result.bestView });
+                });
+            });
+        }
+
+        function geocodeAddress(address, callback) {
+            var geocodeRequest = 'https://dev.virtualearth.net/REST/v1/Locations/' + encodeURIComponent(address) + '?key=AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3';
+            
+            fetch(geocodeRequest)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    var coordinates = data.resourceSets[0].resources[0].point.coordinates;
+                    callback(coordinates);
+                })
+                .catch(function(error) {
+                    console.log('Error geocoding address:', error);
+                });
+        }
+
+        function calculateDuration(travelMode) {
+            var startPointAddress = document.getElementById('searchBox1').value;
+            var endPointAddress = document.getElementById('searchBox2').value;
+            var durationDisplay = document.getElementById('durationDisplay'); // Get the div for displaying durations
+
+            geocodeAddress(startPointAddress, function(startPoint) {
+                geocodeAddress(endPointAddress, function(endPoint) {
+                    var key = 'AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3';
+                    var start = startPoint.join(',');
+                    var end = endPoint.join(',');
+                    var url = `https://dev.virtualearth.net/REST/v1/Routes/${travelMode}?waypoint.1=${start}&waypoint.2=${end}&key=${key}`;
+
+                    var request = new XMLHttpRequest();
+
+                    request.onreadystatechange = function() {
+                        if (this.readyState === XMLHttpRequest.DONE) {
+                            if (this.status === 200) {
+                                var response = JSON.parse(this.responseText);
+
+                                if (response && response.resourceSets && response.resourceSets.length > 0 &&
+                                    response.resourceSets[0].resources && response.resourceSets[0].resources.length > 0 &&
+                                    response.resourceSets[0].resources[0].travelDuration) {
+
+                                    var durationInSeconds = response.resourceSets[0].resources[0].travelDuration;
+
+                                    var hours = Math.floor(durationInSeconds / 3600);
+                                    var minutes = Math.floor((durationInSeconds % 3600) / 60);
+
+                                    // Display the duration in the div
+                                    durationDisplay.innerHTML = `Duration (${travelMode}): ${hours} hours ${minutes} minutes`;
+                                } else {
+                                    durationDisplay.innerHTML = `No duration information available for ${travelMode}. Please check your input.`;
+                                }
+                            } else {
+                                durationDisplay.innerHTML = `Error fetching data from Bing Maps API for ${travelMode}. Please check your API key or try again later.`;
+                            }
+                        }
+                    };
+
+                    request.open('GET', url, true);
+                    request.send();
+                });
+            });
+        }
+    </script>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMaps&key=AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3' async defer></script>
+
+
 </head>
 <body>
     <div class="container">
@@ -32,9 +120,42 @@
             <section class="generate">
                 <video class="generate-video" src="../static/video/Wave_05.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
                 <div class="generate-content">
-                    <form class="generate-content-form">
+                    <div class="generate-content-form">
                         <div class="generate-root">
                             <h2>Enter Root</h2>
+                            <div class="generate-root-destination">
+                                <div class="generate-root-destination-configuration">
+                                    <div class="generate-root-destination-configuration-field">
+                                        <div class="generate-root-destination-input" id='searchBoxContainer1'>
+                                            <input type='text' id='searchBox1' required/>
+                                            <label for="searchBox1">Start destination</label>
+                                        </div>
+                                        <div class="generate-root-destination-mapsbackground">
+                                            <div class="generate-root-destination-maps" id="myMap1" style="position:relative;width:400px;height:300px;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="generate-root-destination-configuration-field">
+                                        <div class="generate-root-destination-input" id='searchBoxContainer2'>
+                                            <input type='text' id='searchBox2' required/>
+                                            <label for="searchBox2">End destination</label>
+                                        </div>
+                                        <div class="generate-root-destination-mapsbackground">
+                                            <div class="generate-root-destination-maps" id="myMap2" style="position:relative;width:400px;height:300px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="generate-root-destination-buttons">
+                                    <h3>Calculate Journey Duration:</h3>
+                                    <div class="generate-root-destination-buttons-images">
+                                        <button onclick="calculateDuration('Walking')"><img src="../static/img/walking-person.png" alt="Calculate Walking Duration"></button>
+                                        <button onclick="calculateDuration('Driving')"><img src="../static/img/car_02.png" alt="Calculate Driving Duration"></button>
+                                    </div>
+                                    <!-- Div to display the duration -->
+                                    <div class="generate-root-destination-calculation" id="durationDisplay"></div>
+                                </div>
+                                
+                            </div>
+                            <!--
                             <div class="generate-root-box">
                                 <input type="text" name="" required="">
                                 <label>Start destination</label>
@@ -43,6 +164,7 @@
                                 <input type="text" name="" required="">
                                 <label>End destination</label>
                             </div>
+                            -->
                         </div>
                         <fieldset class="checkbox-group">
                             <legend class="checkbox-group-legend">Select Music</legend>
@@ -120,7 +242,7 @@
                             <span></span>
                             Generate
                         </button>
-                    </form>
+                    </div>
                 </div>
             </section>
 

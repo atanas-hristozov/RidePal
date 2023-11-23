@@ -319,3 +319,165 @@
     font-weight: bold;
     font-style: oblique;
 }
+
+
+
+
+.generate-root-destination{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  &-configuration{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    @media only screen and (min-width: @mobile){
+      flex-direction: row;
+      margin: 0 20px;
+    }
+    &-field{
+      @media only screen and (min-width: @mobile){
+        margin-left: 30px;
+        margin-right: 30px;
+      }
+    }
+  }
+  &-input{
+    margin: 0;
+    padding: 0;
+    input{
+      background: none;
+      border: none;
+    }
+  }
+  &-mapsbackground{
+    animation: colorChange 3s infinite;
+    box-shadow: 0 0 10px @color-blue;
+    margin-bottom: 30px;
+  }
+  &-maps{
+    filter: hue-rotate(180deg) grayscale(100%) invert(100%);
+    mix-blend-mode: multiply;
+  }
+  &-buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px @color-blue;
+    margin-bottom: 20px;
+    h3{
+      font-family: Helvetica, sans-serif;
+      font-style: oblique;
+      color: @color-neon-blue;
+    }
+    &-images{
+      button{
+        background: none;
+        width: 50px;
+        height: 50px;
+        border: none;
+        border-radius: 25px;
+        padding: 0;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        margin: 0 20px;
+      }
+      img{
+        width: 50px;
+        height: 50px;
+        border: 2px solid @color-neon-blue;
+        border-radius: 25px;
+      }
+      img:hover{
+        filter:  grayscale(100%) contrast(200%) invert(100%);
+        mix-blend-mode: multiply;
+      }
+      button:hover{
+        transform: scale(1.1);
+        box-shadow: 0 0 20px @color-neon-blue;
+        background-color: @color-neon-blue
+      }
+      
+    }
+  }
+  &-calculation{
+    font-family: Helvetica, sans-serif;
+    font-style: oblique;
+    color: @color-neon-blue;
+    margin: 10px 0;
+  }
+}
+@keyframes colorChange {
+  0% {
+    background-color: @color-neon-blue;
+    box-shadow: 0 0 10px @color-neon-blue;
+  }
+  50% {
+    background-color: rgb(40, 126, 255);
+    box-shadow: 0 0 10px rgb(40, 126, 255);
+  }
+  100% {
+    background-color: @color-neon-blue;
+    box-shadow: 0 0 10px @color-neon-blue;
+  }
+}
+
+
+
+
+.generate-root-destination-input input{
+  background-color: transparent !important; 
+}
+
+
+
+
+.generate-root-destination-input {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.generate-root-destination-input input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color:@color-neon-blue; 
+  border: none;
+  border-bottom: 1px solid @color-neon-blue; 
+  outline: none;
+  background: transparent;
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  font-style: oblique;
+}
+
+.generate-root-destination-input label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: @color-neon-blue; 
+  pointer-events: none;
+  transition: .5s;
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  font-style: oblique;
+}
+
+.generate-root-destination-input input:focus ~ label,
+.generate-root-destination-input input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: @color-neon-blue; 
+  font-size: 12px;
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  font-style: oblique;
+}
