@@ -1,5 +1,6 @@
 package com.example.ridepal.config;
 
+import com.example.ridepal.models.*;
 import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientAutoConfiguration;
 import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,31 @@ public class HibernateConfig {
     public WebClient webClient(WebClient.Builder webClientBuilder) {
         // Create the actual WebClient bean using the configured builder
         return webClientBuilder.build();
+    }
+
+    @Bean
+    public Class<User> userClass() {
+        return User.class;
+    }
+    @Bean
+    public Class<Playlist> playlistClass() {
+        return Playlist.class;
+    }
+    @Bean
+    public Class<Genre> genreClass() {
+        return Genre.class;
+    }
+    @Bean
+    public Class<Album> albumClass() {
+        return Album.class;
+    }
+    @Bean
+    public Class<Artist> artistClass() {
+        return Artist.class;
+    }
+    @Bean
+    public Class<Track> trackClass() {
+        return Track.class;
     }
 
     private Properties hibernateProperties() {

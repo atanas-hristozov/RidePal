@@ -1,30 +1,23 @@
 package com.example.ridepal.repositories;
 
 import com.example.ridepal.exceptions.EntityNotFoundException;
-import com.example.ridepal.repositories.contracts.BaseReadRepository;
+import com.example.ridepal.repositories.contracts.BaseCreateReadRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import java.util.List;
-
 import static java.lang.String.format;
 
-public abstract class AbstractReadRepository<T> implements BaseReadRepository<T> {
+public abstract class AbstractCreateReadRepository<T> implements BaseCreateReadRepository<T> {
 
     protected final SessionFactory sessionFactory;
     protected final Class<T> clazz;
 
-    public AbstractReadRepository(SessionFactory sessionFactory, Class<T> clazz) {
+
+    public AbstractCreateReadRepository(SessionFactory sessionFactory, Class<T> clazz) {
         this.sessionFactory = sessionFactory;
         this.clazz = clazz;
     }
 
-    @Override
-    public List<T> getAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery(format("from %s", clazz.getSimpleName()), clazz).list();
-        }
-    }
 
     @Override
     public T getById(int id) {
@@ -43,4 +36,19 @@ public abstract class AbstractReadRepository<T> implements BaseReadRepository<T>
                     .orElseThrow(() -> new EntityNotFoundException(notFoundError));
         }
     }
+
+    @Override
+    public void create(T entity) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(entity);
+            session.getTransaction().commit();
+        }
+    }
 }
+ /*   @Override
+    public List<T> getAll() {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(format("from %s", clazz.getSimpleName()), clazz).list();
+        }
+    }*/

@@ -1,12 +1,10 @@
 package com.example.ridepal.repositories.contracts;
 
-import java.util.List;
+public interface BaseCreateReadRepository<T> {
 
-public interface BaseReadRepository<T>{
-
-    List<T> getAll();
     T getById(int id);
 
     <V> T getByField(String name, V value);
-}
 
+    void create(T entity);
+}

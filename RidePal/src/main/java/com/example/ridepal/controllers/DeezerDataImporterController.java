@@ -32,7 +32,6 @@ public class DeezerDataImporterController {
         deezerDataImporter.importGenreData(responseBody);
 
         return ResponseEntity.ok(responseBody);
-
     }
 
     @GetMapping("/genre/{id}")
@@ -47,5 +46,10 @@ public class DeezerDataImporterController {
 
         return ResponseEntity.ok(responseBody);
     }
-
+//        165"); //R&B*/
+//        152"); //rock
+//        113");//Dance
+//        95");//Kids
+//        116");//Hiphop
+//        98");//Classical
 }

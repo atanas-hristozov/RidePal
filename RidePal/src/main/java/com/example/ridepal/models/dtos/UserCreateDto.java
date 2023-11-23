@@ -1,4 +1,4 @@
-package com.example.ridepal.models.userDtos;
+package com.example.ridepal.models.dtos;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
