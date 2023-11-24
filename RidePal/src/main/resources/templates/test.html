@@ -12,6 +12,7 @@
 
             setupAutoSuggest('#searchBox1', '#searchBoxContainer1', map1);
             setupAutoSuggest('#searchBox2', '#searchBoxContainer2', map2);
+            directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map1);
         }
 
         function setupAutoSuggest(inputBox, container, map) {
@@ -48,43 +49,18 @@
 
             geocodeAddress(startPointAddress, function(startPoint) {
                 geocodeAddress(endPointAddress, function(endPoint) {
-                    var key = 'AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3';
-                    var start = startPoint.join(',');
-                    var end = endPoint.join(',');
-                    var url = `https://dev.virtualearth.net/REST/v1/Routes/${travelMode}?waypoint.1=${start}&waypoint.2=${end}&key=${key}`;
+                    var start = new Microsoft.Maps.Directions.Waypoint({ address: startPointAddress, location: new Microsoft.Maps.Location(startPoint[0], startPoint[1]) });
+                    var end = new Microsoft.Maps.Directions.Waypoint({ address: endPointAddress, location: new Microsoft.Maps.Location(endPoint[0], endPoint[1]) });
 
-                    var request = new XMLHttpRequest();
+                    directionsManager.clearAll();
+                    directionsManager.addWaypoint(start);
+                    directionsManager.addWaypoint(end);
+                    directionsManager.setRequestOptions({ routeMode: Microsoft.Maps.Directions.RouteMode[travelMode] });
 
-                    request.onreadystatechange = function() {
-                        if (this.readyState === XMLHttpRequest.DONE) {
-                            if (this.status === 200) {
-                                var response = JSON.parse(this.responseText);
-
-                                if (response && response.resourceSets && response.resourceSets.length > 0 &&
-                                    response.resourceSets[0].resources && response.resourceSets[0].resources.length > 0 &&
-                                    response.resourceSets[0].resources[0].travelDuration) {
-
-                                    var durationInSeconds = response.resourceSets[0].resources[0].travelDuration;
-
-                                    var hours = Math.floor(durationInSeconds / 3600);
-                                    var minutes = Math.floor((durationInSeconds % 3600) / 60);
-
-                                    alert(`Duration (${travelMode}): ${hours} hours ${minutes} minutes`);
-                                } else {
-                                    alert(`No duration information available for ${travelMode}. Please check your input.`);
-                                }
-                            } else {
-                                alert(`Error fetching data from Bing Maps API for ${travelMode}. Please check your API key or try again later.`);
-                            }
-                        }
-                    };
-
-                    request.open('GET', url, true);
-                    request.send();
+                    directionsManager.calculateDirections();
                 });
             });
         }
-
         calculateDuration('Walking');
         calculateDuration('Driving');
     </script>
