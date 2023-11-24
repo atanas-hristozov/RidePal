@@ -1,5 +1,6 @@
 package com.example.ridepal.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
@@ -8,7 +9,9 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
+    @JsonIgnore
     @Column(name = "id")
     private int id;
     @Column(name = "first_name")
@@ -17,6 +20,7 @@ public class User {
     private String lastName;
     @Column(name = "username")
     private String username;
+    @JsonIgnore
     @Column(name = "password")
     private String password;
     @Column(name = "email")
@@ -26,7 +30,7 @@ public class User {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "user_photo")
     private String userPhoto;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
     private Set<Playlist> playlists;
 

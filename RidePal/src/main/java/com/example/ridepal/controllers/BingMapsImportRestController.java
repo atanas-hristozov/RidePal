@@ -1,25 +1,22 @@
 package com.example.ridepal.controllers;
 
 import com.example.ridepal.models.dtos.LocationDto;
-import com.example.ridepal.services.contracts.DeezerDataImporter;
 import com.example.ridepal.services.contracts.LocationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/roadbeat/route")
-public class BingMapsImportController {
+public class BingMapsImportRestController {
     private final WebClient webClient;
     private final LocationService locationService;
         @Autowired
-        public BingMapsImportController(WebClient webClient, LocationService locationService) {
+        public BingMapsImportRestController(WebClient webClient, LocationService locationService) {
             this.webClient = webClient;
             this.locationService=locationService;
         }

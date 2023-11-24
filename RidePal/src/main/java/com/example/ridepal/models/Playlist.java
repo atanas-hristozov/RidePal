@@ -1,7 +1,9 @@
 package com.example.ridepal.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,6 +12,7 @@ import java.util.Set;
         pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class Playlist {
 @Id
+@JsonIgnore
 @Column(name = "id")
 private int id;
 @Column(name = "title")
@@ -29,6 +32,14 @@ private User user;
             inverseJoinColumns = {@JoinColumn(name = "track_id")}
     )
     private Set<Track> tracks;
+
+    @ManyToMany( fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
+    @JoinTable(
+            name = "playlist_genres",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres;
 
     public Playlist() {
     }
@@ -78,6 +89,17 @@ private User user;
     }
 
     public void setTracks(Set<Track> tracks) {
-        this.tracks = tracks;
+        if(this.tracks.isEmpty()){
+            this.tracks = tracks;
+        }
+        this.tracks.addAll(tracks);
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
     }
 }

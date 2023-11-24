@@ -29,16 +29,28 @@ create table albums
 
 create table playlists
 (
-    id            int          not null
+    id            int auto_increment
         primary key,
     title         varchar(255) not null,
     `rank`        double       not null,
     playlist_time int          not null
 );
 
+create table playlist_genres
+(
+    playlist_id int not null,
+    genre_id    int not null,
+    constraint playlist_genres_genres_id_fk
+        foreign key (genre_id) references genres (id)
+            on update cascade on delete cascade,
+    constraint playlist_genres_playlists_id_fk
+        foreign key (playlist_id) references playlists (id)
+            on update cascade on delete cascade
+);
+
 create table tracks
 (
-    id          bigint auto_increment
+    id          bigint       not null
         primary key,
     title       varchar(255) null,
     duration    int          not null,

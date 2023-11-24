@@ -15,6 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Component
 public class DeezerDataImporterImpl implements DeezerDataImporter {
@@ -63,6 +64,22 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
         }
     }
 
+    private void createGenre(JsonNode item) {
+        int genreId = item.get("id").asInt();
+        try {
+            genreBaseCreateReadRepository.getById(genreId);
+        } catch (EntityNotFoundException e) {
+            String genreName = item.get("name").asText();
+
+            // Create a JPA entity and save it
+            Genre genreEntity = new Genre();
+            genreEntity.setGenreId(genreId);
+            genreEntity.setGenreName(genreName);
+
+            genreBaseCreateReadRepository.create(genreEntity);
+        }
+    }
+
     @Override
     public void importArtistDataForGenre(String responseBody, int genreId) {
         String apiUrl = "https://api.deezer.com/genre/" + genreId + "/artists";
@@ -86,6 +103,26 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void createArtist(JsonNode item, int genreId) {
+        int artistId = item.get("id").asInt();
+        try {
+            artistBaseCreateReadRepository.getById(artistId);
+        } catch (EntityNotFoundException e) {
+            String artistName = item.get("name").asText();
+            String artistPhoto = item.get("picture").asText();
+            String artistTracklist = item.get("tracklist").asText();
+
+            Artist artist = new Artist();
+            artist.setArtistId(artistId);
+            artist.setArtistPhoto(artistPhoto);
+            artist.setArtistName(artistName);
+            artist.setArtistTracklist(artistTracklist);
+
+            artistBaseCreateReadRepository.create(artist);
+            importTracksForArtist(artist, genreId);
         }
     }
 
@@ -130,18 +167,18 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
             JsonNode albumArray = item.get("album");
             album = createAlbum(albumArray, genreId);
 
+                Track track = new Track();
+                track.setTrackId(trackId);
+                track.setTitle(title);
+                track.setDuration(duration);
+                track.setRank(rank);
+                track.setPreviewUrl(previewUrl);
+                track.setArtist(artist);
+                track.setAlbum(album);
+                track.setGenre(genreBaseCreateReadRepository.getById(genreId));
 
-            Track track = new Track();
-            track.setTrackId(trackId);
-            track.setTitle(title);
-            track.setDuration(duration);
-            track.setRank(rank);
-            track.setPreviewUrl(previewUrl);
-            track.setArtist(artist);
-            track.setAlbum(album);
-            track.setGenre(genreBaseCreateReadRepository.getById(genreId));
+                trackBaseCreateReadRepository.create(track);
 
-            trackBaseCreateReadRepository.create(track);
         }
     }
 
@@ -164,42 +201,5 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
         }
         return null;
     }
-
-    private void createArtist(JsonNode item, int genreId) {
-        int artistId = item.get("id").asInt();
-        try {
-            artistBaseCreateReadRepository.getById(artistId);
-        } catch (EntityNotFoundException e) {
-            String artistName = item.get("name").asText();
-            String artistPhoto = item.get("picture").asText();
-            String artistTracklist = item.get("tracklist").asText();
-
-            Artist artist = new Artist();
-            artist.setArtistId(artistId);
-            artist.setArtistPhoto(artistPhoto);
-            artist.setArtistName(artistName);
-            artist.setArtistTracklist(artistTracklist);
-
-            artistBaseCreateReadRepository.create(artist);
-            importTracksForArtist(artist, genreId);
-        }
-    }
-
-    private void createGenre(JsonNode item) {
-        int genreId = item.get("id").asInt();
-        try {
-            genreBaseCreateReadRepository.getById(genreId);
-        } catch (EntityNotFoundException e) {
-            String genreName = item.get("name").asText();
-
-            // Create a JPA entity and save it
-            Genre genreEntity = new Genre();
-            genreEntity.setGenreId(genreId);
-            genreEntity.setGenreName(genreName);
-
-            genreBaseCreateReadRepository.create(genreEntity);
-        }
-    }
-
 }
 

@@ -7,20 +7,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @RestController
-@RequestMapping("/api/roadbeat")
-public class DeezerDataImporterController {
+@RequestMapping("/api/roadbeat/genres")
+public class DeezerDataImporterRestController {
 
     private final DeezerDataImporter deezerDataImporter;
     private final WebClient webClient;
 
     @Autowired
-    public DeezerDataImporterController(DeezerDataImporter deezerDataImporter,
-                                        WebClient webClient) {
+    public DeezerDataImporterRestController(DeezerDataImporter deezerDataImporter,
+                                            WebClient webClient) {
         this.deezerDataImporter = deezerDataImporter;
         this.webClient = webClient;
     }
 
-    @GetMapping("/genres")
+    @GetMapping()
     public ResponseEntity<String> importGenres() {
 
         String responseBody = webClient.get()

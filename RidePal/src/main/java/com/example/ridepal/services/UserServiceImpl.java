@@ -4,19 +4,21 @@ import com.example.ridepal.exceptions.AuthorizationException;
 import com.example.ridepal.exceptions.EntityDuplicateException;
 import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.models.User;
-import com.example.ridepal.repositories.AbstractUpdateDeleteRepository;
+import com.example.ridepal.repositories.AbstractCrudRepository;
 import com.example.ridepal.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     public static final String ERROR_MESSAGE = "You are not authorized!";
 
-    private final AbstractUpdateDeleteRepository<User> userAbstractIdentificationUdCrRepository;
+    private final AbstractCrudRepository<User> userAbstractIdentificationUdCrRepository;
 
     @Autowired
-    public UserServiceImpl(AbstractUpdateDeleteRepository<User> userAbstractIdentificationUdCrRepository) {
+    public UserServiceImpl(AbstractCrudRepository<User> userAbstractIdentificationUdCrRepository) {
         this.userAbstractIdentificationUdCrRepository = userAbstractIdentificationUdCrRepository;
     }
 
@@ -50,26 +52,27 @@ public class UserServiceImpl implements UserService {
         return userAbstractIdentificationUdCrRepository.getByField("username", username);
     }
 
+    @Override
+    public List<User> getAll() {
+        return userAbstractIdentificationUdCrRepository.getAll();
+    }
+
     private void checkUsernameExist(User user) {
-        boolean usernameExists = true;
         try {
-            userAbstractIdentificationUdCrRepository.getByField(user.getUsername(), user);
-        } catch (EntityNotFoundException e) {
-            usernameExists = false;
-        }
-        if (usernameExists) {
+            userAbstractIdentificationUdCrRepository.getByField("username", user.getUsername());
+            // If the above line doesn't throw an exception, then the username already exists
             throw new EntityDuplicateException("User", "username", user.getUsername());
+        } catch (EntityNotFoundException e) {
+            // Username doesn't exist, which is what we want
         }
     }
+
     private void checkEmailExist(User user) {
-        boolean emailExists = true;
         try {
-            userAbstractIdentificationUdCrRepository.getByField(user.getEmail(), user);
+            userAbstractIdentificationUdCrRepository.getByField("email", user.getEmail());
+            throw new EntityDuplicateException("User", "email", user.getEmail());
         } catch (EntityNotFoundException e) {
-            emailExists = false;
-        }
-        if (emailExists) {
-            throw new EntityDuplicateException("User", "email", user.getUsername());
+
         }
     }
 
