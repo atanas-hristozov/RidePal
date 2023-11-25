@@ -1,9 +1,8 @@
 package com.example.ridepal.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "genres")
@@ -15,6 +14,8 @@ public class Genre {
 
     @Column(name = "genre_name")
     private String genreName;
+    @ManyToMany(mappedBy = "genres")
+    private Set<Playlist> playlist;
 
     public Genre() {
     }
@@ -36,4 +37,11 @@ public class Genre {
         this.genreName = genreName;
     }
 
+    public Set<Playlist> getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(Set<Playlist> playlist) {
+        this.playlist = playlist;
+    }
 }

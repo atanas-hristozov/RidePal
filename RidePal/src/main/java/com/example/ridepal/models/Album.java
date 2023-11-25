@@ -1,11 +1,13 @@
 package com.example.ridepal.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "albums")
 public class Album {
     @Id
+    @JsonIgnore
     @Column(name = "id")
     private int albumId;
     @Column(name = "title")

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class AlbumRepositoryImpl extends AbstractCreateReadRepository<Album> {
-
     @Autowired
     public AlbumRepositoryImpl(SessionFactory sessionFactory, Class<Album> clazz) {
         super(sessionFactory, clazz);

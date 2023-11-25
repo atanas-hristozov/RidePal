@@ -1,26 +1,22 @@
 package com.example.ridepal.models.dtos;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class UserCreateDto {
+public class UserUpdateDto {
     @NotNull(message = "Name can't be empty")
     @Size(min = 3, max = 32, message = "First name must be between 3 and 32 symbols.")
     private String firstName;
     @NotNull(message = "Name can't be empty")
     @Size(min = 3, max = 32, message = "First name must be between 3 and 32 symbols.")
     private String lastName;
-    @NotNull(message = "Username can't be empty")
-    private String username;
     @NotNull(message = "Password can't be empty")
     private String password;
     @NotNull
     private String email;
-
     private String userPhoto;
 
-    public UserCreateDto() {
+    public UserUpdateDto() {
     }
 
     public String getFirstName() {
@@ -37,14 +33,6 @@ public class UserCreateDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {

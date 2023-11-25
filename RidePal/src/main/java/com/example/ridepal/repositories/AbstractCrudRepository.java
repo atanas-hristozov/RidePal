@@ -1,12 +1,12 @@
 package com.example.ridepal.repositories;
 
-import com.example.ridepal.repositories.contracts.BaseUpdateDeleteRepository;
+import com.example.ridepal.repositories.contracts.BaseCrudRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public abstract class AbstractUpdateDeleteRepository<T> extends AbstractCreateReadRepository<T> implements BaseUpdateDeleteRepository<T> {
+public abstract class AbstractCrudRepository<T> extends AbstractCreateReadRepository<T> implements BaseCrudRepository<T> {
 
-    protected AbstractUpdateDeleteRepository(SessionFactory sessionFactory, Class<T> clazz) {
+    protected AbstractCrudRepository(SessionFactory sessionFactory, Class<T> clazz) {
         super(sessionFactory, clazz);
     }
 

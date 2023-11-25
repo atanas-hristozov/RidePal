@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepositoryImpl extends AbstractUpdateDeleteRepository<User> {
+public class UserRepositoryImpl extends AbstractCrudRepository<User> {
     @Autowired
-
     public UserRepositoryImpl(SessionFactory sessionFactory, Class<User> clazz) {
         super(sessionFactory, clazz);
     }

@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 public class LocationServiceImpl implements LocationService {
 
-
     @Override
     public List<String> giveBackPossibleLocations(String responseBody) {
         List<String> possibleLocations = new ArrayList<>();

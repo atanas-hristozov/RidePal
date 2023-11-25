@@ -55,7 +55,6 @@ public class HibernateConfig {
                 .exchangeStrategies(ExchangeStrategies.builder()
                         .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024))
                         .build());
-        // Add additional configuration as needed
     }
 
     @Bean
@@ -92,9 +91,6 @@ public class HibernateConfig {
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
-
-        // Configure code-first capabilities
-        //hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
 
         return hibernateProperties;
     }

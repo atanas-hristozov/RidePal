@@ -1,5 +1,6 @@
 package com.example.ridepal.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -8,6 +9,7 @@ import java.util.Set;
 @Table(name = "tracks")
 public class Track {
     @Id
+    @JsonIgnore
     @Column(name = "id")
     private int trackId;
     @Column(name = "title")
@@ -97,5 +99,13 @@ public class Track {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Track track = (Track) o;
+        return trackId == track.trackId;
     }
 }
