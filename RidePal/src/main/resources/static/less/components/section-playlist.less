@@ -251,3 +251,108 @@ cursor: pointer;
 .stroke:nth-child(7){
     animation-delay: 0s;
 }
+
+.playlist-edit{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &-button{
+        position: relative;
+        display: inline-block;
+        padding: 10px 20px;
+        color: @color-neon-blue;
+        font-size: 16px;
+        text-decoration: none;
+        text-transform: uppercase;
+        overflow: hidden;
+        transition: .5s;
+        letter-spacing: 4px;
+        border-radius: 5px;
+        background: none;
+        cursor: pointer;
+        border: none;
+        font-weight: bold;
+        font-style: oblique;
+        margin: 25px 10px 0 10px;
+        span {
+            position: absolute;
+            display: block;
+        }
+        span:nth-child(1) {
+            top: 0;
+            left: -100%;
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, @color-neon-blue);
+            animation: btn-anim21 1s linear infinite;
+        }
+        @keyframes btn-anim21{
+            0%{
+                left: -100%;
+            }
+            50%,100%{
+                left: 100%;
+            }
+        }
+        span:nth-child(2){
+            top: -100%;
+            right: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg,transparent,@color-neon-blue);
+            animation: btn-anim22 1s linear infinite;
+            animation-delay: .25s;
+        }
+        @keyframes btn-anim22{
+            0%{
+                top: -100%;
+            }
+            50%,100%{
+                top: 100%;
+            }
+        }
+        span:nth-child(3){
+            bottom: 0;
+            right: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(270deg,transparent,@color-neon-blue);
+            animation: btn-anim23 1s linear infinite;
+            animation-delay: .5s;
+        }
+        @keyframes btn-anim23{
+            0%{
+                right: -100%;
+            }
+            50%,100%{
+                right: 100%;
+            }
+        }
+        span:nth-child(4){
+            bottom: -100%;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(360deg,transparent,@color-neon-blue);
+            animation: btn-anim24 1s linear infinite;
+            animation-delay: .75s;
+        }
+        @keyframes btn-anim24{
+            0%{
+                bottom: -100%;
+            }
+            50%,100%{
+                bottom: 100% ;
+            }
+        }
+    }
+    &-button:hover {
+        background: @color-neon-blue;
+        color: @color-black;
+        border-radius: 5px;
+        box-shadow: 0 0 5px @color-neon-blue,
+                    0 0 25px @color-neon-blue,
+                    0 0 50px @color-neon-blue,
+                    0 0 100px @color-neon-blue;
+    }
+}
