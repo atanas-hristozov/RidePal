@@ -6,8 +6,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "albums")
 public class Album {
-    @Id
+
     @JsonIgnore
+    @Id
     @Column(name = "id")
     private int albumId;
     @Column(name = "title")

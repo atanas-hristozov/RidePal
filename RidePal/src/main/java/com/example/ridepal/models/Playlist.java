@@ -2,30 +2,29 @@ package com.example.ridepal.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.engine.internal.Cascade;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "playlists")
-@SecondaryTable(name = "playlist_data",
-        pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class Playlist {
-@Id
-@JsonIgnore
-@Column(name = "id")
-private int id;
-@Column(name = "title")
-private String title;
-@Column(name = "rank")
-private double rank;
-@Column(name = "playlist_time")
-private int playlistTime;
-@ManyToOne
-@JoinColumn(name = "user_id")
-private User user;
+    @JsonIgnore
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(name = "title")
+    private String title;
+    @Column(name = "rank")
+    private double rank;
+    @Column(name = "playlist_time")
+    private int playlistTime;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "playlist_data",
             joinColumns = {@JoinColumn(name = "playlist_id")},
@@ -33,11 +32,11 @@ private User user;
     )
     private Set<Track> tracks;
 
-    @ManyToMany( fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "playlist_genres",
-            joinColumns = @JoinColumn(name = "playlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id")
+            joinColumns = {@JoinColumn(name = "playlist_id")},
+            inverseJoinColumns = {@JoinColumn(name = "genre_id")}
     )
     private Set<Genre> genres;
 
@@ -87,19 +86,22 @@ private User user;
     public Set<Track> getTracks() {
         return tracks;
     }
-
     public void setTracks(Set<Track> tracks) {
-        if(this.tracks.isEmpty()){
+        if (this.tracks == null || this.tracks.isEmpty()) {
             this.tracks = tracks;
         }
         this.tracks.addAll(tracks);
+        tracks.forEach(track -> track.addPlaylist(this));
     }
-
     public Set<Genre> getGenres() {
         return genres;
     }
 
     public void setGenres(Set<Genre> genres) {
-        this.genres = genres;
+        if (this.genres == null || this.genres.isEmpty()) {
+            this.genres = genres;
+        }
+        this.genres.addAll(genres);
+        genres.forEach(genre -> genre.addPlaylist(this));
     }
 }

@@ -9,8 +9,9 @@ import java.util.List;
 public interface PlaylistService {
 
     Playlist getById(int id);
-    void create(User user, Playlist playlist, int travelDuration);
+    List<Playlist> getAll();
+    void create(User user, Playlist playlist, int travelDuration, String genreNames);
 
-    void update(Playlist playlist);
-    void delete(int id);
+    void update(User user, Playlist playlist);
+    void delete(User user, Playlist playlist);
 }

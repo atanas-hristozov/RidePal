@@ -39,6 +39,17 @@ public abstract class AbstractCreateReadRepository<T> implements BaseCreateReadR
     }
 
     @Override
+    public <V> T getByField(String name, V value, Session session) {
+        String query = String.format("from %s where %s = :fieldValue", clazz.getSimpleName(), name);
+        String notFoundError = String.format("%s with %s %s not found", clazz.getSimpleName(), name, value);
+            return session
+                    .createQuery(query, clazz)
+                    .setParameter("fieldValue", value)
+                    .uniqueResultOptional()
+                    .orElseThrow(() -> new EntityNotFoundException(notFoundError));
+    }
+
+    @Override
     public void create(T entity) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();

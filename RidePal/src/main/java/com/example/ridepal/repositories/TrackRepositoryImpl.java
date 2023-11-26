@@ -22,18 +22,21 @@ public class TrackRepositoryImpl extends AbstractCrudRepository<Track> implement
     }
 
     @Override
-    public Set<Track> generateRandomTrackByGenre(Genre genre, int tracksNumber) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Track> query = session.createQuery("FROM Track WHERE genre=:genreId ORDER BY rand()");
-            query.setParameter("genreId", genre.getGenreId());
-            query.setParameter("tracksNumber", tracksNumber);
+    public Set<Track> generateRandomTrackByGenre(Genre genre, int tracksNumber, Session session) {
+            Query<Track> query = session.createQuery("FROM Track WHERE genre = :genre ORDER BY rand()");
+            query.setParameter("genre", genre);
+           /* query.setParameter("tracksNumber", tracksNumber);*/
             query.setMaxResults(tracksNumber);
             List<Track> result = query.list();
             Set<Track> resultSet = new HashSet<>(result);
             if (result.isEmpty()) {
-                throw new EntityNotFoundException("Tracks", "name", genre.getGenreName());
+                throw new EntityNotFoundException("Tracks", "genre", genre.getGenreName());
             }
             return resultSet;
-        }
+    }
+
+    @Override
+    public <V> Track getByField(String name, V value, Session session) {
+        return null;
     }
 }

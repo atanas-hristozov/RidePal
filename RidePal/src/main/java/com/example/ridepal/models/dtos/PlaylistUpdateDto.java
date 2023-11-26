@@ -1,17 +1,14 @@
 package com.example.ridepal.models.dtos;
 
-import com.example.ridepal.models.Genre;
 import jakarta.validation.constraints.Size;
 
-import java.util.Set;
+public class PlaylistUpdateDto {
 
-public class PlaylistGenerateDto {
     @Size(min = 3, max = 20, message = "Title length should be between 3 and 20")
     private String title;
-    private int travelDuration;
     private String genreNames;
 
-    public PlaylistGenerateDto() {
+    public PlaylistUpdateDto() {
     }
 
     public String getTitle() {
@@ -20,14 +17,6 @@ public class PlaylistGenerateDto {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public int getTravelDuration() {
-        return travelDuration;
-    }
-
-    public void setTravelDuration(int travelDuration) {
-        this.travelDuration = travelDuration;
     }
 
     public String getGenreNames() {

@@ -23,7 +23,7 @@ import static com.example.ridepal.services.UserServiceImpl.ERROR_MESSAGE;
 public class UserRestController {
 
     private static final String CAN_T_BE_EMPTY = "Cannot be empty!";
-    private static final String CAN_T_DELETE_OTHER_ACCOUNT = "You can't delete other people's accounts!";
+
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
@@ -66,11 +66,10 @@ public class UserRestController {
                        @RequestBody UserUpdateDto userUpdateDto,
                        @PathVariable int id) {
         try {
-            User loggedUser = authenticationHelper.tryGetUser(headers);
-            checkIsItSameUser(loggedUser, id);
-            User user = userMapper.fromUserUpdateDto(id, userUpdateDto);
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToUpdate = userMapper.fromUserUpdateDto(id, userUpdateDto);
 
-            userService.update(user);
+            userService.update(user, userToUpdate);
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -82,14 +81,9 @@ public class UserRestController {
     @DeleteMapping("/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            User loggedUser = authenticationHelper.tryGetUser(headers);
-            int identicalNum = loggedUser.getId();
+            User user = authenticationHelper.tryGetUser(headers);
             User userToDelete = userService.getById(id);
-            if (identicalNum == id || identicalNum == 1) {
-                userService.delete(id);
-            } else {
-                throw new AuthorizationException(ERROR_MESSAGE);
-            }
+            userService.delete(user, userToDelete);
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -105,33 +99,13 @@ public class UserRestController {
                                   @PathVariable int id) {
         try {
             User loggedUser = authenticationHelper.tryGetUser(headers);
-
-            checkAdminRights(loggedUser);
-
-            User userToUpdate = userService.getById(id);
-            if (userToUpdate.getId() == 1 && loggedUser.getId() != 1) {
-                throw new AuthorizationException(ERROR_MESSAGE);
-            }
-
-            userToUpdate = userMapper.fromUserAdminRightsDto(id, adminRightsDto);
-            userService.update(userToUpdate);
+            User userToUpdate = userMapper.fromUserAdminRightsDto(id, adminRightsDto);
+            userService.update(loggedUser, userToUpdate);
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
-    }
-
-    private static void checkAdminRights(User userToCheck) { // User with id 1 is always with admin rights
-        if (!userToCheck.isAdmin() || userToCheck.getId() != 1) {
-            throw new AuthorizationException(ERROR_MESSAGE);
-        }
-    }
-
-    private static void checkIsItSameUser(User loggedUser, int id) {
-        if (loggedUser.getId() != id) {
-            throw new AuthorizationException(CAN_T_DELETE_OTHER_ACCOUNT);
         }
     }
 }
