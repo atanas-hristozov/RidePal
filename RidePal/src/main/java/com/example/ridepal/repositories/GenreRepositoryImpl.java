@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class GenreRepositoryImpl extends AbstractCrudRepository<Genre> {
+public class GenreRepositoryImpl extends AbstractCrudRepository<Genre>  {
     @Autowired
     public GenreRepositoryImpl(SessionFactory sessionFactory, Class<Genre> clazz) {
         super(sessionFactory, clazz);
     }
-}
+
+  }

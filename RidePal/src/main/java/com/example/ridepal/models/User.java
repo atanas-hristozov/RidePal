@@ -10,9 +10,9 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
 
-    @Id
     @JsonIgnore
-    @Column(name = "id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "first_name")
     private String firstName;
@@ -31,7 +31,7 @@ public class User {
     @Column(name = "user_photo")
     private String userPhoto;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Playlist> playlists;
 
     public User() {

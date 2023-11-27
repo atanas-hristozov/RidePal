@@ -3,13 +3,14 @@ package com.example.ridepal.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "tracks")
 public class Track {
-    @Id
     @JsonIgnore
+    @Id
     @Column(name = "id")
     private int trackId;
     @Column(name = "title")
@@ -31,8 +32,8 @@ public class Track {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    /*@ManyToMany(mappedBy = "tracks", cascade = CascadeType.ALL)
-    private Set<Playlist> playlists;*/
+    @ManyToMany(mappedBy = "tracks", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<Playlist> playlists;
 
     public Track() {
     }
@@ -99,6 +100,16 @@ public class Track {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public Set<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void addPlaylist(Playlist playlist) {
+        if (this.playlists == null)
+            this.playlists = new HashSet<>();
+        this.playlists.add(playlist);
     }
 
     @Override
