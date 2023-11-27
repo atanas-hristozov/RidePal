@@ -8,6 +8,7 @@ import com.example.ridepal.helpers.UserMapper;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.dtos.UserAdminRightsDto;
 import com.example.ridepal.models.dtos.UserCreateDto;
+import com.example.ridepal.models.dtos.UserDisplayDto;
 import com.example.ridepal.models.dtos.UserUpdateDto;
 import com.example.ridepal.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.ridepal.services.UserServiceImpl.ERROR_MESSAGE;
 
@@ -35,11 +39,11 @@ public class UserRestController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping("/{id}")
-    public User get(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    @GetMapping("user/{id}")
+    public UserDisplayDto get(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             authenticationHelper.tryGetUser(headers);
-            return userService.getById(id);
+            return userMapper.fromUser(userService.getById(id));
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -48,7 +52,7 @@ public class UserRestController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/user")
     public User create(@RequestBody UserCreateDto userCreateDto) {
         User user = userMapper.fromUserCreateDto(userCreateDto);
         try {
@@ -61,7 +65,7 @@ public class UserRestController {
         return user;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/user/{id}")
     public void update(@RequestHeader HttpHeaders headers,
                        @RequestBody UserUpdateDto userUpdateDto,
                        @PathVariable int id) {
@@ -78,7 +82,7 @@ public class UserRestController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/user/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -107,5 +111,14 @@ public class UserRestController {
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+    }
+
+    @GetMapping("/users")
+    public List<UserDisplayDto> getAllUsers() {
+        List<UserDisplayDto> users = new ArrayList<>();
+        for (User user : userService.getAll()) {
+            users.add(userMapper.fromUser(user));
+        }
+        return users;
     }
 }

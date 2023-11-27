@@ -27,12 +27,10 @@ public class Track {
     @ManyToOne
     @JoinColumn(name = "album_id")
     private Album album;
-
     @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;
-
-    @ManyToMany(mappedBy = "tracks", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(mappedBy = "tracks", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Playlist> playlists;
 
     public Track() {

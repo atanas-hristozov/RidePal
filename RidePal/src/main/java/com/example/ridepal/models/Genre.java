@@ -16,7 +16,7 @@ public class Genre {
 
     @Column(name = "genre_name")
     private String genreName;
-   @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+   @ManyToMany(mappedBy = "genres", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<Playlist> playlists;
 
     public Genre() {

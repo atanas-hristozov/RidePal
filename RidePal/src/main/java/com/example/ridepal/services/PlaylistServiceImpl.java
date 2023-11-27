@@ -96,6 +96,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlist.setPlaylistTime(playlistDuration);
         playlist.setGenres(genres);
         playlist.setUser(user);
+        user.addPlaylist(playlist);
         playlistRepository.createPlaylist(playlist, tracksAll, genres, session);
     }
 

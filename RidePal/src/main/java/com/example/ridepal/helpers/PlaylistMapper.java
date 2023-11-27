@@ -2,9 +2,10 @@ package com.example.ridepal.helpers;
 
 import com.example.ridepal.models.Genre;
 import com.example.ridepal.models.Playlist;
-import com.example.ridepal.models.dtos.PlaylistGenerateDto;
-import com.example.ridepal.models.dtos.PlaylistUpdateDto;
+import com.example.ridepal.models.Track;
+import com.example.ridepal.models.dtos.*;
 import com.example.ridepal.services.contracts.PlaylistService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,17 +22,52 @@ public class PlaylistMapper {
         this.playlistService = playlistService;
     }
 
-    public Playlist fromPlaylistGenerateDto(PlaylistGenerateDto playlistGenerateDto){
+    public Playlist fromPlaylistGenerateDto(PlaylistGenerateDto playlistGenerateDto) {
         Playlist playlist = new Playlist();
         playlist.setTitle(playlistGenerateDto.getTitle());
 
         return playlist;
     }
 
-    public Playlist fromPlaylistUpdateDto(PlaylistUpdateDto playlistUpdateDto, int id){
+    public Playlist fromPlaylistUpdateDto(PlaylistUpdateDto playlistUpdateDto, int id) {
         Playlist playlist = playlistService.getById(id);
         playlist.setTitle(playlistUpdateDto.getTitle());
 
         return playlist;
+    }
+
+    public PlaylistDisplayDto fromPlaylist(Playlist playlist) {
+        PlaylistDisplayDto playlistDto = new PlaylistDisplayDto();
+        playlistDto.setTitle(playlist.getTitle());
+        playlistDto.setCreator(playlist.getUser().getUsername());
+        playlistDto.setPlaylistTime(playlist.getPlaylistTime());
+        playlistDto.setRank(playlist.getRank());
+        for (Genre genre :
+                playlist.getGenres()) {
+            GenreDisplayDto genreDto = new GenreDisplayDto();
+            genreDto.setName(genre.getGenreName());
+            playlistDto.addGenreDisplayDto(genreDto);
+        }
+        for (Track track :
+                playlist.getTracks()) {
+            TrackDisplayDto trackDto = getTrackDisplayDto(track);
+            playlistDto.addTrackDisplayDto(trackDto);
+        }
+        return playlistDto;
+    }
+
+    @NotNull
+    private static TrackDisplayDto getTrackDisplayDto(Track track) {
+        TrackDisplayDto trackDto = new TrackDisplayDto();
+        trackDto.setTitle(track.getTitle());
+        trackDto.setAlbum(track.getAlbum() != null ? track.getAlbum().getAlbumName() : "N/A");
+        trackDto.setDuration(track.getDuration());
+        trackDto.setPreviewUrl(track.getPreviewUrl());
+        trackDto.setRank(track.getRank());
+        ArtistDisplayDto artistDto = new ArtistDisplayDto();
+        artistDto.setName(track.getArtist().getArtistName());
+        artistDto.setPhoto(track.getArtist().getArtistPhoto());
+        trackDto.setArtist(artistDto);
+        return trackDto;
     }
 }

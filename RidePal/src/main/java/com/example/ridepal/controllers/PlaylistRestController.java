@@ -8,6 +8,7 @@ import com.example.ridepal.helpers.PlaylistMapper;
 import com.example.ridepal.models.Genre;
 import com.example.ridepal.models.Playlist;
 import com.example.ridepal.models.User;
+import com.example.ridepal.models.dtos.PlaylistDisplayDto;
 import com.example.ridepal.models.dtos.PlaylistGenerateDto;
 import com.example.ridepal.models.dtos.PlaylistUpdateDto;
 import com.example.ridepal.services.contracts.GenreService;
@@ -66,12 +67,11 @@ public class PlaylistRestController {
     }
 
     @GetMapping("/playlist/{id}")
-    public Playlist getPlaylist(@PathVariable int id,
-                                @RequestHeader HttpHeaders headers) {
-
+    public PlaylistDisplayDto getPlaylist(@PathVariable int id,
+                                          @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return playlistService.getById(id);
+            return playlistMapper.fromPlaylist(playlistService.getById(id));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (EntityDuplicateException e) {

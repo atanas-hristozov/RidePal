@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User {
-
-    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -20,18 +19,15 @@ public class User {
     private String lastName;
     @Column(name = "username")
     private String username;
-    @JsonIgnore
     @Column(name = "password")
     private String password;
     @Column(name = "email")
     private String email;
     @Column(name = "is_admin")
     private boolean isAdmin;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "user_photo")
     private String userPhoto;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Playlist> playlists;
 
     public User() {
@@ -97,8 +93,11 @@ public class User {
         return playlists;
     }
 
-    public void setPlaylists(Set<Playlist> playlists) {
-        this.playlists = playlists;
+    public void addPlaylist(Playlist playlist) {
+        if(this.playlists == null)
+            this.playlists=new HashSet<>();
+
+        playlists.add(playlist);
     }
 
     public String getUserPhoto() {
