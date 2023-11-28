@@ -14,7 +14,6 @@ public class UserUpdateDto {
     private String password;
     @NotNull
     private String email;
-    private String userPhoto;
 
     public UserUpdateDto() {
     }
@@ -51,11 +50,4 @@ public class UserUpdateDto {
         this.email = email;
     }
 
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
 }
