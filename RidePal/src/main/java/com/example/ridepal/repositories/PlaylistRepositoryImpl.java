@@ -40,35 +40,37 @@ public class PlaylistRepositoryImpl extends AbstractCrudRepository<Playlist> imp
 
     @Override
     public List<Playlist> getAllByFilterOptions(PlaylistFilterOptions playlistFilterOptions) {
-        /*try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
-            playlistFilterOptions.getTotalDuration().ifPresent(value -> {
+            playlistFilterOptions.getTitle().ifPresent(value -> {
+                filters.add("title like :title");
+                params.put("playlistTime", String.format("%%%s%%", value));
+            });
+
+            playlistFilterOptions.getPlaylistTime().ifPresent(value -> {
                 filters.add("totalDuration like :playlistTime");
-                params.put("username", String.format("%%%s%%", value));
+                params.put("playlistTime", String.format("%%%s%%", value));
             });
 
-            userFilterOptions.getEmail().ifPresent(value -> {
-                filters.add("email like :email");
-                params.put("email", String.format("%%%s%%", value));
+            playlistFilterOptions.getGenreName().ifPresent(value -> {
+                filters.add("genreName like :genreName");
+                params.put("genreName", String.format("%%%s%%", value));
             });
 
-            userFilterOptions.getFirstName().ifPresent(value -> {
-                filters.add("firstName like :first_name");
-                params.put("first_name", String.format("%%%s%%", value));
-            });
 
-            StringBuilder queryString = new StringBuilder("from User");
+
+            StringBuilder queryString = new StringBuilder("from Playlist");
             if (!filters.isEmpty()) {
                 queryString
                         .append(" where ")
                         .append(String.join(" and ", filters));
             }
-            Query<User> query = session.createQuery(queryString.toString(), User.class);
+            Query<Playlist> query = session.createQuery(queryString.toString(), Playlist.class);
             query.setProperties(params);
-            return query.list();*/
-        return null;
+            return query.list();
+        }
 
     }
 }

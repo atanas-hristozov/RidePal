@@ -18,33 +18,13 @@ create table genres
 
 create table albums
 (
-    id            bigint auto_increment
+    id            bigint       not null
         primary key,
     title         varchar(255) null,
     tracklist_url varchar(255) null,
     genre_id      int          not null,
     constraint albums_genres_id_fk
         foreign key (genre_id) references genres (id)
-);
-
-create table playlists
-(
-    id            int auto_increment
-        primary key,
-    title         varchar(255) not null,
-    `rank`        double       not null,
-    playlist_time int          not null
-);
-
-create table playlist_genres
-(
-    playlist_id int not null,
-    genre_id    int not null,
-    constraint playlist_genres_genres_id_fk
-        foreign key (genre_id) references genres (id)
-            on update cascade on delete cascade,
-    constraint playlist_genres_playlists_id_fk
-        foreign key (playlist_id) references playlists (id)
             on update cascade on delete cascade
 );
 
@@ -66,6 +46,7 @@ create table tracks
             on update cascade on delete cascade,
     constraint tracks_genres_id_fk
         foreign key (genre_id) references genres (id)
+            on update cascade on delete cascade
 );
 
 create table users
@@ -81,19 +62,40 @@ create table users
     user_photo varchar(255) null
 );
 
+create table playlists
+(
+    id            int auto_increment
+        primary key,
+    title         varchar(255) not null,
+    user_id       int          not null,
+    `rank`        double       not null,
+    playlist_time int          not null,
+    constraint playlists_users_id_fk
+        foreign key (user_id) references users (id)
+            on update cascade on delete cascade
+);
+
 create table playlist_data
 (
     playlist_id int    not null,
-    user_id     int    not null,
     track_id    bigint not null,
     constraint playlist_data_playlists_id_fk
         foreign key (playlist_id) references playlists (id)
             on update cascade on delete cascade,
     constraint playlist_data_tracks_id_fk
         foreign key (track_id) references tracks (id)
+            on update cascade on delete cascade
+);
+
+create table playlist_genres
+(
+    playlist_id int not null,
+    genre_id    int not null,
+    constraint playlist_genres_genres_id_fk
+        foreign key (genre_id) references genres (id)
             on update cascade on delete cascade,
-    constraint playlist_data_users_id_fk
-        foreign key (user_id) references users (id)
+    constraint playlist_genres_playlists_id_fk
+        foreign key (playlist_id) references playlists (id)
             on update cascade on delete cascade
 );
 
