@@ -9,7 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tracks")
 public class Track {
-    @JsonIgnore
+
     @Id
     @Column(name = "id")
     private int trackId;
@@ -21,17 +21,15 @@ public class Track {
     private double rank;
     @Column(name = "preview_url")
     private String previewUrl;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "artist_id")
     private Artist artist;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "album_id")
     private Album album;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id")
     private Genre genre;
-    @ManyToMany(mappedBy = "tracks", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<Playlist> playlists;
 
     public Track() {
     }
@@ -100,7 +98,7 @@ public class Track {
         this.genre = genre;
     }
 
-    public Set<Playlist> getPlaylists() {
+/*    public Set<Playlist> getPlaylists() {
         return playlists;
     }
 
@@ -108,7 +106,7 @@ public class Track {
         if (this.playlists == null)
             this.playlists = new HashSet<>();
         this.playlists.add(playlist);
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {

@@ -11,8 +11,7 @@ import java.util.Set;
 
 public interface PlaylistRepository extends BaseCrudRepository<Playlist> {
 
-    void createPlaylist(Playlist playlist, Set<Track> tracks, Set<Genre> genres, Session session);
+    void createPlaylist(Playlist playlist);
     List<Playlist> getAllByFilterOptions(PlaylistFilterOptions playlistFilterOptions);
 
-    Session openSession();
 }

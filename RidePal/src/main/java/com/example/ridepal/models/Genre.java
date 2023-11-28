@@ -13,11 +13,8 @@ public class Genre {
     @Id
     @Column(name = "id")
     private int genreId;
-
     @Column(name = "genre_name")
     private String genreName;
-   @ManyToMany(mappedBy = "genres", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private Set<Playlist> playlists;
 
     public Genre() {
     }
@@ -39,16 +36,6 @@ public class Genre {
         this.genreName = genreName;
     }
 
-    public Set<Playlist> getPlaylists() {
-        return playlists;
-    }
-
-    public void addPlaylist(Playlist playlist) {
-        if(this.playlists==null)
-            this.playlists=new HashSet<>();
-
-        playlists.add(playlist);
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -57,10 +44,4 @@ public class Genre {
         Genre genre = (Genre) o;
         return genreId == genre.genreId && genreName.equals(genre.getGenreName());
     }
-  /* @Override
-    public int hashCode() {
-        int result = genreId;
-        result = 31 * result + genreName.hashCode();
-        return result;
-    }*/
 }

@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "playlists")
 public class Playlist {
-    @JsonIgnore
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,14 +23,14 @@ public class Playlist {
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "playlist_data",
             joinColumns = {@JoinColumn(name = "playlist_id")},
             inverseJoinColumns = {@JoinColumn(name = "track_id")}
     )
     private Set<Track> tracks;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "playlist_genres",
             joinColumns = {@JoinColumn(name = "playlist_id")},
@@ -86,20 +86,18 @@ public class Playlist {
     }
     public void setTracks(Set<Track> tracks) {
         if (this.tracks == null || this.tracks.isEmpty()) {
-            this.tracks = tracks;
+            this.tracks = new HashSet<>();
         }
         this.tracks.addAll(tracks);
-        tracks.forEach(track -> track.addPlaylist(this));
     }
     public Set<Genre> getGenres() {
         return genres;
     }
 
-    public void setGenres(Set<Genre> genres) {
+    public void addGenre(Genre genre) {
         if (this.genres == null || this.genres.isEmpty()) {
-            this.genres = genres;
+            this.genres = new HashSet<>();
         }
-        this.genres.addAll(genres);
-        genres.forEach(genre -> genre.addPlaylist(this));
+        this.genres.add(genre);
     }
 }

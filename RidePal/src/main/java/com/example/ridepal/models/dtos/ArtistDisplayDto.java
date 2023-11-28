@@ -1,13 +1,11 @@
 package com.example.ridepal.models.dtos;
 
 public class ArtistDisplayDto {
-
     private String name;
     private String photo;
 
     public ArtistDisplayDto() {
     }
-
     public String getName() {
         return name;
     }

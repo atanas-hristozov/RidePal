@@ -11,6 +11,7 @@ import com.example.ridepal.models.User;
 import com.example.ridepal.models.dtos.PlaylistDisplayDto;
 import com.example.ridepal.models.dtos.PlaylistGenerateDto;
 import com.example.ridepal.models.dtos.PlaylistUpdateDto;
+import com.example.ridepal.models.dtos.UserDisplayDto;
 import com.example.ridepal.services.contracts.GenreService;
 import com.example.ridepal.services.contracts.PlaylistService;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -82,14 +84,19 @@ public class PlaylistRestController {
     }
 
     @GetMapping("/playlists")
-    public List<Playlist> getAll() {
-        return playlistService.getAll();
+    public List<PlaylistDisplayDto> getAll() {
+        List<PlaylistDisplayDto> playlistDisplayDtos = new ArrayList<>();
+        for (Playlist playlist : playlistService.getAll())
+            playlistDisplayDtos.add(playlistMapper.fromPlaylist(playlist));
+
+        return playlistDisplayDtos;
     }
+
 
     @PutMapping("/playlist/{id}")
     public void updatePlaylist(@PathVariable int id,
                                @RequestHeader HttpHeaders headers,
-                               PlaylistUpdateDto playlistUpdateDto) {
+                               @RequestBody PlaylistUpdateDto playlistUpdateDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Playlist playlist = playlistMapper.fromPlaylistUpdateDto(playlistUpdateDto, id);

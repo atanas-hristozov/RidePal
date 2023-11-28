@@ -11,6 +11,7 @@ import com.example.ridepal.repositories.contracts.PlaylistRepository;
 import com.example.ridepal.repositories.contracts.TrackRepository;
 import com.example.ridepal.services.contracts.PlaylistService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PlaylistServiceImpl implements PlaylistService {
     public static final String GENRES_MATCH_ERROR = "Those Genres doesn't match the genres in the Api.";
     public static final String ERROR_MESSAGE = "You are not authorized!";
@@ -36,14 +38,13 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 
     @Autowired
-    public PlaylistServiceImpl(BaseCrudRepository<Playlist> basePlaylistCrudRepository,
-                               TrackRepository trackRepository,
+    public PlaylistServiceImpl(TrackRepository trackRepository,
                                BaseCrudRepository<Genre> genreBaseCrudRepository,
                                PlaylistRepository playlistRepository) {
-    //    this.basePlaylistCrudRepository = basePlaylistCrudRepository;
+        //    this.basePlaylistCrudRepository = basePlaylistCrudRepository;
         this.trackRepository = trackRepository;
         this.genreBaseCrudRepository = genreBaseCrudRepository;
-        this.playlistRepository=playlistRepository;
+        this.playlistRepository = playlistRepository;
     }
 
     @Override
@@ -66,38 +67,36 @@ public class PlaylistServiceImpl implements PlaylistService {
         // given for the genre and the average length of a single track
         int tracksCountPerGenre = durationPerGenre / AVERAGE_TRACK_DURATION;
         int playlistDuration = 0;
-        Set<Track> tracksAll=new HashSet<>();
-        Set<Genre> genres=new HashSet<>();
-        Session session = playlistRepository.openSession();
+        //open session for all entities involved
+        // Session session = playlistRepository.openSession();
+
         //fill in tracks for each genre
         for (String name : namesGenre) {
             //generate a number of tracks for the given genre
-           Genre genreEntity=  genreBaseCrudRepository.getByField("genreName", name, session);
-             Set<Track> tracks=trackRepository.generateRandomTrackByGenre(genreEntity, tracksCountPerGenre, session);
+            Genre genreEntity = genreBaseCrudRepository.getByField("genreName", name);
+            playlist.addGenre(genreEntity);
+            Set<Track> tracks = trackRepository.generateRandomTrackByGenre(genreEntity, tracksCountPerGenre);
             //find what duration is reached so far
             int sumDuration = tracks.stream().mapToInt(Track::getDuration).sum();
             //if the calculated duration is not enough add more
-            if (sumDuration + 100 < durationPerGenre) {
+            if (sumDuration + 210 < durationPerGenre) {
                 tracksCountPerGenre = (durationPerGenre - sumDuration) / AVERAGE_TRACK_DURATION;
-                tracks.addAll(trackRepository.generateRandomTrackByGenre(genreEntity, tracksCountPerGenre, session));
+                tracks.addAll(trackRepository.generateRandomTrackByGenre(genreEntity, tracksCountPerGenre));
             }
             //if the calculated duration exceeds the limit remove some of the added tracks
             while (sumDuration > durationPerGenre + 180) {
                 tracks.remove(tracks.stream().findFirst().orElse(null));
                 sumDuration = tracks.stream().mapToInt(Track::getDuration).sum();
             }
-            tracksAll.addAll(tracks);
+            playlist.setTracks(tracks);
             //add to the total duration
             playlistDuration += sumDuration;
-            genres.add(genreEntity);
         }
-        playlist.setTracks(tracksAll);
         playlist.setRank(findAverageRank(playlist));
         playlist.setPlaylistTime(playlistDuration);
-        playlist.setGenres(genres);
         playlist.setUser(user);
         user.addPlaylist(playlist);
-        playlistRepository.createPlaylist(playlist, tracksAll, genres, session);
+        playlistRepository.createPlaylist(playlist);
     }
 
     @Override
@@ -113,9 +112,9 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     private double findAverageRank(Playlist playlist) {
-       return BigDecimal.valueOf(playlist.getTracks().stream()
-               .mapToDouble(Track::getRank)
-               .average().getAsDouble()).setScale(2, RoundingMode.UP).doubleValue();
+        return BigDecimal.valueOf(playlist.getTracks().stream()
+                .mapToDouble(Track::getRank)
+                .average().getAsDouble()).setScale(2, RoundingMode.UP).doubleValue();
     }
 
     private static void checkAccessPermissions(User executingUser, Playlist playlist) {
