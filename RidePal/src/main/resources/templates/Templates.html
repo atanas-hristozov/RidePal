@@ -22,8 +22,8 @@
     <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
     <ul class="menu">
       <li><a href="Index.html" th:href="@{/}">Home</a></li>
-      <li><a href="Generate_tracks.html" th:if="${isAuthenticated}" th:href="@{/user}">Create</a></li>
-      <li><a href="All_Playlists.html">Browse</a></li>
+      <li><a href="Generate_tracks.html" th:if="${isAuthenticated}" th:href="@{/generate}">Create</a></li>
+      <li><a href="All_Playlists.html" th:href="@{/playlists}">Browse</a></li>
       <li><a href="About.html" th:href="@{/about}">About</a></li>
       <li><a href="Contacts.html" th:href="@{/contact}">Contact</a></li>
       <li><a href="My_Profile.html" th:if="${isAuthenticated}" th:href="@{/user}">My Profile</a></li>
@@ -36,8 +36,8 @@
     <div class="footer-cover-links">
       <ul class="footer-cover-links-nav">
         <li class="footer-cover-links-nav-item"><a href="Index.html" th:href="@{/}">Home</a></li>
-        <li class="footer-cover-links-nav-item"><a href="Generate_tracks.html">Create</a></li>
-        <li class="footer-cover-links-nav-item"><a href="All_Playlists.html">Browse</a></li>
+        <li class="footer-cover-links-nav-item"><a href="Generate_tracks.html" th:if="${isAuthenticated}" th:href="@{/generate}">Create</a></li>
+        <li class="footer-cover-links-nav-item"><a href="All_Playlists.html" th:href="@{/playlists}">Browse</a></li>
         <li class="footer-cover-links-nav-item"><a href="About.html" th:href="@{/about}">About</a></li>
         <li class="footer-cover-links-nav-item"><a href="Contacts.html" th:href="@{/contact}">Contact</a></li>
       </ul>
@@ -52,7 +52,7 @@
       <P id="currentYear">©date</P>
       <p>All rights reserved</p>
     </div>
-    <script src="../static/Js/year.js"></script>
+    <script src="../static/Js/year.js" th:src="@{/Js/year.js}"></script>
   </div>
 </footer>
 

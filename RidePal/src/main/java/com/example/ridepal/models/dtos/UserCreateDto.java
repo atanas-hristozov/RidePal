@@ -18,8 +18,6 @@ public class UserCreateDto {
     @NotNull
     private String email;
 
-    private String userPhoto;
-
     public UserCreateDto() {
     }
 
@@ -63,11 +61,4 @@ public class UserCreateDto {
         this.email = email;
     }
 
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
 }

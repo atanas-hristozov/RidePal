@@ -1,104 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/public/css/main.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="../static/js/header.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="shortcut icon" type="image/png" href="../static/img/Logo_Title.png">
-    <title>Contacts</title>
+<div th:replace="~{Templates.html :: head('Generate Playlist')}"></div>
+<script type='text/javascript'>
+    var map1, map2;
 
-    <script type='text/javascript'>
-        var map1, map2;
+    function GetMaps() {
+        map1 = new Microsoft.Maps.Map('#myMap1', {});
+        map2 = new Microsoft.Maps.Map('#myMap2', {});
 
-        function GetMaps() {
-            map1 = new Microsoft.Maps.Map('#myMap1', {});
-            map2 = new Microsoft.Maps.Map('#myMap2', {});
+        setupAutoSuggest('#searchBox1', '#searchBoxContainer1', map1);
+        setupAutoSuggest('#searchBox2', '#searchBoxContainer2', map2);
+    }
 
-            setupAutoSuggest('#searchBox1', '#searchBoxContainer1', map1);
-            setupAutoSuggest('#searchBox2', '#searchBoxContainer2', map2);
-        }
-
-        function setupAutoSuggest(inputBox, container, map) {
-            Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', function () {
-                var manager = new Microsoft.Maps.AutosuggestManager({ map: map });
-                manager.attachAutosuggest(inputBox, container, function (result) {
-                    map.entities.clear();
-                    var pin = new Microsoft.Maps.Pushpin(result.location);
-                    map.entities.push(pin);
-                    map.setView({ bounds: result.bestView });
-                });
+    function setupAutoSuggest(inputBox, container, map) {
+        Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', function () {
+            var manager = new Microsoft.Maps.AutosuggestManager({ map: map });
+            manager.attachAutosuggest(inputBox, container, function (result) {
+                map.entities.clear();
+                var pin = new Microsoft.Maps.Pushpin(result.location);
+                map.entities.push(pin);
+                map.setView({ bounds: result.bestView });
             });
-        }
+        });
+    }
 
-        function geocodeAddress(address, callback) {
-            var geocodeRequest = 'https://dev.virtualearth.net/REST/v1/Locations/' + encodeURIComponent(address) + '?key=AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3';
-            
-            fetch(geocodeRequest)
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(data) {
-                    var coordinates = data.resourceSets[0].resources[0].point.coordinates;
-                    callback(coordinates);
-                })
-                .catch(function(error) {
-                    console.log('Error geocoding address:', error);
-                });
-        }
+    function geocodeAddress(address, callback) {
+        var geocodeRequest = 'https://dev.virtualearth.net/REST/v1/Locations/' + encodeURIComponent(address) + '?key=AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3';
 
-        function calculateDuration(travelMode) {
-            var startPointAddress = document.getElementById('searchBox1').value;
-            var endPointAddress = document.getElementById('searchBox2').value;
-            var durationDisplay = document.getElementById('durationDisplay'); // Get the div for displaying durations
+        fetch(geocodeRequest)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                var coordinates = data.resourceSets[0].resources[0].point.coordinates;
+                callback(coordinates);
+            })
+            .catch(function(error) {
+                console.log('Error geocoding address:', error);
+            });
+    }
 
-            geocodeAddress(startPointAddress, function(startPoint) {
-                geocodeAddress(endPointAddress, function(endPoint) {
-                    var key = 'AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3';
-                    var start = startPoint.join(',');
-                    var end = endPoint.join(',');
-                    var url = `https://dev.virtualearth.net/REST/v1/Routes/${travelMode}?waypoint.1=${start}&waypoint.2=${end}&key=${key}`;
+    function calculateDuration(travelMode) {
+        var startPointAddress = document.getElementById('searchBox1').value;
+        var endPointAddress = document.getElementById('searchBox2').value;
+        var durationDisplay = document.getElementById('durationDisplay'); // Get the div for displaying durations
 
-                    var request = new XMLHttpRequest();
+        geocodeAddress(startPointAddress, function(startPoint) {
+            geocodeAddress(endPointAddress, function(endPoint) {
+                var key = 'AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3';
+                var start = startPoint.join(',');
+                var end = endPoint.join(',');
+                var url = `https://dev.virtualearth.net/REST/v1/Routes/${travelMode}?waypoint.1=${start}&waypoint.2=${end}&key=${key}`;
 
-                    request.onreadystatechange = function() {
-                        if (this.readyState === XMLHttpRequest.DONE) {
-                            if (this.status === 200) {
-                                var response = JSON.parse(this.responseText);
+                var request = new XMLHttpRequest();
 
-                                if (response && response.resourceSets && response.resourceSets.length > 0 &&
-                                    response.resourceSets[0].resources && response.resourceSets[0].resources.length > 0 &&
-                                    response.resourceSets[0].resources[0].travelDuration) {
+                request.onreadystatechange = function() {
+                    if (this.readyState === XMLHttpRequest.DONE) {
+                        if (this.status === 200) {
+                            var response = JSON.parse(this.responseText);
 
-                                    var durationInSeconds = response.resourceSets[0].resources[0].travelDuration;
+                            if (response && response.resourceSets && response.resourceSets.length > 0 &&
+                                response.resourceSets[0].resources && response.resourceSets[0].resources.length > 0 &&
+                                response.resourceSets[0].resources[0].travelDuration) {
 
-                                    var hours = Math.floor(durationInSeconds / 3600);
-                                    var minutes = Math.floor((durationInSeconds % 3600) / 60);
+                                var durationInSeconds = response.resourceSets[0].resources[0].travelDuration;
 
-                                    // Display the duration in the div
-                                    durationDisplay.innerHTML = `Duration (${travelMode}): ${hours} hours ${minutes} minutes`;
-                                } else {
-                                    durationDisplay.innerHTML = `No duration information available for ${travelMode}. Please check your input.`;
-                                }
+                                var hours = Math.floor(durationInSeconds / 3600);
+                                var minutes = Math.floor((durationInSeconds % 3600) / 60);
+
+                                // Display the duration in the div
+                                durationDisplay.innerHTML = `Duration (${travelMode}): ${hours} hours ${minutes} minutes`;
                             } else {
-                                durationDisplay.innerHTML = `Error fetching data from Bing Maps API for ${travelMode}. Please check your API key or try again later.`;
+                                durationDisplay.innerHTML = `No duration information available for ${travelMode}. Please check your input.`;
                             }
+                        } else {
+                            durationDisplay.innerHTML = `Error fetching data from Bing Maps API for ${travelMode}. Please check your API key or try again later.`;
                         }
-                    };
+                    }
+                };
 
-                    request.open('GET', url, true);
-                    request.send();
-                });
+                request.open('GET', url, true);
+                request.send();
             });
-        }
-    </script>
-    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMaps&key=AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3' async defer></script>
-
-
-</head>
+        });
+    }
+</script>
+<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMaps&key=AmNgj83_e2KSgoqoQZy0NyPdUIpCpqeqXGNL63Yp5R7XXwtpaQmBORKJ44OIzpU3' async defer></script>
 <body>
     <div class="container">
         <div class="main-field">
@@ -133,8 +120,8 @@
                                 <div class="generate-root-destination-buttons">
                                     <h3>Calculate Journey Duration:</h3>
                                     <div class="generate-root-destination-buttons-images">
-                                        <button onclick="calculateDuration('Walking')"><img src="../static/img/walking-person.png" alt="Calculate Walking Duration"></button>
-                                        <button onclick="calculateDuration('Driving')"><img src="../static/img/car_02.png" alt="Calculate Driving Duration"></button>
+                                        <button onclick="calculateDuration('Walking')"><img th:src="@{/img/walking-person.png}" src="../static/img/walking-person.png" alt="Calculate Walking Duration"></button>
+                                        <button onclick="calculateDuration('Driving')"><img th:src="@{/img/car_02.png}" src="../static/img/car_02.png" alt="Calculate Driving Duration"></button>
                                     </div>
                                     <!-- Div to display the duration -->
                                     <div class="generate-root-destination-calculation" id="durationDisplay"></div>
@@ -163,7 +150,7 @@
                                     <input type="checkbox" class="checkbox-input" name="rock" id="rock">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
-                                            <img src="../static/img/rock-music-wallpaper.jpg" alt="Rock Music">
+                                            <img th:src="@{/img/rock-music-wallpaper.jpg}" src="../static/img/rock-music-wallpaper.jpg" alt="Rock Music">
                                         </span>
                                         <span class="checkbox-label">Rock</span>
                                     </span>
@@ -174,7 +161,7 @@
                                     <input type="checkbox" class="checkbox-input" name="pop" id="pop">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
-                                            <img src="../static/img/pop-music-wallpaper.jpg" alt="Pop Music">
+                                            <img th:src="@{/img/pop-music-wallpaper.jpg}" src="../static/img/pop-music-wallpaper.jpg" alt="Pop Music">
                                         </span>
                                         <span class="checkbox-label">Pop</span>
                                     </span>
@@ -185,7 +172,7 @@
                                     <input type="checkbox" class="checkbox-input" name="hiphop" id="hiphop">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
-                                            <img src="../static/img/hiphop-music-wallpaper.jpg" alt="Hiphop Music">
+                                            <img th:src="@{/img/hiphop-music-wallpaper.jpg}" src="../static/img/hiphop-music-wallpaper.jpg" alt="Hiphop Music">
                                         </span>
                                         <span class="checkbox-label">Hip Hop</span>
                                     </span>
@@ -196,7 +183,7 @@
                                     <input type="checkbox" class="checkbox-input" name="classical" id="classical">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
-                                            <img src="../static/img/classical_02-music-wallpaper.jpg" alt="Classical Music">
+                                            <img th:src="@{/img/classical_02-music-wallpaper.jpg}" src="../static/img/classical_02-music-wallpaper.jpg" alt="Classical Music">
                                         </span>
                                         <span class="checkbox-label">Classical</span>
                                     </span>
@@ -207,7 +194,7 @@
                                     <input type="checkbox" class="checkbox-input" name="rnb" id="rnb">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
-                                            <img src="../static/img/rnb-music-wallpaper.jpg" alt="Rnb Music">
+                                            <img th:src="@{/img/rnb-music-wallpaper.jpg}" src="../static/img/rnb-music-wallpaper.jpg" alt="Rnb Music">
                                         </span>
                                         <span class="checkbox-label">RNB</span>
                                     </span>
@@ -218,7 +205,7 @@
                                     <input type="checkbox" class="checkbox-input" name="kids" id="kids">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
-                                            <img src="../static/img/kids-music-wallpaper.jpg" alt="Kids Music">
+                                            <img th:src="@{/img/kids-music-wallpaper.jpg}" src="../static/img/kids-music-wallpaper.jpg" alt="Kids Music">
                                         </span>
                                         <span class="checkbox-label">Kids</span>
                                     </span>

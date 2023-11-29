@@ -10,26 +10,26 @@
                 <div class="login-content">
                     <div class="login-box">
                         <h2>Register</h2>
-                        <form>
+                        <form th:action="@{/register}" th:object="${user}" action="#" method="post">
                             <div class="user-box">
-                                <input type="text" name="" required="true">
+                                <input th:field="*{firstName}" type="text" name="" required="true">
                                 <label>First Name</label>
                             </div>
                             <div class="user-box">
-                                <input type="text" name="" required="true">
+                                <input th:field="*{lastName}" type="text" name="" required="true">
                                 <label>Last Name</label>
                             </div>
                             <div class="user-box">
-                                <input type="text" name="" required="true">
+                                <input th:field="*{username}" type="text" name="" required="true">
                                 <label>Username</label>
                             </div>
                             <div class="user-box">
-                                <input type="email" name="" required="true">
-                                <label>E-mail</label>
+                                <input th:field="*{password}" type="password" name="" required="true">
+                                <label>Password</label>
                             </div>
                             <div class="user-box">
-                                <input type="password" name="" required="true">
-                                <label>Password</label>
+                                <input th:field="*{email}" type="email" name="" required="true">
+                                <label>E-mail</label>
                             </div>
                             <button class="login-button" type="submit">
                                 <span></span>
@@ -38,6 +38,8 @@
                                 <span></span>
                                 Submit
                             </button>
+                            <div th:errors="*{username}">Username error placeholder</div>
+                            <div th:errors="*{firstName}">Name error placeholder</div>
                         </form>
                     </div>
                 </div>

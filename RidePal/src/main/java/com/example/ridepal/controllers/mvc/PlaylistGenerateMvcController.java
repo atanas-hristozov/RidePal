@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/contact")
-public class ContactMvcController {
+@RequestMapping("/generate")
+public class PlaylistGenerateMvcController {
     private final UserService userService;
 
-    public ContactMvcController(UserService userService) {
+    public PlaylistGenerateMvcController(UserService userService) {
         this.userService = userService;
     }
 
@@ -40,7 +40,7 @@ public class ContactMvcController {
         return null;
     }
     @GetMapping
-    public String showContactPage(Model model, HttpSession session){
-        return "Contacts";
+    public String showGeneratePlaylistPage(Model model, HttpSession session){
+        return "Generate_tracks";
     }
 }
