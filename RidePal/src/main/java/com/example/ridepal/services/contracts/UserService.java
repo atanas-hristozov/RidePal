@@ -1,6 +1,8 @@
 package com.example.ridepal.services.contracts;
 
 import com.example.ridepal.models.User;
+import com.example.ridepal.models.UserFilterOptions;
+import com.example.ridepal.models.dtos.UserDisplayDto;
 
 import java.util.List;
 
@@ -11,6 +13,6 @@ public interface UserService {
     void update (User user, User userToUpdate);
     User getById (int id);
     User getByUsername(String username);
-    List<User> getAll();
+    List<User> getAllByFilterOptions(UserFilterOptions userFilterOptions);
 
 }

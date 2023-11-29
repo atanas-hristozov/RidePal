@@ -6,6 +6,7 @@ import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.UserMapper;
 import com.example.ridepal.models.User;
+import com.example.ridepal.models.UserFilterOptions;
 import com.example.ridepal.models.dtos.UserAdminRightsDto;
 import com.example.ridepal.models.dtos.UserCreateDto;
 import com.example.ridepal.models.dtos.UserDisplayDto;
@@ -114,11 +115,28 @@ public class UserRestController {
     }
 
     @GetMapping("/users")
-    public List<UserDisplayDto> getAllUsers() {
-        List<UserDisplayDto> users = new ArrayList<>();
-        for (User user : userService.getAll()) {
-            users.add(userMapper.fromUser(user));
+    public List<UserDisplayDto> getAllUsers(@RequestHeader HttpHeaders headers,
+                                            @RequestParam(required = false) String username,
+                                            @RequestParam(required = false) String email,
+                                            @RequestParam(required = false) String firstName) {
+        try {
+            User userToCheck = authenticationHelper.tryGetUser(headers);
+            checkAdminRights(userToCheck);
+            List<UserDisplayDto> users = new ArrayList<>();
+            UserFilterOptions userFilterOptionsForAdmins = new UserFilterOptions(username,
+                    email, firstName);
+            for (User user : userService.getAllByFilterOptions(userFilterOptionsForAdmins)) {
+                users.add(userMapper.fromUser(user));
+            }
+            return users;
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
-        return users;
+    }
+
+    private static void checkAdminRights(User userToCheck) {
+        if (!userToCheck.isAdmin() && userToCheck.getId() != 1) {
+            throw new AuthorizationException(ERROR_MESSAGE);
+        }
     }
 }

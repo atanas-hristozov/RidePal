@@ -3,23 +3,29 @@ package com.example.ridepal.services;
 import com.example.ridepal.exceptions.AuthorizationException;
 import com.example.ridepal.exceptions.EntityDuplicateException;
 import com.example.ridepal.exceptions.EntityNotFoundException;
+import com.example.ridepal.helpers.UserMapper;
 import com.example.ridepal.models.User;
+import com.example.ridepal.models.UserFilterOptions;
+import com.example.ridepal.models.dtos.UserDisplayDto;
 import com.example.ridepal.repositories.AbstractCrudRepository;
+import com.example.ridepal.repositories.contracts.UserRepository;
 import com.example.ridepal.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     public static final String ERROR_MESSAGE = "You are not authorized!";
 
-    private final AbstractCrudRepository<User> userAbstractCrudRepository;
+    private final UserRepository userRepository;
+
 
     @Autowired
-    public UserServiceImpl(AbstractCrudRepository<User> userAbstractCrudRepository) {
-        this.userAbstractCrudRepository = userAbstractCrudRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -27,13 +33,13 @@ public class UserServiceImpl implements UserService {
         checkEmailExist(user);
         checkUsernameExist(user);
         user.setAdmin(false);
-        userAbstractCrudRepository.create(user);
+        userRepository.create(user);
     }
 
     @Override
     public void delete(User user, User userToDelete) {
         checkAccessPermissions(user, userToDelete);
-        userAbstractCrudRepository.delete(userToDelete.getId());
+        userRepository.delete(userToDelete.getId());
     }
 
     @Override
@@ -41,27 +47,28 @@ public class UserServiceImpl implements UserService {
         checkAccessPermissions(user, userToUpdate);
         checkEmailExist(user);
         checkUsernameExist(user);
-        userAbstractCrudRepository.update(user);
+        userRepository.update(user);
     }
 
     @Override
     public User getById(int id) {
-        return userAbstractCrudRepository.getById(id);
+        return userRepository.getById(id);
     }
 
     @Override
     public User getByUsername(String username) {
-        return userAbstractCrudRepository.getByField("username", username);
+        return userRepository.getByField("username", username);
     }
 
     @Override
-    public List<User> getAll() {
-        return userAbstractCrudRepository.getAll();
+    public List<User> getAllByFilterOptions(UserFilterOptions userFilterOptions) {
+        return userRepository.getAllByFilterOptions(userFilterOptions);
+
     }
 
     private void checkUsernameExist(User user) {
         try {
-            userAbstractCrudRepository.getByField("username", user.getUsername());
+            userRepository.getByField("username", user.getUsername());
             // If the above line doesn't throw an exception, then the username already exists
             throw new EntityDuplicateException("User", "username", user.getUsername());
         } catch (EntityNotFoundException e) {
@@ -71,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     private void checkEmailExist(User user) {
         try {
-            userAbstractCrudRepository.getByField("email", user.getEmail());
+            userRepository.getByField("email", user.getEmail());
             throw new EntityDuplicateException("User", "email", user.getEmail());
         } catch (EntityNotFoundException e) {
 

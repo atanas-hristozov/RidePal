@@ -18,6 +18,7 @@ public class UserMvcController {
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
+
     @Autowired
     public UserMvcController(UserService userService,
                              AuthenticationHelper authenticationHelper,
@@ -26,27 +27,31 @@ public class UserMvcController {
         this.authenticationHelper = authenticationHelper;
         this.userMapper = userMapper;
     }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
     }
+
     @ModelAttribute("isAdmin")
     public boolean populateIsAdmin(HttpSession session) {
-        if(session.getAttribute("currentUser") != null){
+        if (session.getAttribute("currentUser") != null) {
             Object currentUser = session.getAttribute("currentUser");
             User user = userService.getByUsername(currentUser.toString());
             return user.isAdmin();
         }
         return false;
     }
+
     @ModelAttribute("currentUser")
     public User currentUser(HttpSession session) {
-        if (populateIsAuthenticated(session)){
+        if (populateIsAuthenticated(session)) {
             String username = session.getAttribute("currentUser").toString();
             return userService.getByUsername(username);
         }
         return null;
     }
+
     @GetMapping()
     public String showUserPage(Model model, HttpSession session) {
         if (populateIsAuthenticated(session)) {
