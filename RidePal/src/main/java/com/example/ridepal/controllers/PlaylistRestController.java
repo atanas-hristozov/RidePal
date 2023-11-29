@@ -7,6 +7,7 @@ import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.PlaylistMapper;
 import com.example.ridepal.models.Genre;
 import com.example.ridepal.models.Playlist;
+import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.dtos.PlaylistDisplayDto;
 import com.example.ridepal.models.dtos.PlaylistGenerateDto;
@@ -84,9 +85,9 @@ public class PlaylistRestController {
     }
 
     @GetMapping("/playlists")
-    public List<PlaylistDisplayDto> getAll() {
+    public List<PlaylistDisplayDto> getAll(PlaylistFilterOptions playlistFilterOptions) {
         List<PlaylistDisplayDto> playlistDisplayDtos = new ArrayList<>();
-        for (Playlist playlist : playlistService.getAll())
+        for (Playlist playlist : playlistService.getAll(playlistFilterOptions))
             playlistDisplayDtos.add(playlistMapper.fromPlaylist(playlist));
 
         return playlistDisplayDtos;

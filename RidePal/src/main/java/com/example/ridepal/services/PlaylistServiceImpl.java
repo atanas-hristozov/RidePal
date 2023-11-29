@@ -1,10 +1,8 @@
 package com.example.ridepal.services;
 
 import com.example.ridepal.exceptions.AuthorizationException;
-import com.example.ridepal.models.Genre;
-import com.example.ridepal.models.Playlist;
-import com.example.ridepal.models.Track;
-import com.example.ridepal.models.User;
+import com.example.ridepal.models.*;
+import com.example.ridepal.models.dtos.PlaylistDisplayDto;
 import com.example.ridepal.repositories.PlaylistRepositoryImpl;
 import com.example.ridepal.repositories.contracts.BaseCrudRepository;
 import com.example.ridepal.repositories.contracts.PlaylistRepository;
@@ -53,8 +51,8 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public List<Playlist> getAll() {
-        return playlistRepository.getAll();
+    public List<Playlist> getAll(PlaylistFilterOptions playlistFilterOptions) {
+        return playlistRepository.getAllByFilterOptions(playlistFilterOptions);
     }
 
     @Override
