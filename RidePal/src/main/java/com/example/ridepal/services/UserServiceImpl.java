@@ -45,9 +45,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user, User userToUpdate) {
         checkAccessPermissions(user, userToUpdate);
-        checkEmailExist(user);
-        checkUsernameExist(user);
-        userRepository.update(user);
+        checkEmailExist(userToUpdate);
+        checkUsernameExist(userToUpdate);
+        userRepository.update(userToUpdate);
     }
 
     @Override

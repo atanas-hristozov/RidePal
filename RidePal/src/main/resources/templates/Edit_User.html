@@ -10,25 +10,21 @@
                 <div class="login-content">
                     <div class="login-box">
                         <h2>Edit User info</h2>
-                        <form>
+                        <form th:action="@{/user/update}" th:object="${currentUser}" action="#" method="post">
                             <div class="user-box">
-                                <input type="text" name="" required="true">
-                                <label>Fist Name</label>
+                                <input th:field="*{firstName}" type="text" name="" required="">
+                                <label th:text="*{firstName}">First Name</label>
                             </div>
                             <div class="user-box">
-                                <input type="text" name="" required="true">
-                                <label>Last Name</label>
+                                <input th:field="*{lastName}" type="text" name="" required="">
+                                <label th:text="*{lastName}">Last Name</label>
                             </div>
                             <div class="user-box">
-                                <input type="text" name="" required="true">
-                                <label>Username</label>
+                                <input th:field="*{email}" type="email" name="" required="">
+                                <label th:text="*{email}">Email</label>
                             </div>
                             <div class="user-box">
-                                <input type="email" name="" required="true">
-                                <label>E-mail</label>
-                            </div>
-                            <div class="user-box">
-                                <input type="password" name="" required="true">
+                                <input th:field="*{password}" type="password" name="" required="">
                                 <label>Password</label>
                             </div>
                             <button class="login-button" type="submit">
@@ -38,6 +34,8 @@
                                 <span></span>
                                 Save
                             </button>
+                            <div class="error-login-message" th:errors="*{firstName}">Name error placeholder</div>
+                            <div class="error-login-message" th:errors="*{password}">Password error placeholder</div>
                         </form>
                     </div>
                 </div>
