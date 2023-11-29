@@ -37,6 +37,13 @@ public class UserMapper {
 
         return user;
     }
+    public User fromUserCreateUpdatePhotoDto(int id, UserCreateUpdatePhoto userCreateUpdatePhoto){
+        User user = userService.getById(id);
+        user.setUserPhoto(userCreateUpdatePhoto.getUserPhoto());
+
+        return user;
+    }
+
 
     public User fromUserAdminRightsDto(int id, UserAdminRightsDto adminRightsDto) {
         User user = userService.getById(id);

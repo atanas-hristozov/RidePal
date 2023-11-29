@@ -7,10 +7,7 @@ import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.UserMapper;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.UserFilterOptions;
-import com.example.ridepal.models.dtos.UserAdminRightsDto;
-import com.example.ridepal.models.dtos.UserCreateDto;
-import com.example.ridepal.models.dtos.UserDisplayDto;
-import com.example.ridepal.models.dtos.UserUpdateDto;
+import com.example.ridepal.models.dtos.*;
 import com.example.ridepal.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -82,6 +79,23 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+    @PutMapping("/user/{id}/photo")
+    public void addUpdatePhoto(@RequestHeader HttpHeaders headers,
+                       @RequestBody UserCreateUpdatePhoto userCreateUpdatePhoto,
+                       @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            checkIsItSameUser(user, id);
+            User userToUpdate = userMapper.fromUserCreateUpdatePhotoDto(id, userCreateUpdatePhoto);
+
+            userService.update(user, userToUpdate);
+
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
 
     @DeleteMapping("/user/{id}")
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {
@@ -136,6 +150,11 @@ public class UserRestController {
 
     private static void checkAdminRights(User userToCheck) {
         if (!userToCheck.isAdmin() && userToCheck.getId() != 1) {
+            throw new AuthorizationException(ERROR_MESSAGE);
+        }
+    }
+    private static void checkIsItSameUser(User loggedUser, int id) {
+        if (loggedUser.getId() != id) {
             throw new AuthorizationException(ERROR_MESSAGE);
         }
     }
