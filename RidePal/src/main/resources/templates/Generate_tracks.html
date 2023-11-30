@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{Templates.html :: head('Generate Playlist')}"></div>
 <script type='text/javascript'>
     var map1, map2;
@@ -70,6 +70,7 @@
 
                                 // Display the duration in the div
                                 durationDisplay.innerHTML = `Duration (${travelMode}): ${hours} hours ${minutes} minutes`;
+                                document.getElementById('hiddenTravelDuration').value = Math.floor(durationInSeconds);
                             } else {
                                 durationDisplay.innerHTML = `No duration information available for ${travelMode}. Please check your input.`;
                             }
@@ -93,7 +94,7 @@
             <section class="generate">
                 <video class="generate-video" th:src="@{/video/Wave_05.mp4}" src="../static/video/Wave_05.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
                 <div class="generate-content">
-                    <div class="generate-content-form">
+                    <form th:action="@{/generate/playlist}" th:object="${playlistGenerateDto}" method="post" class="generate-content-form">
                         <div class="generate-root">
                             <h2>Enter Root</h2>
                             <div class="generate-root-destination">
@@ -125,6 +126,7 @@
                                     </div>
                                     <!-- Div to display the duration -->
                                     <div class="generate-root-destination-calculation" id="durationDisplay"></div>
+                                    <input type="hidden" id="hiddenTravelDuration" th:name="travelDuration" th:value="${travelDuration}"/>
                                 </div>
                                 
                             </div>
@@ -139,7 +141,7 @@
                             </div>
                             -->
                             <div class="generate-root-destination-input">
-                                <input type='text' id='searchBox2' required/>
+                                <input th:field="*{title}" type='text' id='searchBox2' required/>
                                 <label for="searchBox2">Set Title</label>
                             </div>
                         </div>
@@ -147,7 +149,7 @@
                             <legend class="checkbox-group-legend">Select Music</legend>
                             <div class="checkbox">
                                 <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="rock" id="rock">
+                                    <input th:field="*{genreNames}" th:value="Rock" type="checkbox" class="checkbox-input" name="rock" id="rock">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img th:src="@{/img/rock-music-wallpaper.jpg}" src="../static/img/rock-music-wallpaper.jpg" alt="Rock Music">
@@ -158,7 +160,7 @@
                             </div>
                             <div class="checkbox">
                                 <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="pop" id="pop">
+                                    <input th:field="*{genreNames}" th:value="Pop" type="checkbox" class="checkbox-input" name="pop" id="pop">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img th:src="@{/img/pop-music-wallpaper.jpg}" src="../static/img/pop-music-wallpaper.jpg" alt="Pop Music">
@@ -169,7 +171,7 @@
                             </div>
                             <div class="checkbox">
                                 <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="hiphop" id="hiphop">
+                                    <input th:field="*{genreNames}" th:value="'Rap/Hip Hop'" type="checkbox" class="checkbox-input" name="hiphop" id="hiphop">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img th:src="@{/img/hiphop-music-wallpaper.jpg}" src="../static/img/hiphop-music-wallpaper.jpg" alt="Hiphop Music">
@@ -180,7 +182,7 @@
                             </div>
                             <div class="checkbox">
                                 <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="classical" id="classical">
+                                    <input th:field="*{genreNames}" th:value="Classical" type="checkbox" class="checkbox-input" name="classical" id="classical">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img th:src="@{/img/classical_02-music-wallpaper.jpg}" src="../static/img/classical_02-music-wallpaper.jpg" alt="Classical Music">
@@ -191,7 +193,7 @@
                             </div>
                             <div class="checkbox">
                                 <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="rnb" id="rnb">
+                                    <input th:field="*{genreNames}" th:value="'R&B'" value="165" type="checkbox" class="checkbox-input" name="rnb" id="rnb">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img th:src="@{/img/rnb-music-wallpaper.jpg}" src="../static/img/rnb-music-wallpaper.jpg" alt="Rnb Music">
@@ -202,7 +204,7 @@
                             </div>
                             <div class="checkbox">
                                 <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="kids" id="kids">
+                                    <input th:field="*{genreNames}" th:value="Kids" value="95" type="checkbox" class="checkbox-input" name="kids" id="kids">
                                     <span class="checkbox-tile">
                                         <span class="checkbox-icon">
                                             <img th:src="@{/img/kids-music-wallpaper.jpg}" src="../static/img/kids-music-wallpaper.jpg" alt="Kids Music">
@@ -219,7 +221,7 @@
                             <span></span>
                             Generate
                         </button>
-                    </div>
+                    </form>
                 </div>
             </section>
 

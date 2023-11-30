@@ -57,7 +57,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public void create(User user, Playlist playlist, int travelDuration, String genreNames) {
-        List<String> namesGenre = Arrays.stream(genreNames.split(", ")).toList();
+        List<String> namesGenre = Arrays.stream(genreNames.split(",")).toList();
 
         int durationPerGenre = travelDuration / namesGenre.size();
 

@@ -1,6 +1,11 @@
 package com.example.ridepal.controllers.mvc;
 
+import com.example.ridepal.helpers.PlaylistMapper;
+import com.example.ridepal.models.Playlist;
+import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.User;
+import com.example.ridepal.models.dtos.PlaylistDisplayDto;
+import com.example.ridepal.services.PlaylistServiceImpl;
 import com.example.ridepal.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -9,13 +14,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/playlists")
 public class AllPlaylistsMvcController {
     private final UserService userService;
+    private final PlaylistServiceImpl playlistService;
+    private final PlaylistMapper playlistMapper;
 
-    public AllPlaylistsMvcController(UserService userService) {
+    public AllPlaylistsMvcController(UserService userService, PlaylistServiceImpl playlistService, PlaylistMapper playlistMapper) {
         this.userService = userService;
+        this.playlistService = playlistService;
+        this.playlistMapper = playlistMapper;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -40,7 +51,9 @@ public class AllPlaylistsMvcController {
         return null;
     }
     @GetMapping
-    public String showAllPlaylistPage(Model model, HttpSession session){
+    public String showAllPlaylistPage(Model model, HttpSession session, PlaylistFilterOptions playlistFilterOptions){
+        List<Playlist> playlist = playlistService.getAll(playlistFilterOptions);
+        model.addAttribute("playlist", playlist);
         return "All_Playlists";
     }
 }

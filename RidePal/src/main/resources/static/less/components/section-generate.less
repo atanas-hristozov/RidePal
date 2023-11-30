@@ -65,7 +65,13 @@
     line-height: 1.125;
     margin-bottom: 1.25rem;
   }
-  
+  .checkbox-input[type="checkbox"]:checked + .checkbox-tile {
+    /* Your styles for the checked state of Thymeleaf-generated checkboxes */
+    /* Example styles: */
+    border-color: @color-blue;
+    box-shadow: 0 5px 10px @color-blue;
+    color: @color-blue;
+}
   .checkbox-input {
     clip: rect(0 0 0 0);
     -webkit-clip-path: inset(100%);
