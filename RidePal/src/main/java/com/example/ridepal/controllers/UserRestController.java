@@ -68,10 +68,10 @@ public class UserRestController {
                        @RequestBody UserUpdateDto userUpdateDto,
                        @PathVariable int id) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             User userToUpdate = userMapper.fromUserUpdateDto(id, userUpdateDto);
 
-            userService.update(user, userToUpdate);
+            userService.update(userToUpdate);
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -79,16 +79,14 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    @PutMapping("/user/{id}/photo")
+    @PutMapping("/user/photo")
     public void addUpdatePhoto(@RequestHeader HttpHeaders headers,
-                       @RequestBody UserCreateUpdatePhoto userCreateUpdatePhoto,
-                       @PathVariable int id) {
+                       @RequestBody UserCreateUpdatePhoto userCreateUpdatePhoto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            checkIsItSameUser(user, id);
-            User userToUpdate = userMapper.fromUserCreateUpdatePhotoDto(id, userCreateUpdatePhoto);
+            User userToUpdate = userMapper.fromUserCreateUpdatePhotoDto(user.getId(), userCreateUpdatePhoto);
 
-            userService.update(user, userToUpdate);
+            userService.update(userToUpdate);
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -102,7 +100,7 @@ public class UserRestController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             User userToDelete = userService.getById(id);
-            userService.delete(user, userToDelete);
+            userService.delete(userToDelete);
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -117,9 +115,9 @@ public class UserRestController {
                                   @RequestBody UserAdminRightsDto adminRightsDto,
                                   @PathVariable int id) {
         try {
-            User loggedUser = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             User userToUpdate = userMapper.fromUserAdminRightsDto(id, adminRightsDto);
-            userService.update(loggedUser, userToUpdate);
+            userService.update(userToUpdate);
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

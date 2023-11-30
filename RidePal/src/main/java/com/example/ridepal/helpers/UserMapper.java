@@ -37,6 +37,16 @@ public class UserMapper {
 
         return user;
     }
+
+    public UserUpdateDto fromUserToUserUpdate(User user) {
+        UserUpdateDto userUpdateDto = new UserUpdateDto();
+        userUpdateDto.setFirstName(user.getFirstName());
+        userUpdateDto.setLastName(user.getLastName());
+        userUpdateDto.setPassword(user.getPassword());
+        userUpdateDto.setEmail(user.getEmail());
+
+        return userUpdateDto;
+    }
     public User fromUserCreateUpdatePhotoDto(int id, UserCreateUpdatePhoto userCreateUpdatePhoto){
         User user = userService.getById(id);
         user.setUserPhoto(userCreateUpdatePhoto.getUserPhoto());

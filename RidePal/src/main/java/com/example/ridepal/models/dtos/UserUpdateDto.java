@@ -8,13 +8,12 @@ public class UserUpdateDto {
     @Size(min = 3, max = 32, message = "First name must be between 3 and 32 symbols.")
     private String firstName;
     @NotNull(message = "Name can't be empty")
-    @Size(min = 3, max = 32, message = "First name must be between 3 and 32 symbols.")
+    @Size(min = 3, max = 32, message = "Last name must be between 3 and 32 symbols.")
     private String lastName;
-    @NotNull(message = "Password can't be empty")
-    private String password;
     @NotNull
     private String email;
-
+    @NotNull(message = "Password can't be empty")
+    private String password;
     public UserUpdateDto() {
     }
 

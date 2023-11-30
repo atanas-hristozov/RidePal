@@ -30,23 +30,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User user) {
-        checkEmailExist(user);
         checkUsernameExist(user);
         user.setAdmin(false);
         userRepository.create(user);
     }
 
     @Override
-    public void delete(User user, User userToDelete) {
-        checkAccessPermissions(user, userToDelete);
-        userRepository.delete(userToDelete.getId());
+    public void delete(User user) {
+
+        userRepository.delete(user.getId());
     }
 
     @Override
-    public void update(User user, User userToUpdate) {
-        checkAccessPermissions(user, userToUpdate);
-        checkEmailExist(userToUpdate);
-        checkUsernameExist(userToUpdate);
+    public void update(User userToUpdate) {
         userRepository.update(userToUpdate);
     }
 
@@ -75,16 +71,6 @@ public class UserServiceImpl implements UserService {
             // Username doesn't exist, which is what we want
         }
     }
-
-    private void checkEmailExist(User user) {
-        try {
-            userRepository.getByField("email", user.getEmail());
-            throw new EntityDuplicateException("User", "email", user.getEmail());
-        } catch (EntityNotFoundException e) {
-
-        }
-    }
-
     private static void checkAccessPermissions(User user, User executingUser) {
         if (!executingUser.isAdmin() && executingUser.getId() != user.getId() && executingUser.getId() != 1) {
             // User with Id 1 have admin rights by default

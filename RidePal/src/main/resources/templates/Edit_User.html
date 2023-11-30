@@ -12,22 +12,22 @@
                         <h2>Edit User info</h2>
                         <form th:action="@{/user/update}" th:object="${currentUser}" action="#" method="post">
                             <div class="user-box">
-                                <input th:field="*{firstName}" type="text" name="" required="">
+                                <input th:field="*{firstName}" type="text" name="firstName" required="">
                                 <label th:text="*{firstName}">First Name</label>
                             </div>
                             <div class="user-box">
-                                <input th:field="*{lastName}" type="text" name="" required="">
+                                <input th:field="*{lastName}" type="text" name="lastName" required="">
                                 <label th:text="*{lastName}">Last Name</label>
                             </div>
                             <div class="user-box">
-                                <input th:field="*{email}" type="email" name="" required="">
+                                <input th:field="*{email}" type="email" name="email" required="">
                                 <label th:text="*{email}">Email</label>
                             </div>
                             <div class="user-box">
-                                <input th:field="*{password}" type="password" name="" required="">
+                                <input th:field="*{password}" type="password" name="password" required="">
                                 <label>Password</label>
                             </div>
-                            <button class="login-button" type="submit">
+                            <button class="login-button" type="submit" value="update">
                                 <span></span>
                                 <span></span>
                                 <span></span>

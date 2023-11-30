@@ -10,6 +10,7 @@ import com.example.ridepal.models.User;
 import com.example.ridepal.models.dtos.UserCreateUpdatePhoto;
 import com.example.ridepal.models.dtos.UserUpdateDto;
 import com.example.ridepal.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,24 +41,6 @@ public class UserMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
-    @ModelAttribute("isAdmin")
-    public boolean populateIsAdmin(HttpSession session) {
-        if (session.getAttribute("currentUser") != null) {
-            Object currentUser = session.getAttribute("currentUser");
-            User user = userService.getByUsername(currentUser.toString());
-            return user.isAdmin();
-        }
-        return false;
-    }
-
-    @ModelAttribute("currentUser")
-    public User currentUser(HttpSession session) {
-        if (populateIsAuthenticated(session)) {
-            String username = session.getAttribute("currentUser").toString();
-            return userService.getByUsername(username);
-        }
-        return null;
-    }
 
     @GetMapping()
     public String showUserPage(Model model, HttpSession session) {
@@ -75,7 +58,8 @@ public class UserMvcController {
     public String showEditUserPage(Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
-            model.addAttribute("currentUser", user);
+            UserUpdateDto userUpdateDto = userMapper.fromUserToUserUpdate(user);
+            model.addAttribute("currentUser", userUpdateDto);
 
             return "Edit_User";
 
@@ -103,8 +87,8 @@ public class UserMvcController {
 
         try {
             User userToUpdate = userMapper.fromUserUpdateDto(user.getId(), userUpdateDto);
-            userService.update(user, userToUpdate);
-            model.addAttribute("currentUser", userToUpdate);
+            userService.update(userToUpdate);
+            model.addAttribute("currentUser", userUpdateDto);
 
             return "redirect:/user";
 
@@ -125,10 +109,14 @@ public class UserMvcController {
             return "Edit_User";
         }
     }
+
     @GetMapping("/photo")
-    public String showEditUserProfilePhoto(Model model, HttpSession session) {
+    public String showEditUserProfilePhoto(Model model,
+                                           HttpSession session,
+                                           UserCreateUpdatePhoto userCreateUpdatePhoto) {
         try {
-            User user = authenticationHelper.tryGetCurrentUser(session);
+            User loggedUser = authenticationHelper.tryGetCurrentUser(session);
+            User user = userMapper.fromUserCreateUpdatePhotoDto(loggedUser.getId(), userCreateUpdatePhoto);
             model.addAttribute("currentUser", user);
 
             return "Upload_photo";
@@ -137,11 +125,12 @@ public class UserMvcController {
             return "redirect:/auth/login";
         }
     }
+
     @PostMapping("/photo")
-    public String updateUserProfilePicture (@Valid @ModelAttribute("currentUser")UserCreateUpdatePhoto userCreateUpdatePhoto,
-                                            BindingResult bindingResult,
-                                            Model model,
-                                            HttpSession session) {
+    public String updateUserProfilePicture(@Valid @ModelAttribute("currentUser") UserCreateUpdatePhoto userCreateUpdatePhoto,
+                                           BindingResult bindingResult,
+                                           Model model,
+                                           HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
@@ -155,8 +144,8 @@ public class UserMvcController {
 
         try {
             User userToUpdate = userMapper.fromUserCreateUpdatePhotoDto(user.getId(), userCreateUpdatePhoto);
-            userService.update(user, userToUpdate);
-            model.addAttribute("currentUser", user);
+            userService.update(userToUpdate);
+            model.addAttribute("currentUser", userToUpdate);
 
             return "redirect:/user";
 
@@ -184,19 +173,17 @@ public class UserMvcController {
     }*/
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deleteUserProfile(@ModelAttribute("user") User user, @PathVariable int id,
-                                    HttpSession session, BindingResult bindingResult) {
+    public String deleteUserProfile(@ModelAttribute("user") User user, HttpSession session, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "redirect:/user";
         }
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
-            User userToDelete = userService.getById(id);
-            userService.delete(user, userToDelete);
-            session.removeAttribute("currentUser");
-
-            return "redirect:/";
+            userService.delete(user);
+            session.removeAttribute("user");
+            session.removeAttribute("isAuthenticated");
+            return "Index";
 
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
