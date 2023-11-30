@@ -11,6 +11,7 @@ public interface PlaylistService {
 
     Playlist getById(int id);
     List<Playlist> getAll(PlaylistFilterOptions playlistFilterOptions);
+    Long allPlaylistsCount();
     void create(User user, Playlist playlist, int travelDuration, String genreNames);
 
     void update(User user, Playlist playlist);

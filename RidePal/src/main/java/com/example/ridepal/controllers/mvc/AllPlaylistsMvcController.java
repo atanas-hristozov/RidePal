@@ -5,6 +5,7 @@ import com.example.ridepal.models.Playlist;
 import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.dtos.PlaylistDisplayDto;
+import com.example.ridepal.models.dtos.PlaylistDisplayFilterDto;
 import com.example.ridepal.services.PlaylistServiceImpl;
 import com.example.ridepal.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -33,27 +34,42 @@ public class AllPlaylistsMvcController {
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
     }
+
     @ModelAttribute("isAdmin")
     public boolean populateIsAdmin(HttpSession session) {
-        if(session.getAttribute("currentUser") != null){
+        if (session.getAttribute("currentUser") != null) {
             Object currentUser = session.getAttribute("currentUser");
             User user = userService.getByUsername(currentUser.toString());
             return user.isAdmin();
         }
         return false;
     }
+
     @ModelAttribute("currentUser")
     public User currentUser(HttpSession session) {
-        if (populateIsAuthenticated(session)){
+        if (populateIsAuthenticated(session)) {
             String username = session.getAttribute("currentUser").toString();
             return userService.getByUsername(username);
         }
         return null;
     }
+
     @GetMapping
-    public String showAllPlaylistPage(Model model, HttpSession session, PlaylistFilterOptions playlistFilterOptions){
-        List<Playlist> playlist = playlistService.getAll(playlistFilterOptions);
-        model.addAttribute("playlist", playlist);
+    public String showAllPlaylistPage(@ModelAttribute("playlistFilterOptions")
+                                      PlaylistDisplayFilterDto playlistDisplayFilterDto,
+                                      Model model) {
+        PlaylistFilterOptions playlistFilterOptions = new PlaylistFilterOptions(
+                playlistDisplayFilterDto.getTitle(),
+                playlistDisplayFilterDto.getPlaylistTimeFrom(),
+                playlistDisplayFilterDto.getPlaylistTimeTo(),
+                playlistDisplayFilterDto.getGenreName());
+
+        List<Playlist> playlists = playlistService.getAll(playlistFilterOptions);
+        Long playlistsCount = playlistService.allPlaylistsCount();
+
+        model.addAttribute("playlists", playlists);
+        model.addAttribute("playlistFilterOptions", playlistDisplayFilterDto);
+        model.addAttribute("playlistsCount", playlistsCount);
         return "All_Playlists";
     }
 }

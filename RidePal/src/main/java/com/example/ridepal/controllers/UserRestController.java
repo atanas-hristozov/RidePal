@@ -145,7 +145,6 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
     private static void checkAdminRights(User userToCheck) {
         if (!userToCheck.isAdmin() && userToCheck.getId() != 1) {
             throw new AuthorizationException(ERROR_MESSAGE);

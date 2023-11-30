@@ -2,6 +2,7 @@ package com.example.ridepal.helpers;
 
 import com.example.ridepal.models.Genre;
 import com.example.ridepal.models.Playlist;
+import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.Track;
 import com.example.ridepal.models.dtos.*;
 import com.example.ridepal.services.contracts.PlaylistService;
@@ -56,7 +57,6 @@ public class PlaylistMapper {
         return playlistDto;
     }
 
-    @NotNull
     private static TrackDisplayDto getTrackDisplayDto(Track track) {
         TrackDisplayDto trackDto = new TrackDisplayDto();
         trackDto.setTitle(track.getTitle());

@@ -28,10 +28,8 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     private final static int AVERAGE_TRACK_DURATION = 210;//3:30 min
 
-    //  private final BaseCrudRepository<Playlist> basePlaylistCrudRepository;
     private final TrackRepository trackRepository;
     private final BaseCrudRepository<Genre> genreBaseCrudRepository;
-
     private final PlaylistRepository playlistRepository;
 
 
@@ -107,6 +105,11 @@ public class PlaylistServiceImpl implements PlaylistService {
     public void delete(User executingUser, Playlist playlist) {
         checkAccessPermissions(executingUser, playlist);
         playlistRepository.delete(playlist.getId());
+    }
+
+    @Override
+    public Long allPlaylistsCount() {
+        return playlistRepository.allPlaylistsCount();
     }
 
     private double findAverageRank(Playlist playlist) {

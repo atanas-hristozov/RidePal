@@ -56,12 +56,12 @@ public class PlaylistRepositoryImpl extends AbstractCrudRepository<Playlist> imp
 
             playlistFilterOptions.getPlaylistTimeFrom().ifPresent(value -> {
                 filters.add("p.playlistTime >= :playlistTimeFrom");
-                params.put("playlistTimeFrom", value * 60);
+                params.put("playlistTimeFrom", value);
             });
 
             playlistFilterOptions.getPlaylistTimeTo().ifPresent(value -> {
                 filters.add("p.playlistTime <= :playlistTimeTo");
-                params.put("playlistTimeTo", value * 60);
+                params.put("playlistTimeTo", value);
             });
 
             playlistFilterOptions.getGenreName().ifPresent(value -> {
@@ -81,23 +81,14 @@ public class PlaylistRepositoryImpl extends AbstractCrudRepository<Playlist> imp
             Query<Playlist> query = session.createQuery(queryString.toString(), Playlist.class);
             query.setProperties(params);
             return query.list();
-            /*List<PlaylistDisplayDto> playlistDisplayDtos = new ArrayList<>();
-            for (Playlist result : results) {
-                PlaylistDisplayDto playlistDisplayDto = new PlaylistDisplayDto();
-               playlistDisplayDto.setPlaylistTime(result.getPlaylistTime());
-               playlistDisplayDto.setRank(result.getRank());
-               for(Track track: result.getTracks()){
-                   TrackDisplayDto trackDto = getTrackDisplayDto(track);
-                   playlistDisplayDto.addTrackDisplayDto(trackDto);
-               }
-               for(Genre genre: result.getGenres()){
-                   GenreDisplayDto genreDto = new GenreDisplayDto();
-                   genreDto.setName(genre.getGenreName());
-                   playlistDisplayDto.addGenreDisplayDto(genreDto);
-               }
+        }
+    }
 
-            }
-            return playlistDisplayDtos;*/
+    @Override
+    public Long allPlaylistsCount() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Long> query = session.createQuery("SELECT COUNT(id) from Playlist", Long.class);
+            return query.uniqueResult();
         }
     }
 

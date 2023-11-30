@@ -14,5 +14,5 @@ public interface PlaylistRepository extends BaseCrudRepository<Playlist> {
 
     void createPlaylist(Playlist playlist);
     List<Playlist> getAllByFilterOptions(PlaylistFilterOptions playlistFilterOptions);
-
+    Long allPlaylistsCount();
 }

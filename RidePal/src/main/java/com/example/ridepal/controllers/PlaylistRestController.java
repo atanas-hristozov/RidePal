@@ -5,14 +5,12 @@ import com.example.ridepal.exceptions.EntityDuplicateException;
 import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.PlaylistMapper;
-import com.example.ridepal.models.Genre;
 import com.example.ridepal.models.Playlist;
 import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.dtos.PlaylistDisplayDto;
 import com.example.ridepal.models.dtos.PlaylistGenerateDto;
 import com.example.ridepal.models.dtos.PlaylistUpdateDto;
-import com.example.ridepal.models.dtos.UserDisplayDto;
 import com.example.ridepal.services.contracts.GenreService;
 import com.example.ridepal.services.contracts.PlaylistService;
 import jakarta.validation.Valid;
@@ -23,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/roadbeat/start")
@@ -93,7 +88,10 @@ public class PlaylistRestController {
         return playlistDisplayDtos;
     }
 
-
+    @GetMapping("/playlistsCount")
+    public Long allPlaylistsCount(){
+        return playlistService.allPlaylistsCount();
+    }
     @PutMapping("/playlist/{id}")
     public void updatePlaylist(@PathVariable int id,
                                @RequestHeader HttpHeaders headers,
