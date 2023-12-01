@@ -6,8 +6,13 @@ import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.exceptions.TextLengthException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.UserMapper;
+import com.example.ridepal.models.Playlist;
+import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.User;
+import com.example.ridepal.models.UserFilterOptions;
+import com.example.ridepal.models.dtos.PlaylistDisplayFilterDto;
 import com.example.ridepal.models.dtos.UserCreateUpdatePhoto;
+import com.example.ridepal.models.dtos.UserFilterDto;
 import com.example.ridepal.models.dtos.UserUpdateDto;
 import com.example.ridepal.services.contracts.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +24,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -41,6 +48,15 @@ public class UserMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
+    @ModelAttribute("isAdmin")
+    public boolean populateIsAdmin(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            Object currentUser = session.getAttribute("currentUser");
+            User user = userService.getByUsername(currentUser.toString());
+            return user.isAdmin();
+        }
+        return false;
+    }
 
     @GetMapping()
     public String showUserPage(Model model, HttpSession session) {
@@ -158,28 +174,14 @@ public class UserMvcController {
         }
     }
 
-    /*
-    @GetMapping("/delete")
-    public String showDeleteUserPage(Model model, HttpSession session) {
-        try {
-            User user = authenticationHelper.tryGetCurrentUser(session);
-            model.addAttribute("currentUser", user);
-
-            return "Delete_User";
-
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-    }*/
-
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deleteUserProfile(@ModelAttribute("user") User user, HttpSession session, BindingResult bindingResult) {
+    public String deleteUserProfile(HttpSession session, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "redirect:/user";
         }
         try {
-            user = authenticationHelper.tryGetCurrentUser(session);
+            User user = authenticationHelper.tryGetCurrentUser(session);
             userService.delete(user);
             session.removeAttribute("user");
             session.removeAttribute("isAuthenticated");
@@ -189,4 +191,30 @@ public class UserMvcController {
             return "redirect:/auth/login";
         }
     }
+
+    @GetMapping("/admin")
+    public String showAdminPage(@ModelAttribute("userFilterOptions") UserFilterDto userFilterDto,
+                                Model model,
+                                HttpSession session) {
+        if (populateIsAuthenticated(session)) {
+            String username = session.getAttribute("currentUser").toString();
+            User user = userService.getByUsername(username);
+            if (user.isAdmin() || user.getId() == 1) {
+                UserFilterOptions filterOptions = new UserFilterOptions(
+                        userFilterDto.getUsername(),
+                        userFilterDto.getEmail(),
+                        userFilterDto.getFirstName());
+                List<User> users = userService.getAllByFilterOptions(filterOptions);
+                model.addAttribute("user", user);
+                model.addAttribute("filterUsers", userFilterDto);
+                model.addAttribute("users", users);
+
+                return "My_Profile";
+            }
+            return "My_Profile";
+        } else {
+            return "redirect:/auth/login";
+        }
+    }
+
 }

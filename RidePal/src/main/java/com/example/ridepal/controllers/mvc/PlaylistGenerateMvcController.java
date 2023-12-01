@@ -94,11 +94,6 @@ public class PlaylistGenerateMvcController {
             model.addAttribute("error", e.getMessage());
             return "errorPage"; // Replace with your error page URL
         }
-        catch (EntityDuplicateException e) {
-            // Handle exceptions if needed and return appropriate error view
-            model.addAttribute("error", e.getMessage());
-            return "errorPage"; // Replace with your error page URL
-        }
         catch (AuthorizationException e) {
             // Handle exceptions if needed and return appropriate error view
             model.addAttribute("error", e.getMessage());

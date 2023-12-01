@@ -74,14 +74,17 @@ public class PlaylistServiceImpl implements PlaylistService {
             Set<Track> tracks = trackRepository.generateRandomTrackByGenre(genreEntity, tracksCountPerGenre);
             //find what duration is reached so far
             int sumDuration = tracks.stream().mapToInt(Track::getDuration).sum();
-            //if the calculated duration is not enough add more
-            if (sumDuration + 210 < durationPerGenre) {
-                tracksCountPerGenre = (durationPerGenre - sumDuration) / AVERAGE_TRACK_DURATION;
-                tracks.addAll(trackRepository.generateRandomTrackByGenre(genreEntity, tracksCountPerGenre));
-            }
-            //if the calculated duration exceeds the limit remove some of the added tracks
-            while (sumDuration > durationPerGenre + 180) {
-                tracks.remove(tracks.stream().findFirst().orElse(null));
+
+            while(sumDuration + AVERAGE_TRACK_DURATION < durationPerGenre || sumDuration > durationPerGenre + AVERAGE_TRACK_DURATION) {
+                //if the calculated duration is not enough add more
+                if (sumDuration + AVERAGE_TRACK_DURATION < durationPerGenre) {
+                    tracksCountPerGenre = (durationPerGenre - sumDuration) / AVERAGE_TRACK_DURATION;
+                    tracks.addAll(trackRepository.generateRandomTrackByGenre(genreEntity, tracksCountPerGenre));
+                }
+                //if the calculated duration exceeds the limit remove some of the added tracks
+                if (sumDuration > durationPerGenre + AVERAGE_TRACK_DURATION) {
+                    tracks.remove(tracks.stream().findFirst().orElse(null));
+                }
                 sumDuration = tracks.stream().mapToInt(Track::getDuration).sum();
             }
             playlist.setTracks(tracks);

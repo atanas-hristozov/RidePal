@@ -26,7 +26,6 @@ public class TrackRepositoryImpl extends AbstractCrudRepository<Track> implement
         try (Session session = sessionFactory.openSession()) {
             Query<Track> query = session.createQuery("FROM Track WHERE genre = :genre ORDER BY rand()");
             query.setParameter("genre", genre);
-            /* query.setParameter("tracksNumber", tracksNumber);*/
             query.setMaxResults(tracksNumber);
             List<Track> result = query.list();
             Set<Track> resultSet = new HashSet<>(result);

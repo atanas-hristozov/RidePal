@@ -88,22 +88,7 @@ public class PlaylistRepositoryImpl extends AbstractCrudRepository<Playlist> imp
     public Long allPlaylistsCount() {
         try (Session session = sessionFactory.openSession()) {
             Query<Long> query = session.createQuery("SELECT COUNT(id) from Playlist", Long.class);
-            return query.uniqueResult();
+            return query.uniqueResult() != null ? query.uniqueResult() : 0;
         }
-    }
-
-    @NotNull
-    private static TrackDisplayDto getTrackDisplayDto(Track track) {
-        TrackDisplayDto trackDto = new TrackDisplayDto();
-        trackDto.setRank(track.getRank());
-        trackDto.setPreviewUrl(track.getPreviewUrl());
-        trackDto.setTitle(track.getTitle());
-        ArtistDisplayDto artistDto = new ArtistDisplayDto();
-        artistDto.setName(track.getArtist().getArtistName());
-        artistDto.setPhoto(track.getArtist().getArtistPhoto());
-        trackDto.setArtist(artistDto);
-        trackDto.setAlbum((track.getAlbum() != null ? track.getAlbum().getAlbumName() : "N/A"));
-        trackDto.setDuration(track.getDuration());
-        return trackDto;
     }
 }

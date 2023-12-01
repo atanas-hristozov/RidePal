@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user) {
-
         userRepository.delete(user.getId());
     }
 
@@ -71,8 +70,8 @@ public class UserServiceImpl implements UserService {
             // Username doesn't exist, which is what we want
         }
     }
-    private static void checkAccessPermissions(User user, User executingUser) {
-        if (!executingUser.isAdmin() && executingUser.getId() != user.getId() && executingUser.getId() != 1) {
+    private static void checkAccessPermissions(User userToManipulate, User executingUser) {
+        if (!executingUser.isAdmin() && executingUser.getId() != userToManipulate.getId() && executingUser.getId() != 1) {
             // User with Id 1 have admin rights by default
             throw new AuthorizationException(ERROR_MESSAGE);
         }
