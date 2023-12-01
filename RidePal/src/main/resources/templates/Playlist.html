@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{Templates.html :: head('Playlist')}"></div>
 <body>
     <div class="container">
@@ -15,7 +15,7 @@
                     <div class="player">
                         <div class="wrapper">
                             <div class="details">
-                                <h2 class="playlist-playing">Playlist Name</h2>
+                                <h2 th:text="${playlist.title}" class="playlist-playing">Playlist Name</h2>
                                 <div class="now-playing">PLAYING x OF y</div>
                                 <div class="track-art"></div>
                                 <div class="track-name">Track Name</div>
@@ -35,9 +35,9 @@
                             </div>
                  
                             <div class="buttons">
-                                <!--<div class="random-track" onclick="randomTrack()">
+                                <div class="random-track" onclick="randomTrack()">
                                     <i class="fa fa-random fa-2x" title="random"></i>
-                                </div>-->
+                                </div>
                                 <div class="prev-track" onclick="prevTrack()">
                                      <i class="fa fa-step-backward fa-2x"></i>
                                  </div>
@@ -47,9 +47,9 @@
                                  <div class="next-track" onclick="nextTrack()">
                                      <i class="fa fa-step-forward fa-2x"></i>
                                  </div>
-                                 <!--<div class="repeat-track" onclick="repeatTrack()">
+                                 <div class="repeat-track" onclick="repeatTrack()">
                                      <i class="fa fa-repeat fa-2x" title="repeat"></i>
-                                 </div>-->
+                                 </div>
                             </div>
                  
                              <div id="wave">
@@ -79,7 +79,81 @@
                         </div>
                     </div>
 
-                    <script src="../static/Js/musicPlayer.js"></script>
+
+
+                    <div style="display: none;" th:if="${musicList}" class="generated-music">
+                        <ul>
+                            <li th:each="track : ${playlist.tracks}">
+                                <img class="artist-photo" th:src="${track.artist.getArtistPhoto()}" />
+                                <span class="title" th:text="${track.title}"></span>
+                                <span class="artist" th:text="${track.artist.artistName}"></span>
+                                <span class="preview-url" th:text="${track.getPreviewUrl()}"></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <script th:inline="javascript">
+                        /*document.addEventListener('DOMContentLoaded', function() {
+                            let generatedMusicDiv = document.querySelector('.generated-music');
+                            let trackElements = generatedMusicDiv.querySelectorAll('li');
+
+                            let music_list01 = [];
+
+                            if (trackElements.length > 0) {
+                                trackElements.forEach(trackElement => {
+                                    let img = trackElement.querySelector('.artist-photo').getAttribute('src');
+                                    let name = trackElement.querySelector('.title').textContent.trim();
+                                    let artist = trackElement.querySelector('.artist').textContent.trim();
+                                    let music = trackElement.querySelector('.preview-url').textContent.trim();
+
+                                    let trackObj = {
+                                        img: img,
+                                        name: name,
+                                        artist: artist,
+                                        music: music
+                                    };
+                                    music_list01.push(trackObj);
+                                });
+                            }
+
+                            console.log(music_list01); // Check if the array is correctly constructed
+                        });*/
+                    </script>
+                    <script th:src="@{/Js/musicPlayer.js}" src="../static/Js/musicPlayer.js"></script>
+
+
+
+
+
+
+                    <script>
+                        let music_list04 = [
+                            {
+                                img : 'images/stay.png',
+                                name : 'Stay',
+                                artist : 'The Kid LAROI, Justin Bieber',
+                                music : 'https://cdns-preview-3.dzcdn.net/stream/c-3e477a6671b162c3d05dac2cfffbe2e7-6.mp3'
+                            },
+                            {
+                                img : 'images/fallingdown.jpg',
+                                name : 'Falling Down',
+                                artist : 'Wid Cards',
+                                music : 'https://cdns-preview-3.dzcdn.net/stream/c-3e477a6671b162c3d05dac2cfffbe2e7-6.mp3'
+                            },
+                            {
+                                img : 'images/faded.png',
+                                name : 'Faded',
+                                artist : 'Alan Walker',
+                                music : 'https://cdns-preview-3.dzcdn.net/stream/c-3e477a6671b162c3d05dac2cfffbe2e7-6.mp3'
+                            },
+                            {
+                                img : 'images/ratherbe.jpg',
+                                name : 'Rather Be',
+                                artist : 'Clean Bandit',
+                                music : 'https://cdns-preview-3.dzcdn.net/stream/c-3e477a6671b162c3d05dac2cfffbe2e7-6.mp3'
+                            }
+                        ];
+                    </script>
 
                 </div>
             </section>

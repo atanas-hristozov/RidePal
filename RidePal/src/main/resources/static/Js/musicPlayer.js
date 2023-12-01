@@ -20,33 +20,36 @@ let isPlaying = false;
 let isRandom = false;
 let updateTimer;
 
-const music_list = [
-    {
-        img : 'images/stay.png',
-        name : 'Stay',
-        artist : 'The Kid LAROI, Justin Bieber',
-        music : 'https://cdns-preview-3.dzcdn.net/stream/c-3e477a6671b162c3d05dac2cfffbe2e7-6.mp3'
-    },
-    {
-        img : 'images/fallingdown.jpg',
-        name : 'Falling Down',
-        artist : 'Wid Cards',
-        music : 'https://cdns-preview-3.dzcdn.net/stream/c-3e477a6671b162c3d05dac2cfffbe2e7-6.mp3'
-    },
-    {
-        img : 'images/faded.png',
-        name : 'Faded',
-        artist : 'Alan Walker',
-        music : 'https://cdns-preview-3.dzcdn.net/stream/c-3e477a6671b162c3d05dac2cfffbe2e7-6.mp3'
-    },
-    {
-        img : 'images/ratherbe.jpg',
-        name : 'Rather Be',
-        artist : 'Clean Bandit',
-        music : 'https://cdns-preview-3.dzcdn.net/stream/c-3e477a6671b162c3d05dac2cfffbe2e7-6.mp3'
-    }
-];
 
+let music_list01 = [];
+document.addEventListener('DOMContentLoaded', function() {
+    let generatedMusicDiv = document.querySelector('.generated-music');
+    let trackElements = generatedMusicDiv.querySelectorAll('li');
+
+    //let music_list01 = [];
+
+    if (trackElements.length > 0) {
+        trackElements.forEach(trackElement => {
+            let img = trackElement.querySelector('.artist-photo').getAttribute('src');
+            let name = trackElement.querySelector('.title').textContent.trim();
+            let artist = trackElement.querySelector('.artist').textContent.trim();
+            let music = trackElement.querySelector('.preview-url').textContent.trim();
+
+            let trackObj = {
+                img: img,
+                name: name,
+                artist: artist,
+                music: music
+            };
+            music_list01.push(trackObj);
+        });
+    }
+
+    console.log(music_list01);
+});
+
+let music_list = music_list01;
+console.log(music_list);
 loadTrack(track_index);
 
 function loadTrack(track_index){
@@ -56,8 +59,8 @@ function loadTrack(track_index){
     curr_track.src = music_list[track_index].music;
     curr_track.load();
 
-    //track_art.style.backgroundImage = "url(" + music_list[track_index].img + ")";
-    track_art.style.backgroundImage = "url(https://i.scdn.co/image/ab6761610000e5eb50defaf9fc059a1efc541f4c)";
+    track_art.style.backgroundImage = "url(" + music_list[track_index].img + ")";
+    //track_art.style.backgroundImage = music_list[track_index].img;
     track_name.textContent = music_list[track_index].name;
     track_artist.textContent = music_list[track_index].artist;
     now_playing.textContent = "Playing music " + (track_index + 1) + " of " + music_list.length;
