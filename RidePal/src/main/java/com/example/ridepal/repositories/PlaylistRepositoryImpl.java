@@ -56,12 +56,12 @@ public class PlaylistRepositoryImpl extends AbstractCrudRepository<Playlist> imp
 
             playlistFilterOptions.getPlaylistTimeFrom().ifPresent(value -> {
                 filters.add("p.playlistTime >= :playlistTimeFrom");
-                params.put("playlistTimeFrom", value);
+                params.put("playlistTimeFrom", value * 60);
             });
 
             playlistFilterOptions.getPlaylistTimeTo().ifPresent(value -> {
                 filters.add("p.playlistTime <= :playlistTimeTo");
-                params.put("playlistTimeTo", value);
+                params.put("playlistTimeTo", value * 60);
             });
 
             playlistFilterOptions.getGenreName().ifPresent(value -> {
