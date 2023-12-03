@@ -1,10 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <div th:replace="~{Templates.html :: head('All Playlists')}"></div>
+
+
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/public/css/main.min.css" th:href="@{/public/css/main.min.css}">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="../static/js/header.js" th:src="@{/js/header.js}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/png" href="../static/img/Logo_Title.png" th:href="@{/img/Logo_Title.png}">
+    <title th:text="'ROADBEAT | '+ ${title}">Home</title>
+</head>
+
+
 <body>
 <div class="container">
     <div class="main-field">
         <div th:replace="~{Templates.html :: header}"></div>
+
+
+        <header class="header" th:fragment="header">
+            <div class="header-content">
+                <a href="Index.html" th:href="@{/}" class="logo"><img src="../static/img/logo_02.png"
+                                                                      th:src="@{/img/logo_02.png}" alt=""></a>
+                <input class="menu-btn" type="checkbox" id="menu-btn"/>
+                <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+                <ul class="menu">
+                    <li><a href="Index.html" th:href="@{/}">Home</a></li>
+                    <li><a href="Generate_tracks.html" th:if="${isAuthenticated}" th:href="@{/generate}">Create</a></li>
+                    <li><a href="All_Playlists.html" th:href="@{/playlists}">Browse</a></li>
+                    <li><a href="About.html" th:href="@{/about}">About</a></li>
+                    <li><a href="Contacts.html" th:href="@{/contact}">Contact</a></li>
+                    <li><a href="My_Profile.html" th:if="${isAuthenticated}" th:href="@{/user}">My Profile</a></li>
+                    <li><a href="Admin_Mode.html" th:if="${isAdmin}" th:href="@{/admin}">Admin Mode</a></li>
+                </ul>
+            </div>
+        </header>
+
+
         <section class="allPlaylists">
             <video class="allPlaylists-video" th:src="@{/video/Wave_04.mp4}" src="../static/video/Wave_04.mp4"
                    playsinline="" preload="none" autoplay="" muted="" loop=""></video>
@@ -13,18 +50,57 @@
                     <h2>Generated Playlists</h2>
 
 
-                    <div>
-                        <section class="all-information">
-                            <div>
-                                <h3>Number of Playlists</h3>
-                                <p th:text="${playlistsCount}">23</p>
+                    <section class="allPlaylists-filter">
+                        <div class="allPlaylists-filter-information">
+                            <h3>Number of Playlists:</h3>
+                            <p th:text="${playlistsCount}">23</p>  
+                        </div>
+
+                        <div class="login-content">
+                            <div class="login-box">
+                                <h2>Search Playlists</h2>
+                                <form th:action="@{/playlists}" method="get" th:object="${playlistFilterOptions}" class="allPlaylists-filter-form">
+                                    <div class="user-box">
+                                        <input type="text" id="title" th:field="*{title}">
+                                        <label for="title">Playlist title</label>
+                                    </div>
+                                    <div class="user-box">
+                                        <input type="number" id="from" th:field="*{playlistTimeFrom}">
+                                        <label for="from">Minutes from</label>
+                                    </div>
+                                    <div class="user-box">
+                                        <input type="number" id="to" th:field="*{playlistTimeTo}" th:value="10000">
+                                        <label for="to">Minutes to</label>
+                                    </div>
+
+                                    <div class="user-box">
+                                        
+                                        <select id="genre" th:field="*{genreName}" class="transparent-options">
+                                            <option value="">Select Genre</option>
+                                            <option th:value="Rock" value="Rock">Rock</option>
+                                            <option th:value="Pop" value="Pop">Pop</option>
+                                            <option th:value="'Rap/Hip Hop'" value="option1">Rap/Hip Hop</option>
+                                            <option th:value="Classical" value="Classical">Classical</option>
+                                            <option th:value="'R&B'" value="R&B">R&B</option>
+                                            <option th:value="Kids" value="Kids">Kids</option>
+                                        </select>
+                                    </div>
+                                    <button class="login-button" type="submit">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        Submit
+                                    </button>
+                                </form>
                             </div>
-                        </section>
+                        </div>
+                        
 
-                        <section class="playlist-filter-options">
-
-                            <form th:action="@{/playlists}" method="get"  th:object="${playlistFilterOptions}"  class="playlist-filter-form">
-
+                        
+                        <!--
+                        <div class="allPlaylists-filter-options">
+                            <form th:action="@{/playlists}" method="get"  th:object="${playlistFilterOptions}"  class="allPlaylists-filter-form">
                                 <label>Playlist title</label>
                                 <input type="text" th:field="*{title}">
                                 <label>Minutes from </label>
@@ -35,13 +111,12 @@
                                 <input type="text" th:field="*{genreName}">
                                 <input type="submit" value="Search" class="search-btn"/>
                             </form>
-
                             <div th:if="${playlists.isEmpty()}" class="no-users-message">
                                 <h2>No results found</h2>
                             </div>
-
-                        </section>
-                    </div>
+                        </div>
+                        -->
+                    </section>
 
 
                     <div th:each="playlist : ${playlists}" class="allPlaylists-content-list-item">
@@ -58,7 +133,7 @@
                             </div>
                             <div class="allPlaylists-content-list-item-text">
                                 <p>Duration:</p>
-                                <p th:text="${playlist.getPlaylistTime()}">23:55 min</p>
+                                <p th:text="${playlist.getPlaylistTime()/60} + ' min'" >23:55 min</p>
                             </div>
                             <div class="allPlaylists-content-list-item-text">
                                 <p>Rank:</p>
