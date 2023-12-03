@@ -72,7 +72,7 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/photo")
+    @GetMapping("/selectedPhoto")
     public ResponseEntity<byte[]> getPhoto(Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
@@ -154,7 +154,7 @@ public class UserMvcController {
         }
     }
 
-   /* @GetMapping("/photo")
+   @GetMapping("/photo")
     public String showEditUserProfilePhoto(Model model,
                                            HttpSession session,
                                            UserCreateUpdatePhoto userCreateUpdatePhoto) {
@@ -168,7 +168,7 @@ public class UserMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-    }*/
+    }
 
     @PostMapping("/photo")
     public String updateUserProfilePhoto(@Valid @ModelAttribute("currentUser")

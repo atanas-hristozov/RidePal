@@ -90,6 +90,26 @@ public class AdminMvcController {
             return "redirect:/auth/login";
         }
     }
+    /*@GetMapping()
+    public List<UserDisplayDto> getAllUsers(HttpSession httpSession,
+                                            @RequestParam(required = false) String username,
+                                            @RequestParam(required = false) String email,
+                                            @RequestParam(required = false) String firstName) {
+        try {
+            User userToCheck = authenticationHelper.tryGetCurrentUser(httpSession);
+            checkAdminRights(userToCheck);
+            List<UserDisplayDto> users = new ArrayList<>();
+            UserFilterOptions userFilterOptionsForAdmins = new UserFilterOptions(username,
+                    email, firstName);
+            for (User user : userService.getAllByFilterOptions(userFilterOptionsForAdmins)) {
+                users.add(userMapper.fromUser(user));
+            }
+            return users;
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }*/
+
 
     @GetMapping("/update/{id}")
     public String showAdminUpdatePage(@PathVariable int id,
@@ -136,25 +156,6 @@ public class AdminMvcController {
         return "redirect:/auth/login";
     }
 
-    @GetMapping("/users")
-    public List<UserDisplayDto> getAllUsers(@RequestHeader HttpHeaders headers,
-                                            @RequestParam(required = false) String username,
-                                            @RequestParam(required = false) String email,
-                                            @RequestParam(required = false) String firstName) {
-        try {
-            User userToCheck = authenticationHelper.tryGetUser(headers);
-            checkAdminRights(userToCheck);
-            List<UserDisplayDto> users = new ArrayList<>();
-            UserFilterOptions userFilterOptionsForAdmins = new UserFilterOptions(username,
-                    email, firstName);
-            for (User user : userService.getAllByFilterOptions(userFilterOptionsForAdmins)) {
-                users.add(userMapper.fromUser(user));
-            }
-            return users;
-        } catch (AuthorizationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
-    }
 
     @PostMapping("/{id}/update")
     public String updateUserProfile(@Valid @ModelAttribute("currentUser") UserAdminRightsDto userAdminRightsDto,
