@@ -58,6 +58,7 @@ public class UserMapper {
     public User fromUserAdminRightsDto(int id, UserAdminRightsDto adminRightsDto) {
         User user = userService.getById(id);
         user.setAdmin(adminRightsDto.isAdmin());
+        user.setUserPhoto(adminRightsDto.getUserPhoto());
 
         return user;
     }

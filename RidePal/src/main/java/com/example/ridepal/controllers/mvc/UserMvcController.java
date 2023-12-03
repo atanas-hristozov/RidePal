@@ -6,26 +6,27 @@ import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.exceptions.TextLengthException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.UserMapper;
-import com.example.ridepal.models.Playlist;
-import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.User;
-import com.example.ridepal.models.UserFilterOptions;
-import com.example.ridepal.models.dtos.PlaylistDisplayFilterDto;
 import com.example.ridepal.models.dtos.UserCreateUpdatePhoto;
-import com.example.ridepal.models.dtos.UserFilterDto;
 import com.example.ridepal.models.dtos.UserUpdateDto;
 import com.example.ridepal.services.contracts.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.apache.commons.io.IOUtils;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Controller
 @RequestMapping("/user")
@@ -64,9 +65,35 @@ public class UserMvcController {
             String username = session.getAttribute("currentUser").toString();
             User user = userService.getByUsername(username);
             model.addAttribute("user", user);
+            model.addAttribute("userProfilePicture", user.getUserPhoto());
             return "My_Profile";
         } else {
             return "redirect:/auth/login";
+        }
+    }
+
+    @GetMapping("/photo")
+    public ResponseEntity<byte[]> getPhoto(Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetCurrentUser(session);
+
+            // User is authenticated, proceed to retrieve the photo
+            byte[] userPhoto = user.getUserPhoto();
+
+            if (userPhoto != null && userPhoto.length > 0) {
+                // If the user has a photo, return it
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(userPhoto);
+            } else {
+                // If the user doesn't have a photo, return a default image or a placeholder image
+                // Replace the following line with your actual path to a default image
+                InputStream defaultImageStream = getClass().getResourceAsStream("/static/default-user-photo.jpg");
+                byte[] defaultImage = IOUtils.toByteArray(defaultImageStream);
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(defaultImage);
+            }
+        } catch (AuthorizationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -81,9 +108,10 @@ public class UserMvcController {
 
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
 
     @PostMapping("/update")
     public String updateUserProfile(@Valid @ModelAttribute("currentUser") UserUpdateDto userUpdateDto,
@@ -126,7 +154,7 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/photo")
+   /* @GetMapping("/photo")
     public String showEditUserProfilePhoto(Model model,
                                            HttpSession session,
                                            UserCreateUpdatePhoto userCreateUpdatePhoto) {
@@ -140,13 +168,16 @@ public class UserMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-    }
+    }*/
 
     @PostMapping("/photo")
-    public String updateUserProfilePicture(@Valid @ModelAttribute("currentUser") UserCreateUpdatePhoto userCreateUpdatePhoto,
-                                           BindingResult bindingResult,
-                                           Model model,
-                                           HttpSession session) {
+    public String updateUserProfilePhoto(@Valid @ModelAttribute("currentUser")
+                                         @RequestParam("file") MultipartFile file,
+                                         RedirectAttributes redirectAttributes,
+                                         UserCreateUpdatePhoto userCreateUpdatePhoto,
+                                         BindingResult bindingResult,
+                                         Model model,
+                                         HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
@@ -159,19 +190,14 @@ public class UserMvcController {
         }
 
         try {
-            User userToUpdate = userMapper.fromUserCreateUpdatePhotoDto(user.getId(), userCreateUpdatePhoto);
-            userService.update(userToUpdate);
-            model.addAttribute("currentUser", userToUpdate);
-
+            userService.uploadPhoto(user, file);
+            model.addAttribute("currentUser", user);
+            redirectAttributes.addFlashAttribute("successMessage", "Photo uploaded successfully");
             return "redirect:/user";
-
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-
-            return "Error_Page";
-
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error uploading photo");
         }
+        return "Edit_User";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
@@ -191,30 +217,4 @@ public class UserMvcController {
             return "redirect:/auth/login";
         }
     }
-
-    @GetMapping("/admin")
-    public String showAdminPage(@ModelAttribute("userFilterOptions") UserFilterDto userFilterDto,
-                                Model model,
-                                HttpSession session) {
-        if (populateIsAuthenticated(session)) {
-            String username = session.getAttribute("currentUser").toString();
-            User user = userService.getByUsername(username);
-            if (user.isAdmin() || user.getId() == 1) {
-                UserFilterOptions filterOptions = new UserFilterOptions(
-                        userFilterDto.getUsername(),
-                        userFilterDto.getEmail(),
-                        userFilterDto.getFirstName());
-                List<User> users = userService.getAllByFilterOptions(filterOptions);
-                model.addAttribute("user", user);
-                model.addAttribute("filterUsers", userFilterDto);
-                model.addAttribute("users", users);
-
-                return "My_Profile";
-            }
-            return "My_Profile";
-        } else {
-            return "redirect:/auth/login";
-        }
-    }
-
 }

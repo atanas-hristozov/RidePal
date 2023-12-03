@@ -5,6 +5,7 @@ import com.example.ridepal.exceptions.EntityDuplicateException;
 import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.UserMapper;
+import com.example.ridepal.models.Playlist;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.UserFilterOptions;
 import com.example.ridepal.models.dtos.*;
@@ -79,9 +80,10 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @PutMapping("/user/photo")
     public void addUpdatePhoto(@RequestHeader HttpHeaders headers,
-                       @RequestBody UserCreateUpdatePhoto userCreateUpdatePhoto) {
+                               @RequestBody UserCreateUpdatePhoto userCreateUpdatePhoto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             User userToUpdate = userMapper.fromUserCreateUpdatePhotoDto(user.getId(), userCreateUpdatePhoto);
@@ -109,15 +111,16 @@ public class UserRestController {
         }
     }
 
-
-    @PutMapping("/admin/{id}")
-    public void adminRightsUpdate(@RequestHeader HttpHeaders headers,
-                                  @RequestBody UserAdminRightsDto adminRightsDto,
-                                  @PathVariable int id) {
+    @GetMapping("/user/users")
+    public List<UserDisplayDto> getAll(@RequestHeader HttpHeaders headers,
+                                       UserFilterOptions userFilterOptions) {
         try {
-            authenticationHelper.tryGetUser(headers);
-            User userToUpdate = userMapper.fromUserAdminRightsDto(id, adminRightsDto);
-            userService.update(userToUpdate);
+            User loggedUser = authenticationHelper.tryGetUser(headers);
+            checkAdminRights(loggedUser);
+        List<UserDisplayDto> userDisplayDtos = new ArrayList<>();
+        for (User user: userService.getAllByFilterOptions(userFilterOptions))
+            userDisplayDtos.add(userMapper.fromUser(user));
+        return userDisplayDtos;
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -126,30 +129,13 @@ public class UserRestController {
         }
     }
 
-    @GetMapping("/users")
-    public List<UserDisplayDto> getAllUsers(@RequestHeader HttpHeaders headers,
-                                            @RequestParam(required = false) String username,
-                                            @RequestParam(required = false) String email,
-                                            @RequestParam(required = false) String firstName) {
-        try {
-            User userToCheck = authenticationHelper.tryGetUser(headers);
-            checkAdminRights(userToCheck);
-            List<UserDisplayDto> users = new ArrayList<>();
-            UserFilterOptions userFilterOptionsForAdmins = new UserFilterOptions(username,
-                    email, firstName);
-            for (User user : userService.getAllByFilterOptions(userFilterOptionsForAdmins)) {
-                users.add(userMapper.fromUser(user));
-            }
-            return users;
-        } catch (AuthorizationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
-    }
+
     private static void checkAdminRights(User userToCheck) {
         if (!userToCheck.isAdmin() && userToCheck.getId() != 1) {
             throw new AuthorizationException(ERROR_MESSAGE);
         }
     }
+
     private static void checkIsItSameUser(User loggedUser, int id) {
         if (loggedUser.getId() != id) {
             throw new AuthorizationException(ERROR_MESSAGE);

@@ -12,7 +12,7 @@ public class UserDisplayDto {
     private String username;
     private String email;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String userPhoto;
+    private byte[] userPhoto;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<PlaylistDisplayDto> playlists;
 
@@ -51,11 +51,11 @@ public class UserDisplayDto {
         this.email = email;
     }
 
-    public String getUserPhoto() {
+    public byte[] getUserPhoto() {
         return userPhoto;
     }
 
-    public void setUserPhoto(String userPhoto) {
+    public void setUserPhoto(byte[] userPhoto) {
         this.userPhoto = userPhoto;
     }
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{Templates.html :: head('UserUpdate')}"></div>
+<body>
+<div th:replace="~{Templates.html :: header}"></div>
+<section class="update-user-by-admin">
+    <H2 th:text="'Edit User ' + ${userToManipulate.getUsername()}">Edit username</H2>
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Firstname</th>
+            <th>IsAdmin</th>
+
+        </tr>
+        <tr th:object="${userToManipulate}">
+            <td th:text="${userToManipulate.getUsername()}">Ivan</td>
+            <td th:text="${userToManipulate.getEmail()}">ivan@abv.bg</td>
+            <td th:text="${userToManipulate.getFirstName()}">Ivan92</td>
+            <td th:text="${userToManipulate.getUserPhoto()}">Ivan92</td>
+            <td>
+                <form th:action="@{/user/admin/update/{id} (id=${userToManipulate.getId()})}" th:object="${userToManipulate}" action="#" method="post">
+                    <select name="isAdmin">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                    <button href="#" type="submit">Update</button>
+                </form>
+
+                <form th:action="@{/user/admin/delete/{id} (id=${userToManipulate.getId()})}" th:object="${userToManipulate}" action="#" method="post">
+                    <select name="isAdmin">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                    <button href="#" type="submit">Update</button>
+                </form>
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </table>
+</section>
+</div>
+</body>
+</html>

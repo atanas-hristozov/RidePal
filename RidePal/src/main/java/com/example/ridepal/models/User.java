@@ -25,8 +25,9 @@ public class User {
     private String email;
     @Column(name = "is_admin")
     private boolean isAdmin;
+    @Lob
     @Column(name = "user_photo")
-    private String userPhoto;
+    private byte[] userPhoto;
     @OneToMany(fetch=FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Playlist> playlists;
 
@@ -100,11 +101,11 @@ public class User {
         playlists.add(playlist);
     }
 
-    public String getUserPhoto() {
+    public byte[] getUserPhoto() {
         return userPhoto;
     }
 
-    public void setUserPhoto(String userPhoto) {
+    public void setUserPhoto(byte[] userPhoto) {
         this.userPhoto = userPhoto;
     }
 }
