@@ -16,4 +16,5 @@ public interface UserService {
     User getByUsername(String username);
     List<User> getAllByFilterOptions(UserFilterOptions userFilterOptions);
     void uploadPhoto(User user, MultipartFile multipartFile) throws IOException;
+    Long allUsersCount();
 }

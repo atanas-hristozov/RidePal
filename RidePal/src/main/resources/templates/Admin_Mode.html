@@ -9,52 +9,10 @@
             <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
             <div class="profile-content">
 
-
-                <h2 class="Profile-title">Users Information</h2>
-                <section class="user-filter-container">
-                    <form action="#" th:action="@{/admin}" method="get" th:object="${filterUsers}">
-                        <label>Filter Options</label>
-                        <br/><br/>
-                        <label>Username</label>
-                        <input type="text" id="username" placeholder="Username" th:field="*{username}" class="filter-input"/>
-                        <label>Email</label>
-                        <input type="text" id="email" placeholder="Email" th:field="*{email}" class="filter-input"/>
-                        <label>First name</label>
-                        <input type="text" id="firstName" placeholder="First name" th:field="*{firstName}" class="filter-input"/>
-                        <input type="submit" value="Search" class="search-btn"/>
-                    </form>
-
-                    <div th:if="${users.isEmpty()}" >
-                        <h2>No Users</h2>
-                    </div>
-                </section>
-
-                <section >
-                    <h3>All Users</h3>
-
-                    <table class>
-                        <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>First Name</th>
-                            <th>Edit Photo</th>
-                            <th>Delete</th>
-                        </tr>
-                        <tr th:each="user : ${users}" >
-                            <td th:text="${user.getUsername()}">Ivan</td>
-                            <td th:text="${user.getEmail()}">ivan@abv.bg</td>
-                            <td th:text="${user.getFirstName()}">Ivan92</td>
-
-                            <td>
-                                <a th:href="@{'/user/admin/edit/' + ${user.getId()}}" href="#" >Edit</a>
-
-                            </td>
-                            <td>
-                                <a th:href="@{'/user/admin/delete/' + ${user.getId()}}" href="#" >Delete</a>
-                            </td>
-                        </tr>
-                    </table>
-                </section>
+                <ul class="menu">
+                    <li><a href="Admin_AllUsers.html" th:if="${isAdmin}" th:href="@{/admin/users}">All users</a></li>
+                    <li><a href="Admin_AllPlaylists.html" th:if="${isAdmin}" th:href="@{/admin/playlists}">All playlists</a></li>
+                </ul>
 
             </div>
         </section>

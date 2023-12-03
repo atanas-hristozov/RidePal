@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserRepository extends BaseCrudRepository<User>{
     List<User>getAllByFilterOptions(UserFilterOptions userFilterOptions);
+    Long allUsersCount();
 }

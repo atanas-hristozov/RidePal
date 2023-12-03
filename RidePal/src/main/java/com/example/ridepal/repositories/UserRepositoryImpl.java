@@ -53,4 +53,12 @@ public class UserRepositoryImpl extends AbstractCrudRepository<User> implements 
             return query.list();
         }
     }
+
+    @Override
+    public Long allUsersCount() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Long> query = session.createQuery("SELECT COUNT(id) from User ", Long.class);
+            return query.uniqueResult() != null ? query.uniqueResult() : 0;
+        }
+    }
 }
