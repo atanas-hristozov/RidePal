@@ -10,13 +10,13 @@
                    playsinline="" preload="none" autoplay="" muted="" loop=""></video>
             <div class="allPlaylists-content">
                 <div class="allPlaylists-content-list">
-                    <h2>All Generated Playlists</h2>
+                    <h2>Generated Playlists</h2>
 
 
                     <div>
                         <section class="all-information">
                             <div>
-                                <h3>All Playlists</h3>
+                                <h3>Number of Playlists</h3>
                                 <p th:text="${playlistsCount}">23</p>
                             </div>
                         </section>
@@ -45,9 +45,9 @@
 
 
                     <div th:each="playlist : ${playlists}" class="allPlaylists-content-list-item">
-                        <a href="Playlist.html">
-                            <img th:src="@{/img/profile-picture-placeholder.jpg}"
-                                 src="../static/img/profile-picture-placeholder.jpg" alt="profile_picture">
+                        <a th:href="@{/playlist/{id}(id=${playlist.getId()})}" href="Playlist.html">
+                            <img th:if="${playlist.getUser().getUserPhoto() == null}" th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg" alt="profile_picture">
+                            <img th:if="${playlist.getUser().getUserPhoto() != null}" th:src="@{/user/selectedPhoto/{id}(id=${playlist.getUser().getId()})}" src="../static/img/profile-picture-placeholder.jpg" alt="profile_picture">
                             <div class="allPlaylists-content-list-item-text">
                                 <p>Playlist name:</p>
                                 <p th:text="${playlist.getTitle()}"></p>

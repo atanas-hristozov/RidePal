@@ -11,7 +11,8 @@
                     <div class="profile-content-userinfo">
                         <div class="profile-content-picture">
                             <div class="about-desc-profiles-info">
-                                <img th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                                <img th:if="${userProfilePicture == null}" th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                                <img th:if="${userProfilePicture != null}" th:src="@{/user/selectedPhoto}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
                                 <div class="about-desc-profiles-info-pictures">
                                     <div class="about-desc-profiles-info-pictures-pulse">
                                         <span style="--i:0"></span>

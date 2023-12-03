@@ -9,17 +9,17 @@
                 <video class="photo-video" th:src="@{/video/Wave_03.mp4}" src="../static/video/Wave_03.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
                 <div class="photo-content">
 
-                  <form th:action="@{/photo}" method="post" enctype="multipart/form-data" th:object="${currentUser}" class="upload-container">
-                      <input type="file" id="imageInput" accept="image/*">
+                  <form th:action="@{/user/photo}" method="post" enctype="multipart/form-data" th:object="${currentUser}" class="upload-container">
+                      <input type="file" id="imageInput" name="file" accept="image/*">
                       <label for="imageInput"  class="login-button"><span></span>
                         <span></span>
                         <span></span>
                         <span></span>Select Image</label>
                       <div class="preview">
-                        <img id="previewImage" src="../static/img/placeholder-update-image.png" alt="Image Preview">
+                        <img id="previewImage" th:src="@{/img/placeholder-update-image.png}" src="../static/img/placeholder-update-image.png" alt="Image Preview">
                       </div>
                       <div>
-                          <button class="login-button">
+                          <button class="login-button" type="submit">
                               <span></span>
                               <span></span>
                               <span></span>
@@ -28,7 +28,7 @@
                           </button>
                         </div>
                     </form>
-                    <script src="../static/Js/upload-photo.js"></script>
+                    <script th:src="@{/Js/upload-photo.js}" src="../static/Js/upload-photo.js"></script>
 
                     
                 

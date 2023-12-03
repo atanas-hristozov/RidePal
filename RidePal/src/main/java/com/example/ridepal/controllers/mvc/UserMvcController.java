@@ -97,6 +97,32 @@ public class UserMvcController {
         }
     }
 
+
+    @GetMapping("/selectedPhoto/{id}")
+    public ResponseEntity<byte[]> getPhotoId(@PathVariable int id, HttpSession session) {
+        try {
+            // Retrieve user details based on the provided user ID
+            User user = userService.getById(id); // Replace with your logic to fetch the user by ID
+
+            byte[] userPhoto = user.getUserPhoto();
+
+            if (userPhoto != null && userPhoto.length > 0) {
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(userPhoto);
+            } else {
+                // If no user photo is found, return a default image
+                InputStream defaultImageStream = getClass().getResourceAsStream("/static/default-user-photo.jpg");
+                byte[] defaultImage = IOUtils.toByteArray(defaultImageStream);
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(defaultImage);
+            }
+        } catch (AuthorizationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+
     @GetMapping("/update")
     public String showEditUserPage(Model model, HttpSession session) {
         try {
