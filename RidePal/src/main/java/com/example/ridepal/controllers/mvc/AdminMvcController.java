@@ -32,7 +32,7 @@ import java.util.List;
 import static com.example.ridepal.services.UserServiceImpl.ERROR_MESSAGE;
 
 @Controller
-@RequestMapping("user/admin")
+@RequestMapping("/admin")
 public class AdminMvcController {
 
     private UserService userService;
@@ -66,7 +66,7 @@ public class AdminMvcController {
         return false;
     }
 
-    @GetMapping()
+    @GetMapping
     public String showAdminPage(@ModelAttribute("userFilterOptions") UserFilterDto userFilterDto,
                                 Model model,
                                 HttpSession session) {

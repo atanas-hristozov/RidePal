@@ -12,7 +12,7 @@
 
                 <h2 class="Profile-title">Users Information</h2>
                 <section class="user-filter-container">
-                    <form action="#" th:action="@{/admin/users}" method="get" th:object="${filterUsers}">
+                    <form action="#" th:action="@{/admin}" method="get" th:object="${filterUsers}">
                         <label>Filter Options</label>
                         <br/><br/>
                         <label>Username</label>
@@ -21,7 +21,6 @@
                         <input type="text" id="email" placeholder="Email" th:field="*{email}" class="filter-input"/>
                         <label>First name</label>
                         <input type="text" id="firstName" placeholder="First name" th:field="*{firstName}" class="filter-input"/>
-
                         <input type="submit" value="Search" class="search-btn"/>
                     </form>
 
