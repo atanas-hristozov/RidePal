@@ -54,6 +54,7 @@ public class AllPlaylistsMvcController {
         }
         return null;
     }
+
     @ModelAttribute("requestURI")
     public String requestURI(final HttpServletRequest request) {
         return request.getRequestURI();
@@ -66,7 +67,7 @@ public class AllPlaylistsMvcController {
         PlaylistFilterOptions playlistFilterOptions = new PlaylistFilterOptions(
                 playlistDisplayFilterDto.getTitle(),
                 playlistDisplayFilterDto.getPlaylistTimeFrom(),
-                playlistDisplayFilterDto.getPlaylistTimeTo(),
+                playlistDisplayFilterDto.getPlaylistTimeTo() != 0 ? playlistDisplayFilterDto.getPlaylistTimeTo() : 10000,
                 playlistDisplayFilterDto.getGenreName());
 
         List<Playlist> playlists = playlistService.getAll(playlistFilterOptions);
