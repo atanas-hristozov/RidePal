@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let generatedMusicDiv = document.querySelector('.generated-music');
     let trackElements = generatedMusicDiv.querySelectorAll('li');
 
-    //let music_list01 = [];
-
     if (trackElements.length > 0) {
         trackElements.forEach(trackElement => {
             let img = trackElement.querySelector('.artist-photo').getAttribute('src');
@@ -44,8 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
             music_list01.push(trackObj);
         });
     }
-
     console.log(music_list01);
+    // After populating the music_list01 array, load the first track
+    if (music_list01.length > 0) {
+        loadTrack(track_index);
+    }
 });
 
 let music_list = music_list01;
@@ -64,6 +65,7 @@ function loadTrack(track_index){
     track_name.textContent = music_list[track_index].name;
     track_artist.textContent = music_list[track_index].artist;
     now_playing.textContent = "Playing music " + (track_index + 1) + " of " + music_list.length;
+
 
     updateTimer = setInterval(setUpdate, 1000);
 
