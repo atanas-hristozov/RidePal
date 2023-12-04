@@ -5,7 +5,6 @@ import com.example.ridepal.exceptions.EntityDuplicateException;
 import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.UserMapper;
-import com.example.ridepal.models.Playlist;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.UserFilterOptions;
 import com.example.ridepal.models.dtos.*;
@@ -83,10 +82,10 @@ public class UserRestController {
 
     @PutMapping("/user/photo")
     public void addUpdatePhoto(@RequestHeader HttpHeaders headers,
-                               @RequestBody UserCreateUpdatePhoto userCreateUpdatePhoto) {
+                               @RequestBody UserCreateUpdatePhotoDto userCreateUpdatePhotoDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            User userToUpdate = userMapper.fromUserCreateUpdatePhotoDto(user.getId(), userCreateUpdatePhoto);
+            User userToUpdate = userMapper.fromUserCreateUpdatePhotoDto(user.getId(), userCreateUpdatePhotoDto);
 
             userService.update(userToUpdate);
 

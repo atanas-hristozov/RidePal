@@ -47,11 +47,19 @@ public class UserMapper {
 
         return userUpdateDto;
     }
-    public User fromUserCreateUpdatePhotoDto(int id, UserCreateUpdatePhoto userCreateUpdatePhoto){
+
+    public User fromUserCreateUpdatePhotoDto(int id, UserCreateUpdatePhotoDto userCreateUpdatePhotoDto) {
         User user = userService.getById(id);
-        user.setUserPhoto(userCreateUpdatePhoto.getUserPhoto());
+        user.setUserPhoto(userCreateUpdatePhotoDto.getUserPhoto());
 
         return user;
+    }
+
+    public UserCreateUpdatePhotoDto fromUserToUserUpdatePhotoDto(User user) {
+        UserCreateUpdatePhotoDto userPhotoUpdateDto = new UserCreateUpdatePhotoDto();
+        userPhotoUpdateDto.setUserPhoto(user.getUserPhoto());
+
+        return userPhotoUpdateDto;
     }
 
 
@@ -71,7 +79,7 @@ public class UserMapper {
         userDisplayDto.setEmail(user.getEmail());
         userDisplayDto.setUserPhoto(user.getUserPhoto());
 
-        for (Playlist playlist: user.getPlaylists()){
+        for (Playlist playlist : user.getPlaylists()) {
             PlaylistDisplayDto playlistDisplayDto = new PlaylistDisplayDto();
             playlistDisplayDto.setTitle(playlist.getTitle());
             playlistDisplayDto.setRank(playlist.getRank());

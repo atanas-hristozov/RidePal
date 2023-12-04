@@ -6,6 +6,7 @@ import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.helpers.UserMapper;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.UserFilterOptions;
+import com.example.ridepal.models.dtos.UserCreateUpdatePhotoDto;
 import com.example.ridepal.models.dtos.UserDisplayDto;
 import com.example.ridepal.repositories.AbstractCrudRepository;
 import com.example.ridepal.repositories.contracts.UserRepository;
@@ -54,6 +55,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void removePhoto(User user) {
+        user.setUserPhoto(null);
+      userRepository.update(user);
+
+    }
+
+    @Override
+    public void addRemoveAdmin(User executingUser, User userToUpdate) {
+        checkAdminRights(executingUser);
+        userToUpdate.setAdmin(!userToUpdate.isAdmin());
+        userRepository.update(userToUpdate);
+    }
+
+    @Override
     public Long allUsersCount() {
         return userRepository.allUsersCount();
     }
@@ -86,6 +101,11 @@ public class UserServiceImpl implements UserService {
     private static void checkAccessPermissions(User userToManipulate, User executingUser) {
         if (!executingUser.isAdmin() && executingUser.getId() != userToManipulate.getId() && executingUser.getId() != 1) {
             // User with Id 1 have admin rights by default
+            throw new AuthorizationException(ERROR_MESSAGE);
+        }
+    }
+    private static void checkAdminRights(User userToCheck) {
+        if (!userToCheck.isAdmin() && userToCheck.getId() != 1) {
             throw new AuthorizationException(ERROR_MESSAGE);
         }
     }

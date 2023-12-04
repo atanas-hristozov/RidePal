@@ -2,11 +2,11 @@ package com.example.ridepal.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-public class UserCreateUpdatePhoto {
+public class UserCreateUpdatePhotoDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private byte[] userPhoto;
 
-    public UserCreateUpdatePhoto() {
+    public UserCreateUpdatePhotoDto() {
     }
 
     public byte[] getUserPhoto() {

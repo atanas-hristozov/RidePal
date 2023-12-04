@@ -11,6 +11,7 @@ import com.example.ridepal.models.User;
 import com.example.ridepal.models.UserFilterOptions;
 import com.example.ridepal.models.dtos.PlaylistDisplayFilterDto;
 import com.example.ridepal.models.dtos.UserAdminRightsDto;
+import com.example.ridepal.models.dtos.UserCreateUpdatePhotoDto;
 import com.example.ridepal.models.dtos.UserFilterDto;
 import com.example.ridepal.services.contracts.PlaylistService;
 import com.example.ridepal.services.contracts.UserService;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -129,49 +131,81 @@ public class AdminMvcController {
         return "Admin_AllPlaylists";
     }
 
-
-    /*@GetMapping()
-    public List<UserDisplayDto> getAllUsers(HttpSession httpSession,
-                                            @RequestParam(required = false) String username,
-                                            @RequestParam(required = false) String email,
-                                            @RequestParam(required = false) String firstName) {
+    @GetMapping("users/view/user/{id}")
+    public String showAdminUpdateUserPage(@PathVariable int id,
+                                          Model model,
+                                          HttpSession session) {
         try {
-            User userToCheck = authenticationHelper.tryGetCurrentUser(httpSession);
-            checkAdminRights(userToCheck);
-            List<UserDisplayDto> users = new ArrayList<>();
-            UserFilterOptions userFilterOptionsForAdmins = new UserFilterOptions(username,
-                    email, firstName);
-            for (User user : userService.getAllByFilterOptions(userFilterOptionsForAdmins)) {
-                users.add(userMapper.fromUser(user));
-            }
-            return users;
-        } catch (AuthorizationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
-    }*/
-
-
-    @GetMapping("/update/{id}")
-    public String showAdminUpdatePage(@PathVariable int id,
-                                      Model model, HttpSession session) {
-        try {
-            if (populateIsAuthenticated(session)) {
-                String username = session.getAttribute("currentUser").toString();
+            authenticationHelper.tryGetCurrentUser(session);
+            if (populateIsAdmin(session)) {
                 User userToManipulate = userService.getById(id);
-                User user = userService.getByUsername(username);
-                checkAdminRights(user);
-                if (user.isAdmin()) {
-                    model.addAttribute("userToManipulate", userToManipulate);
-                    model.addAttribute("admin", user);
+                model.addAttribute("userToManipulate", userToManipulate);
 
-                    return "Admin_UpdateDelete_Users";
-                }
-                return "Error_Page";
+                return "Admin_Update_User";
             }
+            return "Error_Page";
+        } catch (EntityNotFoundException | AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+    }
+
+    @PostMapping("users/view/user/{id}")
+    public String deleteUserProfilePhoto(@PathVariable int id, HttpSession session) {
+        User admin;
+        try {
+            admin = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-        return "redirect:/auth/login";
+        try {
+            if (admin.isAdmin()) {
+                User userToManipulate = userService.getById(id);
+                userService.removePhoto(userToManipulate);
+                String redirectUrl = String.valueOf(userToManipulate.getId());
+                return "redirect:" + redirectUrl;
+
+            } else
+                return "Error_Page";
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    @PostMapping("users/view/user/{id}/newadmin")
+    public String changeAdminRights(@PathVariable int id, HttpSession session) {
+        User admin;
+        try {
+            admin = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+        try {
+            if (admin.isAdmin()) {
+                User userToManipulate = userService.getById(id);
+                userService.addRemoveAdmin(admin, userToManipulate);
+
+                String redirectUrl = "/admin/users/view/user/" + userToManipulate.getId();
+                return "redirect:" + redirectUrl;
+
+            } else
+                return "Error_Page";
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "users/view/user/{id}/delete", method = RequestMethod.POST)
+    public String deleteUserProfile(HttpSession session, @ModelAttribute("userToManipulate") User userToManipulate) {
+        try {
+            User admin = authenticationHelper.tryGetCurrentUser(session);
+            if (admin.isAdmin()) {
+                userService.delete(userToManipulate);
+                return "redirect:/admin/users";
+            } else
+                return "Error_Page";
+
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
     }
 
     @GetMapping("/delete/{id}")
@@ -187,7 +221,7 @@ public class AdminMvcController {
                     model.addAttribute("userToManipulate", userToManipulate);
                     model.addAttribute("admin", userToManipulate.isAdmin());
 
-                    return "Admin_UpdateDelete_Users";
+                    return "Admin_Update_User";
                 }
                 return "Error_Page";
             }

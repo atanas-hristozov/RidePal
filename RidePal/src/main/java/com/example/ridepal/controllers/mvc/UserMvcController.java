@@ -7,7 +7,7 @@ import com.example.ridepal.exceptions.TextLengthException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.UserMapper;
 import com.example.ridepal.models.User;
-import com.example.ridepal.models.dtos.UserCreateUpdatePhoto;
+import com.example.ridepal.models.dtos.UserCreateUpdatePhotoDto;
 import com.example.ridepal.models.dtos.UserUpdateDto;
 import com.example.ridepal.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -122,7 +122,6 @@ public class UserMvcController {
     }
 
 
-
     @GetMapping("/update")
     public String showEditUserPage(Model model, HttpSession session) {
         try {
@@ -180,13 +179,13 @@ public class UserMvcController {
         }
     }
 
-   @GetMapping("/photo")
+    @GetMapping("/photo")
     public String showEditUserProfilePhoto(Model model,
                                            HttpSession session,
-                                           UserCreateUpdatePhoto userCreateUpdatePhoto) {
+                                           UserCreateUpdatePhotoDto userCreateUpdatePhotoDto) {
         try {
             User loggedUser = authenticationHelper.tryGetCurrentUser(session);
-            User user = userMapper.fromUserCreateUpdatePhotoDto(loggedUser.getId(), userCreateUpdatePhoto);
+            User user = userMapper.fromUserCreateUpdatePhotoDto(loggedUser.getId(), userCreateUpdatePhotoDto);
             model.addAttribute("currentUser", user);
 
             return "Upload_photo";
@@ -200,7 +199,7 @@ public class UserMvcController {
     public String updateUserProfilePhoto(@Valid @ModelAttribute("currentUser")
                                          @RequestParam("file") MultipartFile file,
                                          RedirectAttributes redirectAttributes,
-                                         UserCreateUpdatePhoto userCreateUpdatePhoto,
+                                         UserCreateUpdatePhotoDto userCreateUpdatePhotoDto,
                                          BindingResult bindingResult,
                                          Model model,
                                          HttpSession session) {
@@ -224,6 +223,23 @@ public class UserMvcController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error uploading photo");
         }
         return "Edit_User";
+    }
+
+    @PostMapping
+    public String deleteUserProfilePhoto(HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+        try {
+            userService.removePhoto(user);
+
+            return "redirect:/user";
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

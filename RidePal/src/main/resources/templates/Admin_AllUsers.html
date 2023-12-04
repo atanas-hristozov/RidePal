@@ -45,8 +45,7 @@
               <th>Username</th>
               <th>Email</th>
               <th>First Name</th>
-              <th>Edit Photo</th>
-              <th>Delete</th>
+              <th>View</th>
             </tr>
             <tr th:each="user : ${users}" >
               <td th:text="${user.getUsername()}">Ivan</td>
@@ -54,13 +53,10 @@
               <td th:text="${user.getFirstName()}">Ivan92</td>
 
               <td>
-                <form th:action="@{/admin/update/{id} (id=${user.getId()})}" th:object="${u}" action="#" method="post">
+                <form th:action="@{'users/view/user/' + ${user.getId()}}" th:object="${userToManipulate}" action="#" method="post">
 
-                  <a th:href="@{'/user/admin/edit/' + ${user.getId()}}" href="#" >Edit</a>
+                  <a th:href="@{'users/view/user/' + ${user.getId()}}" href="#" >View</a>
 
-              </td>
-              <td>
-                <a th:href="@{'/user/admin/delete/' + ${user.getId()}}" href="#" >Delete</a>
               </td>
             </tr>
           </table>

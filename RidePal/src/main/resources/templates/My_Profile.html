@@ -29,6 +29,18 @@
                                 <span></span>
                                 Upload Photo
                             </a>
+
+                                <form th:action="@{/user}" th:object="${user}" method="post">
+                                    <button type="submit" class="login-button">
+                                        <input type="hidden" name="_method" value="delete" />
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        Delete Photo
+                                    </button>
+                                </form>
+
                         </div> 
                         <div class="profile-content-userinfo-text">
                             <h2>Profile information</h2>
