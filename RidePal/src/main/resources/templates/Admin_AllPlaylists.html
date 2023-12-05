@@ -14,14 +14,54 @@
 
 
                     <div>
-                        <section class="all-information">
-                            <div>
-                                <h3>Number of all playlists</h3>
-                                <p th:text="${playlistsCount}">23</p>
+                        <section class="allPlaylists-filter">
+                            <div class="allPlaylists-filter-information">
+                                <h3>Number of Playlists:</h3>
+                                <p th:text="${playlistsCount}">23</p>  
+                            </div>
+    
+                            <div class="filter-content">
+                                <div class="filter-box">
+                                    <h2>Search Playlists</h2>
+                                    <form th:action="@{/playlists}" method="get" th:object="${playlistFilterOptions}" class="allPlaylists-filter-form">
+                                        <div class="filter-user-box">
+                                            <input type="text" id="title" th:field="*{title}">
+                                            <label for="title">Playlist title</label>
+                                        </div>
+                                        <div class="filter-user-box">
+                                            <input type="number" id="from" th:field="*{playlistTimeFrom}">
+                                            <label for="from">Minutes from</label>
+                                        </div>
+                                        <div class="filter-user-box">
+                                            <input type="number" id="to" th:field="*{playlistTimeTo}" th:value="10000">
+                                            <label for="to">Minutes to</label>
+                                        </div>
+    
+                                        <div class="filter-user-box">
+                                            
+                                            <select id="genre" th:field="*{genreName}" class="transparent-filter-options">
+                                                <option value="">Select Genre</option>
+                                                <option th:value="Rock" value="Rock">Rock</option>
+                                                <option th:value="Pop" value="Pop">Pop</option>
+                                                <option th:value="'Rap/Hip Hop'" value="option1">Rap/Hip Hop</option>
+                                                <option th:value="Classical" value="Classical">Classical</option>
+                                                <option th:value="'R&B'" value="R&B">R&B</option>
+                                                <option th:value="Kids" value="Kids">Kids</option>
+                                            </select>
+                                        </div>
+                                        <button class="filter-button" type="submit">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                            Submit
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </section>
 
-                        <section class="playlist-filter-options">
+                        <!--<section class="playlist-filter-options">
 
                             <form th:action="@{/playlists}" method="get"  th:object="${playlistFilterOptions}"  class="playlist-filter-form">
 
@@ -40,11 +80,12 @@
                                 <h2>No results found</h2>
                             </div>
 
-                        </section>
+                        </section>-->
                     </div>
 
 
                     <div th:each="playlist : ${playlists}" class="allPlaylists-content-list-item">
+
                         <a th:href="@{/playlist/{id}(id=${playlist.getId()})}" href="Playlist.html">
                             <img th:if="${playlist.getUser().getUserPhoto() == null}" th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg" alt="profile_picture">
                             <img th:if="${playlist.getUser().getUserPhoto() != null}" th:src="@{/user/selectedPhoto/{id}(id=${playlist.getUser().getId()})}" src="../static/img/profile-picture-placeholder.jpg" alt="profile_picture">

@@ -32,7 +32,7 @@
 
                                 <form th:action="@{/user}" th:object="${user}" method="post">
                                     <button type="submit" class="login-button">
-                                        <input type="hidden" name="_method" value="delete" />
+                                        <!--<input type="hidden" name="_method" value="delete" />-->
                                         <span></span>
                                         <span></span>
                                         <span></span>
@@ -79,8 +79,8 @@
                                         </button>
                                     </form>
                                     <form th:action="@{/user/delete}" th:object="${user}" method="post">
-                                        <button type="submit" class="login-button">
-                                            <input type="hidden" name="_method" value="delete" />
+                                        <button type="submit" class="login-button" style="margin-left: 10px;">
+                                            <!--<input type="hidden" name="_method" value="delete" />-->
                                             <span></span>
                                             <span></span>
                                             <span></span>
@@ -92,78 +92,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="profile-content-playlists">
+                    <div  class="profile-content-playlists">
                         <h3>My Playlists</h3>
-                        <a href="Playlist.html" class="profile-content-playlists-item">
+                        <a th:each="playlist : ${playlists}" th:href="@{/playlist/{id}(id=${playlist.getId()})}" href="Playlist.html" class="profile-content-playlists-item">
                             <div class="profile-content-playlists-item-text">
-                                <p>Name: Fisrt Playlist</p>
-                                <p>Number of songs: 15</p>
-                                <p>duration: 24,36 min</p>
-                            </div>
-                            <div class="profile-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
-                        <a href="Playlist.html" class="profile-content-playlists-item">
-                            <div class="profile-content-playlists-item-text">
-                                <p>Name: Fisrt Playlist</p>
-                                <p>Number of songs: 15</p>
-                                <p>duration: 24,36 min</p>
-                            </div>
-                            <div class="profile-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
-                        <a href="Playlist.html" class="profile-content-playlists-item">
-                            <div class="profile-content-playlists-item-text">
-                                <p>Name: Fisrt Playlist</p>
-                                <p>Number of songs: 15</p>
-                                <p>duration: 24,36 min</p>
-                            </div>
-                            <div class="profile-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
-                        <a href="Playlist.html" class="profile-content-playlists-item">
-                            <div class="profile-content-playlists-item-text">
-                                <p>Name: Fisrt Playlist</p>
-                                <p>Number of songs: 15</p>
-                                <p>duration: 24,36 min</p>
-                            </div>
-                            <div class="profile-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
-                        <a href="Playlist.html" class="profile-content-playlists-item">
-                            <div class="profile-content-playlists-item-text">
-                                <p>Name: Fisrt Playlist</p>
-                                <p>Number of songs: 15</p>
-                                <p>duration: 24,36 min</p>
-                            </div>
-                            <div class="profile-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
-                        <a href="Playlist.html" class="profile-content-playlists-item">
-                            <div class="profile-content-playlists-item-text">
-                                <p>Name: Fisrt Playlist</p>
-                                <p>Number of songs: 15</p>
-                                <p>duration: 24,36 min</p>
+                                <p th:text="${'Title: ' + playlist.getTitle()}">Name: Fisrt Playlist</p>
+                                <p th:text="${'Number of songs: ' + playlist.getTracks().size()}">Number of songs: 15</p>
+                                <p th:text="${'Duration: ' + playlist.getPlaylistTime()/60} + ' min'">duration: 24,36 min</p>
                             </div>
                             <div class="profile-content-playlists-item-pulse">
                                 <span style="--i:0"></span>
@@ -173,6 +108,9 @@
                             </div>
                         </a>
                     </div>
+
+
+
                     <div th:if="${isAdmin}" class="profile-content-playlists">
                         <h3>All users</h3>
                         <div class="profile-content-playlists-users">
