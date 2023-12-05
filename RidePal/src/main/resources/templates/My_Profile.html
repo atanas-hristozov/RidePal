@@ -92,9 +92,9 @@
                             </div>
                         </div>
                     </div>
-                    <div th:each="playlist : ${playlists}" class="profile-content-playlists">
+                    <div  class="profile-content-playlists">
                         <h3>My Playlists</h3>
-                        <a th:href="@{/playlist/{id}(id=${playlist.getId()})}" href="Playlist.html" class="profile-content-playlists-item">
+                        <a th:each="playlist : ${playlists}" th:href="@{/playlist/{id}(id=${playlist.getId()})}" href="Playlist.html" class="profile-content-playlists-item">
                             <div class="profile-content-playlists-item-text">
                                 <p th:text="${'Title: ' + playlist.getTitle()}">Name: Fisrt Playlist</p>
                                 <p th:text="${'Number of songs: ' + playlist.getTracks().size()}">Number of songs: 15</p>
