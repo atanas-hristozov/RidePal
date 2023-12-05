@@ -1,31 +1,32 @@
 package com.example.ridepal.controllers.mvc;
 
 import com.example.ridepal.exceptions.AuthorizationException;
-import com.example.ridepal.exceptions.EntityDuplicateException;
 import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.helpers.AuthenticationHelper;
+import com.example.ridepal.helpers.PlaylistMapper;
 import com.example.ridepal.helpers.UserMapper;
 import com.example.ridepal.models.Playlist;
 import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.User;
 import com.example.ridepal.models.UserFilterOptions;
-import com.example.ridepal.models.dtos.PlaylistDisplayFilterDto;
-import com.example.ridepal.models.dtos.UserAdminRightsDto;
-import com.example.ridepal.models.dtos.UserCreateUpdatePhotoDto;
-import com.example.ridepal.models.dtos.UserFilterDto;
+import com.example.ridepal.models.dtos.*;
 import com.example.ridepal.services.contracts.PlaylistService;
 import com.example.ridepal.services.contracts.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.InputStream;
 import java.util.List;
 
 import static com.example.ridepal.services.UserServiceImpl.ERROR_MESSAGE;
@@ -34,18 +35,20 @@ import static com.example.ridepal.services.UserServiceImpl.ERROR_MESSAGE;
 @RequestMapping("/admin")
 public class AdminMvcController {
 
-    private UserService userService;
-    private PlaylistService playlistService;
-    private UserMapper userMapper;
-    private AuthenticationHelper authenticationHelper;
+    private final UserService userService;
+    private final PlaylistService playlistService;
+    private final UserMapper userMapper;
+    private final PlaylistMapper playlistMapper;
+    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
     public AdminMvcController(UserService userService,
                               PlaylistService playlistService, UserMapper userMapper,
-                              AuthenticationHelper authenticationHelper) {
+                              PlaylistMapper playlistMapper, AuthenticationHelper authenticationHelper) {
         this.userService = userService;
         this.playlistService = playlistService;
         this.userMapper = userMapper;
+        this.playlistMapper = playlistMapper;
         this.authenticationHelper = authenticationHelper;
     }
 
@@ -112,25 +115,6 @@ public class AdminMvcController {
         }
     }
 
-    @GetMapping("/playlists")
-    public String showAllPlaylistPage(@ModelAttribute("playlistFilterOptions")
-                                      PlaylistDisplayFilterDto playlistDisplayFilterDto,
-                                      Model model) {
-        PlaylistFilterOptions playlistFilterOptions = new PlaylistFilterOptions(
-                playlistDisplayFilterDto.getTitle(),
-                playlistDisplayFilterDto.getPlaylistTimeFrom(),
-                playlistDisplayFilterDto.getPlaylistTimeTo() != 0 ? playlistDisplayFilterDto.getPlaylistTimeTo() : 10000,
-                playlistDisplayFilterDto.getGenreName());
-
-        List<Playlist> playlists = playlistService.getAll(playlistFilterOptions);
-        Long playlistsCount = playlistService.allPlaylistsCount();
-
-        model.addAttribute("playlists", playlists);
-        model.addAttribute("playlistFilterOptions", playlistDisplayFilterDto);
-        model.addAttribute("playlistsCount", playlistsCount);
-        return "Admin_AllPlaylists";
-    }
-
     @GetMapping("users/view/user/{id}")
     public String showAdminUpdateUserPage(@PathVariable int id,
                                           Model model,
@@ -140,12 +124,39 @@ public class AdminMvcController {
             if (populateIsAdmin(session)) {
                 User userToManipulate = userService.getById(id);
                 model.addAttribute("userToManipulate", userToManipulate);
+                model.addAttribute("userProfilePicture", userToManipulate.getUserPhoto());
 
                 return "Admin_Update_User";
             }
             return "Error_Page";
         } catch (EntityNotFoundException | AuthorizationException e) {
             return "redirect:/auth/login";
+        }
+    }
+
+    @GetMapping("users/view/user/{id}/selectedPhoto")
+    public ResponseEntity<byte[]> getPhoto(@PathVariable int id, HttpSession session) {
+        try {
+            User admin = authenticationHelper.tryGetCurrentUser(session);
+            checkAdminRights(admin);
+            User userToManipulate = userService.getById(id);
+            // User is authenticated, proceed to retrieve the photo
+            byte[] userPhoto = userToManipulate.getUserPhoto();
+
+            if (userPhoto != null && userPhoto.length > 0) {
+                // If the user has a photo, return it
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(userPhoto);
+            } else {
+                // If the user doesn't have a photo, return a default image or a placeholder image
+                // Replace the following line with your actual path to a default image
+                InputStream defaultImageStream = getClass().getResourceAsStream("/static/default-user-photo.jpg");
+                byte[] defaultImage = IOUtils.toByteArray(defaultImageStream);
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(defaultImage);
+            }
+        } catch (AuthorizationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -170,6 +181,7 @@ public class AdminMvcController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @PostMapping("users/view/user/{id}/newadmin")
     public String changeAdminRights(@PathVariable int id, HttpSession session) {
         User admin;
@@ -208,7 +220,7 @@ public class AdminMvcController {
         }
     }
 
-    @GetMapping("/delete/{id}")
+/*    @GetMapping("/delete/{id}")
     public String showAdminDeletePage(@PathVariable int id,
                                       Model model, HttpSession session) {
         try {
@@ -229,10 +241,10 @@ public class AdminMvcController {
             return "redirect:/auth/login";
         }
         return "redirect:/auth/login";
-    }
+    }*/
 
 
-    @PostMapping("/{id}/update")
+   /* @PostMapping("/{id}/update")
     public String updateUserProfile(@Valid @ModelAttribute("currentUser") UserAdminRightsDto userAdminRightsDto,
                                     @PathVariable int id,
                                     BindingResult bindingResult,
@@ -268,9 +280,9 @@ public class AdminMvcController {
 
             return "Admin_Mode";
         }
-    }
+    }*/
 
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+   /* @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
     public String deleteUserProfile(@PathVariable int id,
                                     BindingResult bindingResult,
                                     Model model,
@@ -289,7 +301,7 @@ public class AdminMvcController {
         try {
             User userToDelete = userService.getById(id);
             userService.delete(userToDelete);
-            /*session.removeAttribute("userToDelete");*/
+            *//*session.removeAttribute("userToDelete");*//*
 
             return "Admin_Mode";
 
@@ -297,6 +309,103 @@ public class AdminMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "Error_Page";
+        }
+    }*/
+
+    @GetMapping("/playlists")
+    public String showAllPlaylistPage(@ModelAttribute("playlistFilterOptions")
+                                      PlaylistDisplayFilterDto playlistDisplayFilterDto,
+                                      Model model) {
+        PlaylistFilterOptions playlistFilterOptions = new PlaylistFilterOptions(
+                playlistDisplayFilterDto.getTitle(),
+                playlistDisplayFilterDto.getPlaylistTimeFrom(),
+                playlistDisplayFilterDto.getPlaylistTimeTo() != 0 ? playlistDisplayFilterDto.getPlaylistTimeTo() : 10000,
+                playlistDisplayFilterDto.getGenreName());
+
+        List<Playlist> playlists = playlistService.getAll(playlistFilterOptions);
+        Long playlistsCount = playlistService.allPlaylistsCount();
+
+        model.addAttribute("playlists", playlists);
+        model.addAttribute("playlistFilterOptions", playlistDisplayFilterDto);
+        model.addAttribute("playlistsCount", playlistsCount);
+        return "Admin_AllPlaylists";
+    }
+
+
+    @RequestMapping(value = "playlists/{id}/delete", method = RequestMethod.POST)
+    public String deletePlaylist(@PathVariable int id,
+                                 Model model,
+                                 HttpSession session) {
+        User admin;
+        try {
+            admin = authenticationHelper.tryGetCurrentUser(session);
+            try {
+                Playlist playlistToDelete = playlistService.getById(id);
+                playlistService.delete(admin, playlistToDelete);
+
+                return "redirect:/admin/playlists";
+
+            } catch (EntityNotFoundException e) {
+                model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+                model.addAttribute("error", e.getMessage());
+                return "Error_Page";
+            }
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+    }
+
+    @GetMapping("playlists/{id}/update")
+    public String showUpdatePlaylistGenre(@PathVariable int id,
+                                          Model model,
+                                          HttpSession session) {
+
+        try {
+            authenticationHelper.tryGetCurrentUser(session);
+            try {
+                Playlist playlist = playlistService.getById(id);
+                PlaylistUpdateDto playlistUpdateDto = playlistMapper.fromPlaylistToPlaylistUpdateDto(playlist);
+                model.addAttribute("playlist", playlist);
+                model.addAttribute("playlistUpdateDto", playlistUpdateDto);
+                return "Edit_Playlist";
+
+            } catch (EntityNotFoundException e) {
+                model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+                model.addAttribute("error", e.getMessage());
+                return "Error_Page";
+            }
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+    }
+
+    @PostMapping("playlists/{id}/update")
+    public String updatePlaylistGenre(@Valid @ModelAttribute ("playlistUpdateDto") PlaylistUpdateDto playlistUpdateDto,
+                                      @PathVariable int id,
+                                      BindingResult bindingResult,
+                                      Model model,
+                                      HttpSession session) {
+        User admin;
+        try {
+            admin = authenticationHelper.tryGetCurrentUser(session);
+
+            if (bindingResult.hasErrors()) {
+                return "Edit_User";
+            }
+            try {
+                Playlist updatedPlaylist = playlistMapper.fromPlaylistUpdateDto(playlistUpdateDto, id);
+                playlistService.update(admin, updatedPlaylist);
+
+                String redirectUrl = "/admin/playlists/" + updatedPlaylist.getId() + "/update";
+                return "redirect:" + redirectUrl;
+
+            } catch (EntityNotFoundException e) {
+                model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+                model.addAttribute("error", e.getMessage());
+                return "Error_Page";
+            }
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
         }
     }
 
@@ -306,3 +415,4 @@ public class AdminMvcController {
         }
     }
 }
+

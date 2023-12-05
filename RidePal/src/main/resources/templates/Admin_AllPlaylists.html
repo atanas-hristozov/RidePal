@@ -66,9 +66,31 @@
                             </div>
 
                             <div class="allPlaylists-content-list-item-text">
-                                <th>Edit</th>
-                                <th>Delete</th>
+
                             </div>
+
+                            <form th:action="@{playlists/{id}/update (id=${playlist.getId()})}"
+                                  th:object="${playlist}" method="post">
+                                <button type="submit" class="login-button">
+                                    <input type="hidden" name="_method" value="post"/>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    Update
+                                </button>
+                            </form>
+                            <form th:action="@{playlists/{id}/delete (id=${playlist.getId()})}"
+                                  th:object="${playlist}" method="post">
+                                <button type="submit" class="login-button">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    Delete
+                                </button>
+                            </form>
 
                             <div class="allPlaylists-content-list-item-pulse">
                                 <span style="--i:0"></span>

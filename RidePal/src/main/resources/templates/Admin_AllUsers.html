@@ -20,7 +20,7 @@
         </section>
 
         <section class="user-filter-container">
-          <form action="#" th:action="@{/admin}" method="get" th:object="${filterUsers}">
+          <form action="#" th:action="@{/admin/users}" method="get" th:object="${filterUsers}">
             <label>Filter Options</label>
             <br/><br/>
             <label>Username</label>
@@ -53,7 +53,7 @@
               <td th:text="${user.getFirstName()}">Ivan92</td>
 
               <td>
-                <form th:action="@{'users/view/user/' + ${user.getId()}}" th:object="${userToManipulate}" action="#" method="post">
+                <form th:action="@{'users/view/user/' + ${user.getId()}}" th:object="${user}" action="#" method="post">
 
                   <a th:href="@{'users/view/user/' + ${user.getId()}}" href="#" >View</a>
 

@@ -6,13 +6,17 @@
     <div class="main-field">
         <div th:replace="~{Templates.html :: header}"></div>
         <section class="profile">
-            <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
+            <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4"
+                   playsinline="" preload="none" autoplay="" muted="" loop=""></video>
             <div class="profile-content">
                 <div class="profile-content-userinfo">
                     <div class="profile-content-picture">
                         <div class="about-desc-profiles-info">
-                            <img th:if="${userToManipulate.getUserPhoto() == null}" th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
-                            <img th:if="${userToManipulate.getUserPhoto() != null}" th:src="@{/user/selectedPhoto}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                            <img th:if="${userProfilePicture == null}" th:src="@{/img/profile-picture-placeholder.jpg}"
+                                 src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                            <img th:if="${userProfilePicture != null}"
+                                 th:src="@{/admin/users/view/user/{id}/selectedPhoto (id=${userToManipulate.getId()})}"
+                                 src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
                             <div class="about-desc-profiles-info-pictures">
                                 <div class="about-desc-profiles-info-pictures-pulse">
                                     <span style="--i:0"></span>
@@ -22,9 +26,10 @@
                                 </div>
                             </div>
                         </div>
-                        <form th:action="@{{id} (id=${userToManipulate.getId()})}" th:object="${userToManipulate}" method="post">
+                        <form th:action="@{{id} (id=${userToManipulate.getId()})}" th:object="${userToManipulate}"
+                              method="post">
                             <button type="submit" class="login-button">
-                                <input type="hidden" name="_method" value="delete" />
+                                <input type="hidden" name="_method" value="delete"/>
                                 <span></span>
                                 <span></span>
                                 <span></span>
@@ -32,9 +37,10 @@
                                 Delete Photo
                             </button>
                         </form>
-                        <form th:action="@{{id}/newadmin (id=${userToManipulate.getId()})}" th:object="${userToManipulate}" method="post">
+                        <form th:action="@{{id}/newadmin (id=${userToManipulate.getId()})}"
+                              th:object="${userToManipulate}" method="post">
                             <button type="submit" class="login-button">
-                                <input type="hidden" name="_method" value="update" />
+                                <input type="hidden" name="_method" value="update"/>
                                 <span></span>
                                 <span></span>
                                 <span></span>
@@ -62,19 +68,20 @@
                                 <h4>E-mail</h4>
                                 <p th:text="${userToManipulate.getEmail()}">atanas@abv.bg</p>
                             </div>
-                            <form th:action="@{{id}/delete (id=${userToManipulate.getId()})}" th:object="${userToManipulate}" method="post">
-                                    <button type="submit" class="login-button">
-                                        <input type="hidden" name="_method" value="delete" />
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                        Delete User
-                                    </button>
-                                </form>
-                            </div>
+                            <form th:action="@{{id}/delete (id=${userToManipulate.getId()})}"
+                                  th:object="${userToManipulate}" method="post">
+                                <button type="submit" class="login-button">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    Delete User
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
+            </div>
 </body>
 </html>

@@ -98,7 +98,7 @@ public class UserMvcController {
     }
 
 
-    @GetMapping("/selectedPhoto/{id}")
+   /* @GetMapping("/selectedPhoto/{id}")
     public ResponseEntity<byte[]> getPhotoId(@PathVariable int id, HttpSession session) {
         try {
             // Retrieve user details based on the provided user ID
@@ -119,7 +119,7 @@ public class UserMvcController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
+    }*/
 
 
     @GetMapping("/update")
