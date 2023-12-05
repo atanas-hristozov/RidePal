@@ -8,12 +8,13 @@
         <section class="profile">
             <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
             <div class="profile-content">
-
-                <ul class="menu">
-                    <li><a class="login-button" href="Admin_AllUsers.html" th:if="${isAdmin}" th:href="@{/admin/users}">All users</a></li>
-                    <li><a class="login-button" href="Admin_AllPlaylists.html" th:if="${isAdmin}" th:href="@{/admin/playlists}">All playlists</a></li>
-                </ul>
-
+                <div class="profile-admin-page">
+                    <h2>Admin Mode</h2>
+                    <div class="profile-admin-page-links">
+                        <a class="login-button" href="Admin_AllUsers.html" th:if="${isAdmin}" th:href="@{/admin/users}">All users</a>
+                        <a class="login-button" href="Admin_AllPlaylists.html" th:if="${isAdmin}" th:href="@{/admin/playlists}">All playlists</a>
+                    </div>
+                </div>
             </div>
         </section>
 

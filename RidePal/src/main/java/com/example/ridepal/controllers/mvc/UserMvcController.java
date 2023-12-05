@@ -6,9 +6,13 @@ import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.exceptions.TextLengthException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.UserMapper;
+import com.example.ridepal.models.Playlist;
+import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.User;
+import com.example.ridepal.models.dtos.PlaylistDisplayFilterDto;
 import com.example.ridepal.models.dtos.UserCreateUpdatePhotoDto;
 import com.example.ridepal.models.dtos.UserUpdateDto;
+import com.example.ridepal.services.PlaylistServiceImpl;
 import com.example.ridepal.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -27,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -34,14 +39,17 @@ public class UserMvcController {
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
+    private final PlaylistServiceImpl playlistService;
 
     @Autowired
     public UserMvcController(UserService userService,
                              AuthenticationHelper authenticationHelper,
-                             UserMapper userMapper) {
+                             UserMapper userMapper,
+                             PlaylistServiceImpl playlistService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.userMapper = userMapper;
+        this.playlistService = playlistService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -60,12 +68,21 @@ public class UserMvcController {
     }
 
     @GetMapping()
-    public String showUserPage(Model model, HttpSession session) {
+    public String showUserPage(Model model, PlaylistDisplayFilterDto playlistDisplayFilterDto, HttpSession session) {
         if (populateIsAuthenticated(session)) {
             String username = session.getAttribute("currentUser").toString();
             User user = userService.getByUsername(username);
+
+            PlaylistFilterOptions playlistFilterOptions = new PlaylistFilterOptions(
+                    playlistDisplayFilterDto.getTitle(),
+                    playlistDisplayFilterDto.getPlaylistTimeFrom(),
+                    playlistDisplayFilterDto.getPlaylistTimeTo() != 0 ? playlistDisplayFilterDto.getPlaylistTimeTo() : 10000,
+                    playlistDisplayFilterDto.getGenreName());
+
+            List<Playlist> playlists = playlistService.getAll(playlistFilterOptions);
             model.addAttribute("user", user);
             model.addAttribute("userProfilePicture", user.getUserPhoto());
+            model.addAttribute("playlists", playlists);
             return "My_Profile";
         } else {
             return "redirect:/auth/login";

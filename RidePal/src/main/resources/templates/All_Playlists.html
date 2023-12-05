@@ -19,26 +19,26 @@
                             <p th:text="${playlistsCount}">23</p>  
                         </div>
 
-                        <div class="login-content">
-                            <div class="login-box">
+                        <div class="filter-content">
+                            <div class="filter-box">
                                 <h2>Search Playlists</h2>
                                 <form th:action="@{/playlists}" method="get" th:object="${playlistFilterOptions}" class="allPlaylists-filter-form">
-                                    <div class="user-box">
+                                    <div class="filter-user-box">
                                         <input type="text" id="title" th:field="*{title}">
                                         <label for="title">Playlist title</label>
                                     </div>
-                                    <div class="user-box">
+                                    <div class="filter-user-box">
                                         <input type="number" id="from" th:field="*{playlistTimeFrom}">
                                         <label for="from">Minutes from</label>
                                     </div>
-                                    <div class="user-box">
+                                    <div class="filter-user-box">
                                         <input type="number" id="to" th:field="*{playlistTimeTo}" th:value="10000">
                                         <label for="to">Minutes to</label>
                                     </div>
 
-                                    <div class="user-box">
+                                    <div class="filter-user-box">
                                         
-                                        <select id="genre" th:field="*{genreName}" class="transparent-options">
+                                        <select id="genre" th:field="*{genreName}" class="transparent-filter-options">
                                             <option value="">Select Genre</option>
                                             <option th:value="Rock" value="Rock">Rock</option>
                                             <option th:value="Pop" value="Pop">Pop</option>
@@ -48,7 +48,7 @@
                                             <option th:value="Kids" value="Kids">Kids</option>
                                         </select>
                                     </div>
-                                    <button class="login-button" type="submit">
+                                    <button class="filter-button" type="submit">
                                         <span></span>
                                         <span></span>
                                         <span></span>
@@ -58,27 +58,6 @@
                                 </form>
                             </div>
                         </div>
-                        
-
-                        
-                        <!--
-                        <div class="allPlaylists-filter-options">
-                            <form th:action="@{/playlists}" method="get"  th:object="${playlistFilterOptions}"  class="allPlaylists-filter-form">
-                                <label>Playlist title</label>
-                                <input type="text" th:field="*{title}">
-                                <label>Minutes from </label>
-                                <input type="number" th:field="*{playlistTimeFrom}">
-                                <label>Minutes to</label>
-                                <input type="number" th:field="*{playlistTimeTo}" th:value="10000">
-                                 <label>Genre type</label>
-                                <input type="text" th:field="*{genreName}">
-                                <input type="submit" value="Search" class="search-btn"/>
-                            </form>
-                            <div th:if="${playlists.isEmpty()}" class="no-users-message">
-                                <h2>No results found</h2>
-                            </div>
-                        </div>
-                        -->
                     </section>
 
 

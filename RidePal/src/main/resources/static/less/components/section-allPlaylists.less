@@ -178,3 +178,41 @@
         border: none;
     }
 }
+
+.admin-playlist-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    &-link{
+        border: 2px solid @color-yellow;
+        font-size: 16;
+        font-weight: bold;
+        font-family: Helvetica, sans-serif;
+        font-style: oblique;
+        text-transform: uppercase;
+        color: @color-yellow;
+        margin: 0 50px 0 100px;
+        width: 90px;
+        height: 90px;
+    }
+    &-button{
+        border: 2px solid @color-yellow;
+        font-size: 16;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-family: Helvetica, sans-serif;
+        font-style: oblique;
+        color: @color-yellow;
+        width: 90px;
+        height: 90px;
+        border-radius: 45px;
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.7);
+        transition: 0.3s ease-in-out;
+        
+    }
+    &-button:hover{
+        transform: scale(1.1);
+    }
+}
