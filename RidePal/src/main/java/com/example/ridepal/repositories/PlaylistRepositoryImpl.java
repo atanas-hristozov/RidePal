@@ -85,6 +85,16 @@ public class PlaylistRepositoryImpl extends AbstractCrudRepository<Playlist> imp
     }
 
     @Override
+    public List<Playlist> getAllByCreator(int creatorId) {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM Playlist P WHERE P.user.id = :creatorId";
+            Query<Playlist> query = session.createQuery(hql, Playlist.class);
+            query.setParameter("creatorId", creatorId);
+            return query.getResultList();
+        }
+    }
+
+    @Override
     public Long allPlaylistsCount() {
         try (Session session = sessionFactory.openSession()) {
             Query<Long> query = session.createQuery("SELECT COUNT(id) from Playlist", Long.class);

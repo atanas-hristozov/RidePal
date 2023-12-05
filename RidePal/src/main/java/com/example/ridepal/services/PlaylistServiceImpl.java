@@ -115,6 +115,11 @@ public class PlaylistServiceImpl implements PlaylistService {
         return playlistRepository.allPlaylistsCount();
     }
 
+    @Override
+    public List<Playlist> getAllByCreator(int creatorId) {
+        return playlistRepository.getAllByCreator(creatorId);
+    }
+
     private double findAverageRank(Playlist playlist) {
         return BigDecimal.valueOf(playlist.getTracks().stream()
                 .mapToDouble(Track::getRank)

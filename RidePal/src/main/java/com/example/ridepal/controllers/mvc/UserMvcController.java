@@ -79,7 +79,7 @@ public class UserMvcController {
                     playlistDisplayFilterDto.getPlaylistTimeTo() != 0 ? playlistDisplayFilterDto.getPlaylistTimeTo() : 10000,
                     playlistDisplayFilterDto.getGenreName());
 
-            List<Playlist> playlists = playlistService.getAll(playlistFilterOptions);
+            List<Playlist> playlists = playlistService.getAllByCreator(user.getId());
             model.addAttribute("user", user);
             model.addAttribute("userProfilePicture", user.getUserPhoto());
             model.addAttribute("playlists", playlists);
@@ -115,7 +115,7 @@ public class UserMvcController {
     }
 
 
-   /* @GetMapping("/selectedPhoto/{id}")
+  @GetMapping("/selectedPhoto/{id}")
     public ResponseEntity<byte[]> getPhotoId(@PathVariable int id, HttpSession session) {
         try {
             // Retrieve user details based on the provided user ID
@@ -136,7 +136,7 @@ public class UserMvcController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }*/
+    }
 
 
     @GetMapping("/update")

@@ -33,10 +33,11 @@ public class PlaylistMapper {
     public Playlist fromPlaylistUpdateDto(PlaylistUpdateDto playlistUpdateDto, int id) {
         Playlist playlist = playlistService.getById(id);
         playlist.setTitle(playlistUpdateDto.getTitle());
-      //  playlistUpdateDto.getGenres().forEach(playlist::addGenre);
+        playlistUpdateDto.getGenres().forEach(playlist::addGenre);
 
         return playlist;
     }
+
     public PlaylistUpdateDto fromPlaylistToPlaylistUpdateDto(Playlist playlist) {
         PlaylistUpdateDto playlistUpdateDto = new PlaylistUpdateDto();
         playlistUpdateDto.setTitle(playlist.getTitle());
