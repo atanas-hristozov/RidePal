@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{Templates.html :: head('All Playlists')}"></div>
+<body>
+<div class="container">
+    <div class="main-field">
+        <div th:replace="~{Templates.html :: header}"></div>
+        <section class="allPlaylists">
+            <video class="allPlaylists-video" th:src="@{/video/Wave_04.mp4}" src="../static/video/Wave_04.mp4"
+                   playsinline="" preload="none" autoplay="" muted="" loop=""></video>
+            <div class="allPlaylists-content">
+                <div class="allPlaylists-content-list">
+
+                    <section class="allPlaylists-filter">
+
+                        <div class="filter-content">
+                            <div class="filter-box">
+                                <h2>Generate Tracks For Genre</h2>
+                                <form th:action="@{/admin/generate}" method="post" th:object="${selectedGenre}" class="allPlaylists-filter-form">
+                                    <div class="filter-user-box">
+                                        <select th:field="*{name}">
+                                            <option th:each="option : ${genres}" th:value="${option.genreName}" th:text="${option.genreName}"></option>
+                                        </select>
+                                    </div>
+                                    <button class="filter-button" type="submit">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        Submit
+                                    </button>
+                                </form>
+                                <section class="allPlaylists-filter">
+                                    <div class="allPlaylists-filter-information">
+                                        <h3>Number of all tracks:</h3>
+                                        <p th:text="${allTracksCount}">23</p>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+<div th:replace="~{Templates.html :: footer}"></div>
+</body>
+
+<!--<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Set the value to an empty string after the page loads
+        $('#numberInput').val('');
+    });
+</script>-->
+</html>

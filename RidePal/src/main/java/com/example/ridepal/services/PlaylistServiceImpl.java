@@ -100,7 +100,7 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public void update(User executingUser, Playlist playlist) {
-       /* checkAccessPermissions(executingUser, playlist);*/
+       checkAccessPermissions(executingUser, playlist);
         playlistRepository.update(playlist);
     }
 
@@ -118,6 +118,16 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public List<Playlist> getAllByCreator(int creatorId) {
         return playlistRepository.getAllByCreator(creatorId);
+    }
+
+    @Override
+    public Long tracksNumberPerGenre(int genreId) {
+        return trackRepository.tracksNumberPerGenre(genreId);
+    }
+
+    @Override
+    public Long allTracksNumber() {
+        return trackRepository.allTracksNumber();
     }
 
     private double findAverageRank(Playlist playlist) {

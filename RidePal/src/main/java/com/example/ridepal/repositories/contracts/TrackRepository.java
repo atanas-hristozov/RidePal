@@ -10,4 +10,7 @@ import java.util.Set;
 public interface TrackRepository extends BaseCrudRepository<Track>{
 
    Set<Track> generateRandomTrackByGenre(Genre genre, int numberOfTracks);
+
+   Long tracksNumberPerGenre(int genreId);
+   Long allTracksNumber();
 }
