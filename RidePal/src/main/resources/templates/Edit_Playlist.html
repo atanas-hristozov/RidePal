@@ -9,102 +9,97 @@
             <video class="generate-video" th:src="@{/video/Wave_05.mp4}" src="../static/video/Wave_05.mp4"
                    playsinline="" preload="none" autoplay="" muted="" loop=""></video>
             <div class="generate-content">
-                <div class="generate-content-form">
-                    <form th:action="@{/admin/playlists/{id}/update (id=${playlist.getId()})}"
-                          th:object="${playlistUpdateDto}" action="#" method="post">
-                        <div class="generate-root">
-                            <h2>Update Playlist</h2>
-                            <div class="generate-root-destination-input">
-                            <!--    <input type='text' id='searchBox2' required/>
-                                <label for="searchBox2">Update Title</label>-->
-                                <input th:field="*{title}" type="text" name="title" required="">
-                                <label th:text="*{title}">Title</label>
-                            </div>
+                <form th:action="@{/admin/playlists/{id}/update (id=${playlist.getId()})}"
+                      th:object="${playlistUpdateDto}" action="#" method="post" class="generate-content-form">
+                    <div class="generate-root">
+                        <h2>Update Playlist</h2>
+                        <div class="generate-root-destination-input">
+                            <input th:field="*{title}" type="text" name="title" required="">
+                            <label th:text="*{title}">Title</label>
+                        </div>
+                    </div>
+
+                    <fieldset class="checkbox-group">
+                        <legend class="checkbox-group-legend">Select Music</legend>
+                        <div class="checkbox">
+                            <label class="checkbox-wrapper">
+                                <input th:field="*{genres}" th:value="Rock" type="checkbox" class="checkbox-input" name="rock" id="rock">
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                        <img th:src="@{/img/rock-music-wallpaper.jpg}" src="../static/img/rock-music-wallpaper.jpg" alt="Rock Music">
+                                    </span>
+                                    <span class="checkbox-label">Rock</span>
+                                </span>
+                            </label>
                         </div>
 
-                        <fieldset class="checkbox-group">
-                            <legend class="checkbox-group-legend">Select Music</legend>
-                            <div class="checkbox">
-                                <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="rock" id="rock">
-                                    <span class="checkbox-tile">
-                                        <span class="checkbox-icon">
-                                            <img src="../static/img/rock-music-wallpaper.jpg" alt="Rock Music">
-                                        </span>
-                                        <span class="checkbox-label">Rock</span>
+                        <div class="checkbox">
+                            <label class="checkbox-wrapper">
+                                <input th:field="*{genres}" th:value="Pop" type="checkbox" class="checkbox-input" name="pop" id="pop">
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                        <img th:src="@{/img/pop-music-wallpaper.jpg}" src="../static/img/pop-music-wallpaper.jpg" alt="Pop Music">
                                     </span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="pop" id="pop">
-                                    <span class="checkbox-tile">
-                                        <span class="checkbox-icon">
-                                            <img src="../static/img/pop-music-wallpaper.jpg" alt="Pop Music">
-                                        </span>
-                                        <span class="checkbox-label">Pop</span>
+                                    <span class="checkbox-label">Pop</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label class="checkbox-wrapper">
+                                <input th:field="*{genres}" th:value="'Rap/Hip Hop'" type="checkbox" class="checkbox-input" name="hiphop" id="hiphop">
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                        <img th:src="@{/img/hiphop-music-wallpaper.jpg}" src="../static/img/hiphop-music-wallpaper.jpg" alt="Hiphop Music">
                                     </span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="hiphop" id="hiphop">
-                                    <span class="checkbox-tile">
-                                        <span class="checkbox-icon">
-                                            <img src="../static/img/hiphop-music-wallpaper.jpg" alt="Hiphop Music">
-                                        </span>
-                                        <span class="checkbox-label">Hip Hop</span>
+                                    <span class="checkbox-label">Hip Hop</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label class="checkbox-wrapper">
+                                <input th:field="*{genres}" th:value="Classical" type="checkbox" class="checkbox-input" name="classical" id="classical">
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                        <img th:src="@{/img/classical_02-music-wallpaper.jpg}" src="../static/img/classical_02-music-wallpaper.jpg" alt="Classical Music">
                                     </span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="classical" id="classical">
-                                    <span class="checkbox-tile">
-                                        <span class="checkbox-icon">
-                                            <img src="../static/img/classical_02-music-wallpaper.jpg"
-                                                 alt="Classical Music">
-                                        </span>
-                                        <span class="checkbox-label">Classical</span>
+                                    <span class="checkbox-label">Classical</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label class="checkbox-wrapper">
+                                <input th:field="*{genres}" th:value="'R&B'" value="165" type="checkbox" class="checkbox-input" name="rnb" id="rnb">
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                        <img th:src="@{/img/rnb-music-wallpaper.jpg}" src="../static/img/rnb-music-wallpaper.jpg" alt="Rnb Music">
                                     </span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="rnb" id="rnb">
-                                    <span class="checkbox-tile">
-                                        <span class="checkbox-icon">
-                                            <img src="../static/img/rnb-music-wallpaper.jpg" alt="Rnb Music">
-                                        </span>
-                                        <span class="checkbox-label">RNB</span>
+                                    <span class="checkbox-label">RNB</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label class="checkbox-wrapper">
+                                <input th:field="*{genres}" th:value="Kids" value="95" type="checkbox" class="checkbox-input" name="kids" id="kids">
+                                <span class="checkbox-tile">
+                                    <span class="checkbox-icon">
+                                        <img th:src="@{/img/kids-music-wallpaper.jpg}" src="../static/img/kids-music-wallpaper.jpg" alt="Kids Music">
                                     </span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label class="checkbox-wrapper">
-                                    <input type="checkbox" class="checkbox-input" name="kids" id="kids">
-                                    <span class="checkbox-tile">
-                                        <span class="checkbox-icon">
-                                            <img src="../static/img/kids-music-wallpaper.jpg" alt="Kids Music">
-                                        </span>
-                                        <span class="checkbox-label">Kids</span>
-                                    </span>
-                                </label>
-                            </div>
-                        </fieldset>
-                        <button class="generate-button" type="submit">
-                            <input type="hidden" name="_method" value="post"/>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            Update
-                        </button>
-                    </form>
-                </div>
+                                    <span class="checkbox-label">Kids</span>
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+                    <button class="generate-button" type="submit">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        Update
+                    </button>
+                </form>
             </div>
         </section>
-
+        <script th:src="@{/Js/Playlist_Selected_Styles.js}"></script>
     </div>
 </div>
 <div th:replace="~{Templates.html :: footer}"></div>

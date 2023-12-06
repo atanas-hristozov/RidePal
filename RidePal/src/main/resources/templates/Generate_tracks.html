@@ -128,23 +128,13 @@
                                     <div class="generate-root-destination-calculation" id="durationDisplay"></div>
                                     <input type="hidden" id="hiddenTravelDuration" th:name="travelDuration" th:value="${travelDuration}"/>
                                 </div>
-                                
                             </div>
-                            <!--
-                            <div class="generate-root-box">
-                                <input type="text" name="" required="">
-                                <label>Start destination</label>
-                            </div>
-                            <div class="generate-root-box">
-                                <input type="text" name="" required="">
-                                <label>End destination</label>
-                            </div>
-                            -->
                             <div class="generate-root-destination-input">
                                 <input th:field="*{title}" type='text' id='searchBox2' required/>
                                 <label for="searchBox2">Set Title</label>
                             </div>
                         </div>
+
                         <fieldset class="checkbox-group">
                             <legend class="checkbox-group-legend">Select Music</legend>
                             <div class="checkbox">
@@ -225,22 +215,7 @@
                     </form>
                 </div>
             </section>
-            <script>
-                // Get all checkbox elements
-                const checkboxes = document.querySelectorAll('.checkbox-input');
-
-                // Loop through each checkbox element
-                checkboxes.forEach(checkbox => {
-                    // Add click event listener to each checkbox
-                    checkbox.addEventListener('click', function(event) {
-                        // Get the checkbox tile element for the clicked checkbox
-                        const checkboxTile = this.parentNode.querySelector('.checkbox-tile');
-
-                        // Toggle the border color on click
-                        checkboxTile.style.borderColor = this.checked ? '#00A2FF' : '#000';
-                    });
-                });
-            </script>
+            <script th:src="@{/Js/Playlist_Selected_Styles.js}"></script>
         </div>
     </div>
     <div th:replace="~{Templates.html :: footer}"></div>

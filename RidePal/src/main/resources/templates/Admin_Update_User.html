@@ -2,86 +2,92 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{Templates.html :: head('User Info')}"></div>
 <body>
-<div class="container">
-    <div class="main-field">
-        <div th:replace="~{Templates.html :: header}"></div>
-        <section class="profile">
-            <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4"
-                   playsinline="" preload="none" autoplay="" muted="" loop=""></video>
-            <div class="profile-content">
-                <div class="profile-content-userinfo">
-                    <div class="profile-content-picture">
-                        <div class="about-desc-profiles-info">
-                            <img th:if="${userProfilePicture == null}" th:src="@{/img/profile-picture-placeholder.jpg}"
-                                 src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
-                            <img th:if="${userProfilePicture != null}"
-                                 th:src="@{/admin/users/view/user/{id}/selectedPhoto (id=${userToManipulate.getId()})}"
-                                 src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
-                            <div class="about-desc-profiles-info-pictures">
-                                <div class="about-desc-profiles-info-pictures-pulse">
-                                    <span style="--i:0"></span>
-                                    <span style="--i:1"></span>
-                                    <span style="--i:2"></span>
-                                    <span style="--i:3"></span>
+    <div class="container">
+        <div class="main-field">
+            <div th:replace="~{Templates.html :: header}"></div>
+            <section class="profile">
+                <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4"
+                       playsinline="" preload="none" autoplay="" muted="" loop=""></video>
+                <div class="profile-content">
+                    <div class="profile-content-userinfo">
+                        <div class="profile-content-picture">
+                            <div class="about-desc-profiles-info">
+                                <img th:if="${userProfilePicture == null}" th:src="@{/img/profile-picture-placeholder.jpg}"
+                                     src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                                <img th:if="${userProfilePicture != null}"
+                                     th:src="@{/admin/users/view/user/{id}/selectedPhoto (id=${userToManipulate.getId()})}"
+                                     src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                                <div class="about-desc-profiles-info-pictures">
+                                    <div class="about-desc-profiles-info-pictures-pulse">
+                                        <span style="--i:0"></span>
+                                        <span style="--i:1"></span>
+                                        <span style="--i:2"></span>
+                                        <span style="--i:3"></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <form th:action="@{{id} (id=${userToManipulate.getId()})}" th:object="${userToManipulate}"
-                              method="post">
-                            <button type="submit" class="login-button">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                Delete Photo
-                            </button>
-                        </form>
-                        <form th:action="@{{id}/newadmin (id=${userToManipulate.getId()})}"
-                              th:object="${userToManipulate}" method="post">
-                            <button type="submit" class="login-button">
-                                <input type="hidden" name="_method" value="update"/>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                Promote/Demote Admin
-                            </button>
-                        </form>
-
-                    </div>
-                    <div class="profile-content-userinfo-text">
-                        <div class="profile-content-userinfo-text-items">
-                            <div>
-                                <h4>First Name</h4>
-                                <p th:text="${userToManipulate.getFirstName()}">Atanas</p>
-                            </div>
-                            <div>
-                                <h4>Last Name</h4>
-                                <p th:text="${userToManipulate.getLastName()}">Hristozov</p>
-                            </div>
-                            <div>
-                                <h4>Username</h4>
-                                <p th:text="${userToManipulate.getUsername()}">Atanas94</p>
-                            </div>
-                            <div>
-                                <h4>E-mail</h4>
-                                <p th:text="${userToManipulate.getEmail()}">atanas@abv.bg</p>
-                            </div>
-                            <form th:action="@{{id}/delete (id=${userToManipulate.getId()})}"
-                                  th:object="${userToManipulate}" method="post">
+                            <form th:action="@{{id} (id=${userToManipulate.getId()})}" th:object="${userToManipulate}"
+                                  method="post">
                                 <button type="submit" class="login-button">
-                                    <input type="hidden" name="_method" value="delete"/>
+                                    <!--<input type="hidden" name="_method" value="delete"/>-->
                                     <span></span>
                                     <span></span>
                                     <span></span>
                                     <span></span>
-                                    Delete User
+                                    Delete Photo
                                 </button>
                             </form>
+                            <form th:action="@{{id}/newadmin (id=${userToManipulate.getId()})}"
+                                  th:object="${userToManipulate}" method="post">
+                                <button type="submit" class="login-button">
+                                    <!--<input type="hidden" name="_method" value="update"/>-->
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    Promote/Demote Admin
+                                </button>
+                            </form>
+
+                        </div>
+                        <div class="profile-content-userinfo-text">
+                            <h2>Profile information</h2>
+                            <div class="profile-content-userinfo-text-items">
+                                <div>
+                                    <h4>First Name</h4>
+                                    <p th:text="${userToManipulate.getFirstName()}">Atanas</p>
+                                </div>
+                                <div>
+                                    <h4>Last Name</h4>
+                                    <p th:text="${userToManipulate.getLastName()}">Hristozov</p>
+                                </div>
+                                <div>
+                                    <h4>Username</h4>
+                                    <p th:text="${userToManipulate.getUsername()}">Atanas94</p>
+                                </div>
+                                <div>
+                                    <h4>E-mail</h4>
+                                    <p th:text="${userToManipulate.getEmail()}">atanas@abv.bg</p>
+                                </div>
+                                <form th:action="@{{id}/delete (id=${userToManipulate.getId()})}"
+                                      th:object="${userToManipulate}" method="post">
+                                    <button type="submit" class="login-button">
+                                        <!--<input type="hidden" name="_method" value="delete"/>-->
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        Delete User
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+        </div>
+    </div>
+    <div th:replace="~{Templates.html :: footer}"></div>
 </body>
 </html>
