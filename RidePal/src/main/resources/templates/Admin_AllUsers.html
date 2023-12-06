@@ -1,25 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{Templates.html :: head('My Profile')}"></div>
+
+
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../static/public/css/main.min.css" th:href="@{/public/css/main.min.css}">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="../static/js/header.js" th:src="@{/js/header.js}"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link rel="shortcut icon" type="image/png" href="../static/img/Logo_Title.png" th:href="@{/img/Logo_Title.png}">
+  <title th:text="'ROADBEAT | '+ ${title}">Home</title>
+</head>
+
 <body>
 <div class="container">
   <div class="main-field">
     <div th:replace="~{Templates.html :: header}"></div>
+
+
+    <header class="header" th:fragment="header">
+      <div class="header-content">
+          <a href="Index.html" th:href="@{/}" class="logo"><img src="../static/img/logo_02.png"
+                                                                th:src="@{/img/logo_02.png}" alt=""></a>
+          <input class="menu-btn" type="checkbox" id="menu-btn"/>
+          <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+          <ul class="menu">
+              <li><a href="Index.html" th:href="@{/}">Home</a></li>
+              <li><a href="Generate_tracks.html" th:if="${isAuthenticated}" th:href="@{/generate}">Create</a></li>
+              <li><a href="All_Playlists.html" th:href="@{/playlists}">Browse</a></li>
+              <li><a href="About.html" th:unless="${isAdmin}" th:href="@{/about}">About</a></li>
+              <li><a href="Contacts.html" th:unless="${isAdmin}" th:href="@{/contact}">Contact</a></li>
+              <li><a href="My_Profile.html" th:if="${isAuthenticated}" th:href="@{/user}">My Profile</a></li>
+              <li><a href="Admin_Mode.html" th:if="${isAdmin}" th:href="@{/admin}">Admin Mode</a></li>
+          </ul>
+      </div>
+  </header>
+
     <section class="profile">
       <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
       <div class="profile-content">
 
+          <div class="profile-content-playlists">
+              <h3 style="margin-bottom: 30px;">Users Information</h3>
+          </div>
 
-        <h2 class="Profile-title">Users Information</h2>
-
-        <section class="all-information">
-          <div>
-            <h3>Number of all users</h3>
+        <section class="allPlaylists-filter">
+          <div class="allPlaylists-filter-information">
+            <h3>Number of all users:</h3>
             <p th:text="${usersCount}">23</p>
           </div>
         </section>
 
-        <section class="user-filter-container">
+
+        <!--<section class="user-filter-container">
           <form action="#" th:action="@{/admin/users}" method="get" th:object="${filterUsers}">
             <label>Filter Options</label>
             <br/><br/>
@@ -35,8 +72,41 @@
           <div th:if="${users.isEmpty()}" >
             <h2>No Users</h2>
           </div>
-        </section>
+        </section>-->
 
+
+
+        <div class="filter-content">
+          <div class="filter-box">
+              <h2>Search Playlists</h2>
+              <form action="#" th:action="@{/admin/users}" method="get" th:object="${filterUsers}" class="allPlaylists-filter-form">
+                  <div class="filter-user-box">
+                      <input type="text" id="username" th:field="*{username}">
+                      <label for="username">Username</label>
+                  </div>
+                  <div class="filter-user-box">
+                      <input type="text" id="email" th:field="*{email}" class="allPlaylists-filter-form">
+                      <label for="email">Email</label>
+                  </div>
+                  <div class="filter-user-box">
+                      <input type="text" id="firstName" th:field="*{firstName}" class="allPlaylists-filter-form">
+                      <label for="firstName">First name</label>
+                  </div>
+
+                  
+                  <button class="filter-button" type="submit">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      Search
+                  </button>
+              </form>
+          </div>
+      </div>
+
+
+        <!--
         <section >
           <h3>All Users</h3>
 
@@ -61,6 +131,36 @@
             </tr>
           </table>
         </section>
+        -->
+
+
+        <div class="profile-content-playlists">
+          <h3>All users</h3>
+          <div class="profile-content-playlists-users">
+              <p>FitsrName:</p>
+              <p>LastName:</p>
+              <p>Username:</p>
+              <p>Number of Playlists:</p>
+              <p>Is Admin:</p>
+          </div>
+          <a th:each="user : ${users}" th:href="@{'users/view/user/' + ${user.getId()}}" href="Playlist.html" class="profile-user-content-playlists-item">
+              <div class="profile-user-content-playlists-item-text">
+                  <img th:if="${user.getUserPhoto() == null}" th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                  <img th:if="${user.getUserPhoto() != null}" th:src="@{/user/selectedPhoto/{id}(id=${user.getId()})}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                  <p th:text="${user.getFirstName()}">Atanas</p>
+                  <p th:text="${user.getLastName()}">Hristozov</p>
+                  <p th:text="${user.getUsername()}">Nasko94</p>
+                  <p th:text="${user.getPlaylists().size()}">15</p>
+                  <p th:text="${user.isAdmin()}">Yes</p>
+              </div>
+              <div class="profile-user-content-playlists-item-pulse">
+                  <span style="--i:0"></span>
+                  <span style="--i:1"></span>
+                  <span style="--i:2"></span>
+                  <span style="--i:3"></span>
+              </div>
+          </a>
+      </div>
 
       </div>
     </section>
