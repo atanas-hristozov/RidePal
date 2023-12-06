@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="~{Templates.html :: head('Contacts')}"></div>
+<body>
+    <div class="container">
+        <div class="main-field">
+            <div th:replace="~{Templates.html :: header}"></div>
+            <section class="contacts">
+                <video class="contacts-video" th:src="@{/video/Wave_02.mp4}" src="../static/video/Wave_02.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
+                <div class="contacts-content">
+                    <h2 class="contacts-error">Something Went Wrong</h2>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div th:replace="~{Templates.html :: footer}"></div>
+</body>
+</html>
