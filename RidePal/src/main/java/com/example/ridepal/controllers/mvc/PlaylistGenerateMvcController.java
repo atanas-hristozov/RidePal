@@ -87,14 +87,9 @@ public class PlaylistGenerateMvcController {
             playlistService.create(user, playlist, travelDuration, genreNames);
 
             // Redirect to success page or appropriate view
-            return "Generate_tracks"; // Replace with your success page URL
+            return "redirect:/playlist/" + playlist.getId(); // Replace with your success page URL
 
-        } catch (EntityNotFoundException e) {
-            // Handle exceptions if needed and return appropriate error view
-            model.addAttribute("error", e.getMessage());
-            return "errorPage"; // Replace with your error page URL
-        }
-        catch (AuthorizationException e) {
+        } catch (EntityNotFoundException | AuthorizationException e) {
             // Handle exceptions if needed and return appropriate error view
             model.addAttribute("error", e.getMessage());
             return "errorPage"; // Replace with your error page URL

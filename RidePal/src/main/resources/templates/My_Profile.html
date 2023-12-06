@@ -2,178 +2,125 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{Templates.html :: head('My Profile')}"></div>
 <body>
-    <div class="container">
-        <div class="main-field">
-            <div th:replace="~{Templates.html :: header}"></div>
-            <section class="profile">
-                <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4" playsinline="" preload="none" autoplay="" muted="" loop=""></video>
-                <div class="profile-content">
-                    <div class="profile-content-userinfo">
-                        <div class="profile-content-picture">
-                            <div class="about-desc-profiles-info">
-                                <img th:if="${userProfilePicture == null}" th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
-                                <img th:if="${userProfilePicture != null}" th:src="@{/user/selectedPhoto}" src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
-                                <div class="about-desc-profiles-info-pictures">
-                                    <div class="about-desc-profiles-info-pictures-pulse">
-                                        <span style="--i:0"></span>
-                                        <span style="--i:1"></span>
-                                        <span style="--i:2"></span>
-                                        <span style="--i:3"></span>
-                                    </div>
+<div class="container">
+    <div class="main-field">
+        <div th:replace="~{Templates.html :: header}"></div>
+        <section class="profile">
+            <video class="profile-video" th:src="@{/video/Space_01.mp4}" src="../static/video/Space_01.mp4"
+                   playsinline="" preload="none" autoplay="" muted="" loop=""></video>
+            <div class="profile-content">
+                <div class="profile-content-userinfo">
+                    <div class="profile-content-picture">
+                        <div class="about-desc-profiles-info">
+                            <img th:if="${userProfilePicture == null}" th:src="@{/img/profile-picture-placeholder.jpg}"
+                                 src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                            <img th:if="${userProfilePicture != null}" th:src="@{/user/selectedPhoto}"
+                                 src="../static/img/profile-picture-placeholder.jpg" alt="Atanas">
+                            <div class="about-desc-profiles-info-pictures">
+                                <div class="about-desc-profiles-info-pictures-pulse">
+                                    <span style="--i:0"></span>
+                                    <span style="--i:1"></span>
+                                    <span style="--i:2"></span>
+                                    <span style="--i:3"></span>
                                 </div>
                             </div>
-                            <a th:href="@{/user/photo}" class="login-button" href="Upload_photo.html">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                Upload Photo
-                            </a>
+                        </div>
+                        <a th:href="@{/user/photo}" class="login-button" href="Upload_photo.html">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            Upload Photo
+                        </a>
 
-                                <form th:action="@{/user}" th:object="${user}" method="post">
-                                    <button type="submit" class="login-button">
+                        <form th:action="@{/user}" th:object="${user}" method="post">
+                            <button type="submit" class="login-button">
+                                <!--<input type="hidden" name="_method" value="delete" />-->
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                Delete Photo
+                            </button>
+                        </form>
+
+                    </div>
+                    <div class="profile-content-userinfo-text">
+                        <h2>Profile information</h2>
+                        <div class="profile-content-userinfo-text-items">
+                            <div>
+                                <h4>First Name</h4>
+                                <p th:text="${user.getFirstName()}">Atanas</p>
+                            </div>
+                            <div>
+                                <h4>Last Name</h4>
+                                <p th:text="${user.getLastName()}">Hristozov</p>
+                            </div>
+                            <div>
+                                <h4>Username</h4>
+                                <p th:text="${user.getUsername()}">Atanas94</p>
+                            </div>
+                            <div>
+                                <h4>E-mail</h4>
+                                <p th:text="${user.getEmail()}">atanas@abv.bg</p>
+                            </div>
+                            <div>
+                                <a th:href="@{/user/update}" href="Edit_User.html">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    Edit
+                                </a>
+                                <form th:action="@{/auth/logout}" method="post">
+                                    <button class="login-button">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        Logout
+                                    </button>
+                                </form>
+                                <form th:action="@{/user/delete}" th:object="${user}" method="post">
+                                    <button type="submit" class="login-button" style="margin-left: 10px;">
                                         <!--<input type="hidden" name="_method" value="delete" />-->
                                         <span></span>
                                         <span></span>
                                         <span></span>
                                         <span></span>
-                                        Delete Photo
+                                        Delete
                                     </button>
                                 </form>
-
-                        </div> 
-                        <div class="profile-content-userinfo-text">
-                            <h2>Profile information</h2>
-                            <div class="profile-content-userinfo-text-items">
-                                <div>
-                                    <h4>First Name</h4>
-                                    <p th:text="${user.getFirstName()}">Atanas</p>
-                                </div>
-                                <div>
-                                    <h4>Last Name</h4>
-                                    <p th:text="${user.getLastName()}">Hristozov</p>
-                                </div>
-                                <div>
-                                    <h4>Username</h4>
-                                    <p th:text="${user.getUsername()}">Atanas94</p>
-                                </div>
-                                <div>
-                                    <h4>E-mail</h4>
-                                    <p th:text="${user.getEmail()}">atanas@abv.bg</p>
-                                </div>
-                                <div>
-                                    <a th:href="@{/user/update}" href="Edit_User.html">
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                        Edit
-                                    </a>
-                                    <form th:action="@{/auth/logout}" method="post">
-                                        <button class="login-button">
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                            Logout
-                                        </button>
-                                    </form>
-                                    <form th:action="@{/user/delete}" th:object="${user}" method="post">
-                                        <button type="submit" class="login-button" style="margin-left: 10px;">
-                                            <!--<input type="hidden" name="_method" value="delete" />-->
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div  class="profile-content-playlists">
-                        <h3>My Playlists</h3>
-                        <a th:each="playlist : ${playlists}" th:href="@{/playlist/{id}(id=${playlist.getId()})}" href="Playlist.html" class="profile-content-playlists-item">
-                            <div class="profile-content-playlists-item-text">
-                                <p th:text="${'Title: ' + playlist.getTitle()}">Name: Fisrt Playlist</p>
-                                <p th:text="${'Number of songs: ' + playlist.getTracks().size()}">Number of songs: 15</p>
-                                <p th:text="${'Duration: ' + playlist.getPlaylistTime()/60} + ' min'">duration: 24,36 min</p>
-                            </div>
-                            <div class="profile-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
-                    </div>
-
-
-
-                    <div th:if="${isAdmin}" class="profile-content-playlists">
-                        <h3>All users</h3>
-                        <div class="profile-content-playlists-users">
-                            <p>FitsrName:</p>
-                            <p>LastName:</p>
-                            <p>Username:</p>
-                            <p>Number of Playlists:</p>
-                            <p>Is admin:</p>
-                        </div>
-                        <a href="Playlist.html" class="profile-user-content-playlists-item">
-                            <div class="profile-user-content-playlists-item-text">
-                                <img th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg">
-                                <p>Atanas</p>
-                                <p>Hristozov</p>
-                                <p>Nasko94</p>
-                                <p>15</p>
-                                <p>Yes</p>
-                            </div>
-                            <div class="profile-user-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
-                        <a href="Playlist.html" class="profile-user-content-playlists-item">
-                            <div class="profile-user-content-playlists-item-text">
-                                <img th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg">
-                                <p>Atanas</p>
-                                <p>Hristozov</p>
-                                <p>Nasko94</p>
-                                <p>15</p>
-                                <p>Yes</p>
-                            </div>
-                            <div class="profile-user-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
-                        <a href="Playlist.html" class="profile-user-content-playlists-item">
-                            <div class="profile-user-content-playlists-item-text">
-                                <img th:src="@{/img/profile-picture-placeholder.jpg}" src="../static/img/profile-picture-placeholder.jpg">
-                                <p>Atanas</p>
-                                <p>Hristozov</p>
-                                <p>Nasko94</p>
-                                <p>15</p>
-                                <p>Yes</p>
-                            </div>
-                            <div class="profile-user-content-playlists-item-pulse">
-                                <span style="--i:0"></span>
-                                <span style="--i:1"></span>
-                                <span style="--i:2"></span>
-                                <span style="--i:3"></span>
-                            </div>
-                        </a>
                     </div>
                 </div>
-            </section>
+                <div class="profile-content-playlists">
+                    <h3>My Playlists</h3>
+                    <a th:each="playlist : ${playlists}" th:href="@{/playlist/{id}(id=${playlist.getId()})}"
+                       href="Playlist.html" class="profile-content-playlists-item">
+                        <div class="profile-content-playlists-item-text">
+                            <p th:text="${'Title: ' + playlist.getTitle()}">Name: Fisrt Playlist</p>
+                            <p th:text="${'Number of songs: ' + playlist.getTracks().size()}">Number of songs: 15</p>
+                            <p th:text="${'Duration: ' + playlist.getPlaylistTime()/60} + ' min'">duration: 24,36
+                                min</p>
+                        </div>
+                        <div class="profile-content-playlists-item-pulse">
+                            <span style="--i:0"></span>
+                            <span style="--i:1"></span>
+                            <span style="--i:2"></span>
+                            <span style="--i:3"></span>
+                        </div>
+                    </a>
+                </div>
 
-        </div>
+
+               
+            </div>
+        </section>
+
     </div>
-    <div th:replace="~{Templates.html :: footer}"></div>
+</div>
+<div th:replace="~{Templates.html :: footer}"></div>
 </body>
 </html>

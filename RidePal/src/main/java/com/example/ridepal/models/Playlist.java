@@ -27,15 +27,13 @@ public class Playlist {
     @JoinTable(
             name = "playlist_data",
             joinColumns = {@JoinColumn(name = "playlist_id")},
-            inverseJoinColumns = {@JoinColumn(name = "track_id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "track_id")})
     private Set<Track> tracks;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "playlist_genres",
             joinColumns = {@JoinColumn(name = "playlist_id")},
-            inverseJoinColumns = {@JoinColumn(name = "genre_id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "genre_id")})
     private Set<Genre> genres;
 
     public Playlist() {
@@ -99,5 +97,9 @@ public class Playlist {
             this.genres = new HashSet<>();
         }
         this.genres.add(genre);
+    }
+
+    public void setGenres(Set<Genre> genres){
+        this.genres=genres;
     }
 }

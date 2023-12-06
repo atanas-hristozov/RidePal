@@ -2,25 +2,23 @@ package com.example.ridepal.helpers;
 
 import com.example.ridepal.models.Genre;
 import com.example.ridepal.models.Playlist;
-import com.example.ridepal.models.PlaylistFilterOptions;
 import com.example.ridepal.models.Track;
 import com.example.ridepal.models.dtos.*;
+import com.example.ridepal.services.contracts.GenreService;
 import com.example.ridepal.services.contracts.PlaylistService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class PlaylistMapper {
 
     private final PlaylistService playlistService;
+    private final GenreService genreService;
 
     @Autowired
-    public PlaylistMapper(PlaylistService playlistService) {
+    public PlaylistMapper(PlaylistService playlistService, GenreService genreService) {
         this.playlistService = playlistService;
+        this.genreService = genreService;
     }
 
     public Playlist fromPlaylistGenerateDto(PlaylistGenerateDto playlistGenerateDto) {
@@ -33,15 +31,21 @@ public class PlaylistMapper {
     public Playlist fromPlaylistUpdateDto(PlaylistUpdateDto playlistUpdateDto, int id) {
         Playlist playlist = playlistService.getById(id);
         playlist.setTitle(playlistUpdateDto.getTitle());
-        playlistUpdateDto.getGenres().forEach(playlist::addGenre);
-
+        String[] genres = playlistUpdateDto.getGenres().split(",");
+        playlist.setGenres(null);
+        for (String genre : genres)
+            playlist.addGenre(genreService.getByName(genre));
         return playlist;
     }
 
     public PlaylistUpdateDto fromPlaylistToPlaylistUpdateDto(Playlist playlist) {
         PlaylistUpdateDto playlistUpdateDto = new PlaylistUpdateDto();
         playlistUpdateDto.setTitle(playlist.getTitle());
-        playlistUpdateDto.setGenres(playlist.getGenres());
+        String genres = "";
+
+        for (Genre genre : playlist.getGenres())
+            genres = genres.concat(genre.getGenreName());
+        playlistUpdateDto.setGenres(genres);
 
         return playlistUpdateDto;
     }
