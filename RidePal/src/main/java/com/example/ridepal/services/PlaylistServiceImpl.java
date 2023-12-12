@@ -23,9 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class PlaylistServiceImpl implements PlaylistService {
-    public static final String GENRES_MATCH_ERROR = "Those Genres doesn't match the genres in the Api.";
     public static final String ERROR_MESSAGE = "You are not authorized!";
-
     private final static int AVERAGE_TRACK_DURATION = 210;//3:30 min
 
     private final TrackRepository trackRepository;
@@ -37,7 +35,6 @@ public class PlaylistServiceImpl implements PlaylistService {
     public PlaylistServiceImpl(TrackRepository trackRepository,
                                BaseCrudRepository<Genre> genreBaseCrudRepository,
                                PlaylistRepository playlistRepository) {
-        //    this.basePlaylistCrudRepository = basePlaylistCrudRepository;
         this.trackRepository = trackRepository;
         this.genreBaseCrudRepository = genreBaseCrudRepository;
         this.playlistRepository = playlistRepository;
@@ -141,13 +138,5 @@ public class PlaylistServiceImpl implements PlaylistService {
             // User with Id 1 have admin rights by default
             throw new AuthorizationException(ERROR_MESSAGE);
         }
-    }
-
-    private Set<Genre> validateGenres(Set<Genre> jsonGenres) {
-        Set<Genre> dbGenres = new HashSet<>(genreBaseCrudRepository.getAll());
-        if (!jsonGenres.equals(dbGenres)) {
-            throw new EntityNotFoundException(GENRES_MATCH_ERROR);
-        }
-        return jsonGenres;
     }
 }

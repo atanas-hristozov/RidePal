@@ -98,12 +98,6 @@ public class UserServiceImpl implements UserService {
             // Username doesn't exist, which is what we want
         }
     }
-    private static void checkAccessPermissions(User userToManipulate, User executingUser) {
-        if (!executingUser.isAdmin() && executingUser.getId() != userToManipulate.getId() && executingUser.getId() != 1) {
-            // User with Id 1 have admin rights by default
-            throw new AuthorizationException(ERROR_MESSAGE);
-        }
-    }
     private static void checkAdminRights(User userToCheck) {
         if (!userToCheck.isAdmin() && userToCheck.getId() != 1) {
             throw new AuthorizationException(ERROR_MESSAGE);

@@ -128,15 +128,8 @@ public class UserRestController {
         }
     }
 
-
     private static void checkAdminRights(User userToCheck) {
         if (!userToCheck.isAdmin() && userToCheck.getId() != 1) {
-            throw new AuthorizationException(ERROR_MESSAGE);
-        }
-    }
-
-    private static void checkIsItSameUser(User loggedUser, int id) {
-        if (loggedUser.getId() != id) {
             throw new AuthorizationException(ERROR_MESSAGE);
         }
     }
