@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+
     <h1>RidePal Web Application</h1>
     <p>RidePal, a web app, crafts personalized playlists based on users' music tastes and travel durations. It taps into external tools like Microsoft Bing Maps and Deezer to gauge travel times and fetch music data, building custom playlists within the platform.</p>
     <img src="https://github.com/atanas-hristozov/RidePal/blob/main/RidePal/src/main/resources/static/img_documentation/Home_Page.JPG" alt="">
@@ -146,6 +139,3 @@ spring.datasource.password=your_password
     <li>Rosen Yanev</li>
   </ul>
 <img src="https://github.com/atanas-hristozov/RidePal/blob/main/RidePal/src/main/resources/static/img_documentation/About.JPG" alt="">
-
-</body>
-</html>
