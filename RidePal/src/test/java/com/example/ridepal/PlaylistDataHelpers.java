@@ -16,7 +16,7 @@ public class PlaylistDataHelpers {
         playlist.setId(1);
         playlist.setTitle("testTitle");
         playlist.setRank(10.5);
-        playlist.setPlaylistTime(3600);
+        playlist.setPlaylistTime(210);
         playlist.setUser(user);
         playlist.setTracks(tracks);
         return playlist;
@@ -47,7 +47,7 @@ public class PlaylistDataHelpers {
         Track track = new Track();
         track.setTrackId(1);
         track.setTitle("TestTrackTitle");
-        track.setDuration(360);
+        track.setDuration(60);
         track.setRank(10.5);
         track.setPreviewUrl("https://cdns-preview-4.dzcdn.net/stream/c-4eb38d794d8473e0e1065280e68eadde-2.mp3");
         track.setArtist(createArtist());

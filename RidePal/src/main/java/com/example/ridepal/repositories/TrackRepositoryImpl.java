@@ -38,16 +38,6 @@ public class TrackRepositoryImpl extends AbstractCrudRepository<Track> implement
     }
 
     @Override
-    public Long tracksNumberPerGenre(int genreId) {
-        try (Session session = sessionFactory.openSession()) {
-            String hql = "SELECT COUNT(T.id) FROM Track T WHERE T.genre.id = :genreId";
-            Query<Long> query = session.createQuery(hql, Long.class);
-            query.setParameter("genreId", genreId);
-            return query.getSingleResult();
-        }
-    }
-
-    @Override
     public Long allTracksNumber() {
         try (Session session = sessionFactory.openSession()) {
             String hql = "SELECT COUNT(id) FROM Track";

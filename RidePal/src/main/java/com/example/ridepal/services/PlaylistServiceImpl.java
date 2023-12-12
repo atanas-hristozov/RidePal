@@ -118,11 +118,6 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public Long tracksNumberPerGenre(int genreId) {
-        return trackRepository.tracksNumberPerGenre(genreId);
-    }
-
-    @Override
     public Long allTracksNumber() {
         return trackRepository.allTracksNumber();
     }

@@ -18,6 +18,17 @@ public class UserHelpers {
         mockUser.setAdmin(false);
         return mockUser;
     }
+    public static User createDifferentuser() {
+        User mockUser = new User();
+        mockUser.setId(3);
+        mockUser.setPassword("NewPassword");
+        mockUser.setFirstName("NewFirstName");
+        mockUser.setLastName("NewLastName");
+        mockUser.setUsername("NewUsername");
+        mockUser.setEmail("NewMock@mail");
+        mockUser.setAdmin(false);
+        return mockUser;
+    }
     public static User createAdmin(){
         User admin = new User();
         admin.setId(1);
