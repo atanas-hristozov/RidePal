@@ -42,19 +42,9 @@ public class DeezerDataImporterImpl implements DeezerDataImporter {
         /*String apiUrl = "https://api.deezer.com/genre";*/
 
         try {
-            // Make a request to the Deezer API
-            /*Request request = new Request.Builder()
-                    .url(apiUrl)
-                    .build();
-            try (Response response = new OkHttpClient().newCall(request).execute()) {
-                responseBody = response.body().string();
-            }*/
-
-            // Parse JSON response
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-            //List of genres
             ArrayNode dataArray = (ArrayNode) jsonNode.get("data");
             dataArray.forEach(this::createGenre);
 

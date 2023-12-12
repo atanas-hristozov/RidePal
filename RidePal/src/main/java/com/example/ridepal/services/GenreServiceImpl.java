@@ -38,4 +38,6 @@ public class GenreServiceImpl implements GenreService {
     public List<Genre> getAll() {
         return genreAbstractCrudRepository.getAll();
     }
+
+
 }

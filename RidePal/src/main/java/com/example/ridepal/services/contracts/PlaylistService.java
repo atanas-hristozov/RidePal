@@ -16,4 +16,5 @@ public interface PlaylistService {
     void create(User user, Playlist playlist, int travelDuration, String genreNames);
     void update(User user, Playlist playlist);
     void delete(User user, Playlist playlist);
+    Long allTracksNumber();
 }

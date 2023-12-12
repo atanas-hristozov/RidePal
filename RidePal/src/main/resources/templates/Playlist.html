@@ -58,31 +58,21 @@
                                  <span class="stroke"></span>
                              </div>  
                              <div class="playlist-edit">
-                                <a th:href="@{playlists/{id}/update (id=${playlist.getId()})}" class="playlist-edit-button" href="Edit_Playlist.html">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    EDIT</a>
-                                 <form th:action="@{playlists/{id}/delete (id=${playlist.getId()})}"
-                                       th:object="${playlist}" method="post">
-                                     <button class="playlist-edit-button" type="submit">
-                                         <span></span>
-                                         <span></span>
-                                         <span></span>
-                                         <span></span>
-                                         DELETE
-                                     </button>
+                                 <a class="playlist-edit-button" th:if="${isAuthor}" href="#"
+                                    th:href="@{'/playlist/' + ${playlist.getId()} + '/update'}">
+                                     <span></span>
+                                     <span></span>
+                                     <span></span>
+                                     <span></span>
+                                     EDIT</a>
+                                 <form th:if="${isAuthor}" th:action="@{'/playlist/' + ${playlist.getId()} + '/delete'}" th:object="${playlist}" method="post">
+                                     <input type="hidden" name="_method" value="delete" />
+                                     <button class="playlist-edit-button" type="submit">DELETE</button>
+                                     <span></span>
+                                     <span></span>
+                                     <span></span>
+                                     <span></span>
                                  </form>
-                                 <!--
-                                <button class="playlist-edit-button" type="submit">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                    DELETE
-                                </button>
-                                -->
                              </div>
                         </div>
                     </div>

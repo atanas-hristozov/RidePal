@@ -11,6 +11,7 @@ import com.example.ridepal.models.dtos.PlaylistGenerateDto;
 import com.example.ridepal.services.contracts.PlaylistService;
 import com.example.ridepal.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class PlaylistGenerateMvcController {
     private final PlaylistService playlistService;
     private final PlaylistMapper playlistMapper;
     private final AuthenticationHelper authenticationHelper;
-
+    @Autowired
     public PlaylistGenerateMvcController(UserService userService,
                                          PlaylistService playlistService,
                                          PlaylistMapper playlistMapper,

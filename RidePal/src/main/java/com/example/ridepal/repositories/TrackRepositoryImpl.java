@@ -2,6 +2,7 @@ package com.example.ridepal.repositories;
 
 import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.models.Genre;
+import com.example.ridepal.models.Playlist;
 import com.example.ridepal.models.Track;
 import com.example.ridepal.repositories.contracts.TrackRepository;
 import org.hibernate.Session;
@@ -33,6 +34,15 @@ public class TrackRepositoryImpl extends AbstractCrudRepository<Track> implement
                 throw new EntityNotFoundException("Tracks", "genre", genre.getGenreName());
             }
             return resultSet;
+        }
+    }
+
+    @Override
+    public Long allTracksNumber() {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "SELECT COUNT(id) FROM Track";
+            Query<Long> query = session.createQuery(hql, Long.class);
+            return query.getSingleResult();
         }
     }
 }

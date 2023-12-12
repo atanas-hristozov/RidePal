@@ -5,11 +5,10 @@ import com.example.ridepal.exceptions.EntityNotFoundException;
 import com.example.ridepal.helpers.AuthenticationHelper;
 import com.example.ridepal.helpers.PlaylistMapper;
 import com.example.ridepal.helpers.UserMapper;
-import com.example.ridepal.models.Playlist;
-import com.example.ridepal.models.PlaylistFilterOptions;
-import com.example.ridepal.models.User;
-import com.example.ridepal.models.UserFilterOptions;
+import com.example.ridepal.models.*;
 import com.example.ridepal.models.dtos.*;
+import com.example.ridepal.services.contracts.DeezerDataImporter;
+import com.example.ridepal.services.contracts.GenreService;
 import com.example.ridepal.services.contracts.PlaylistService;
 import com.example.ridepal.services.contracts.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.InputStream;
@@ -37,19 +37,25 @@ public class AdminMvcController {
 
     private final UserService userService;
     private final PlaylistService playlistService;
-    private final UserMapper userMapper;
+    private final GenreService genreService;
+    private final DeezerDataImporter dataImporter;
     private final PlaylistMapper playlistMapper;
     private final AuthenticationHelper authenticationHelper;
+    private final WebClient webClient;
+
 
     @Autowired
-    public AdminMvcController(UserService userService,
-                              PlaylistService playlistService, UserMapper userMapper,
-                              PlaylistMapper playlistMapper, AuthenticationHelper authenticationHelper) {
+    public AdminMvcController(UserService userService, PlaylistService playlistService,
+                              GenreService genreService, DeezerDataImporter dataImporter,
+                              PlaylistMapper playlistMapper, AuthenticationHelper authenticationHelper,
+                              WebClient webClient) {
         this.userService = userService;
         this.playlistService = playlistService;
-        this.userMapper = userMapper;
+        this.genreService = genreService;
+        this.dataImporter = dataImporter;
         this.playlistMapper = playlistMapper;
         this.authenticationHelper = authenticationHelper;
+        this.webClient = webClient;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -220,98 +226,6 @@ public class AdminMvcController {
         }
     }
 
-/*    @GetMapping("/delete/{id}")
-    public String showAdminDeletePage(@PathVariable int id,
-                                      Model model, HttpSession session) {
-        try {
-            if (populateIsAuthenticated(session)) {
-                String username = session.getAttribute("currentUser").toString();
-                User userToManipulate = userService.getById(id);
-                User user = userService.getByUsername(username);
-                checkAdminRights(user);
-                if (user.isAdmin()) {
-                    model.addAttribute("userToManipulate", userToManipulate);
-                    model.addAttribute("admin", userToManipulate.isAdmin());
-
-                    return "Admin_Update_User";
-                }
-                return "Error_Page";
-            }
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-        return "redirect:/auth/login";
-    }*/
-
-
-   /* @PostMapping("/{id}/update")
-    public String updateUserProfile(@Valid @ModelAttribute("currentUser") UserAdminRightsDto userAdminRightsDto,
-                                    @PathVariable int id,
-                                    BindingResult bindingResult,
-                                    Model model,
-                                    HttpSession session) {
-        User user;
-        try {
-            user = authenticationHelper.tryGetCurrentUser(session);
-            checkAdminRights(user);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "Error_Page";
-        }
-
-        try {
-            User userToUpdate = userMapper.fromUserAdminRightsDto(id, userAdminRightsDto);
-            userService.update(userToUpdate);
-            model.addAttribute("currentUser", userAdminRightsDto);
-
-            return "Admin_Mode";
-
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-
-            return "Error_Page";
-
-        } catch (EntityDuplicateException e) {
-            bindingResult.rejectValue("email", "duplicate_email", e.getMessage());
-
-            return "Admin_Mode";
-        }
-    }*/
-
-   /* @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
-    public String deleteUserProfile(@PathVariable int id,
-                                    BindingResult bindingResult,
-                                    Model model,
-                                    HttpSession session) {
-        User user;
-        try {
-            user = authenticationHelper.tryGetCurrentUser(session);
-            checkAdminRights(user);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "Error_Page";
-        }
-        try {
-            User userToDelete = userService.getById(id);
-            userService.delete(userToDelete);
-            *//*session.removeAttribute("userToDelete");*//*
-
-            return "Admin_Mode";
-
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "Error_Page";
-        }
-    }*/
-
     @GetMapping("/playlists")
     public String showAllPlaylistPage(@ModelAttribute("playlistFilterOptions")
                                       PlaylistDisplayFilterDto playlistDisplayFilterDto,
@@ -380,7 +294,7 @@ public class AdminMvcController {
     }
 
     @PostMapping("playlists/{id}/update")
-    public String updatePlaylistGenre(@Valid @ModelAttribute ("playlistUpdateDto") PlaylistUpdateDto playlistUpdateDto,
+    public String updatePlaylistGenre(@Valid @ModelAttribute("playlistUpdateDto") PlaylistUpdateDto playlistUpdateDto,
                                       @PathVariable int id,
                                       BindingResult bindingResult,
                                       Model model,
@@ -398,6 +312,62 @@ public class AdminMvcController {
 
                 String redirectUrl = "/admin/playlists/" + updatedPlaylist.getId() + "/update";
                 return "redirect:" + redirectUrl;
+
+            } catch (EntityNotFoundException e) {
+                model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+                model.addAttribute("error", e.getMessage());
+                return "Error_Page";
+            }
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+    }
+
+    @GetMapping("/generate")
+    public String showGenerateTracksPage(Model model,
+                                         HttpSession session) {
+
+        try {
+            checkAdminRights(authenticationHelper.tryGetCurrentUser(session));
+            try {
+                List<Genre> genres = genreService.getAll();
+                Long allTracksCount = playlistService.allTracksNumber();
+                model.addAttribute("allTracksCount", allTracksCount);
+                model.addAttribute("genres", genres);
+                model.addAttribute("selectedGenre", new GenreDisplayDto());
+                return "Generate_Tracks_perGenre";
+
+            } catch (EntityNotFoundException e) {
+                model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+                model.addAttribute("error", e.getMessage());
+                return "Error_Page";
+            }
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+    }
+
+    @PostMapping("/generate")
+    public String generateTracks(@Valid @ModelAttribute("selectedGenre") GenreDisplayDto selectedGenre,
+                                 BindingResult bindingResult,
+                                 Model model,
+                                 HttpSession session) {
+        try {
+            checkAdminRights(authenticationHelper.tryGetCurrentUser(session));
+            if (bindingResult.hasErrors()) {
+                return "Error_Page";
+            }
+            try {
+                Genre genre = genreService.getByName(selectedGenre.getName());
+                String responseBody = webClient.get()
+                        .uri("https://api.deezer.com/genre/" + genre.getGenreId() + "/artists")
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .block();
+
+                dataImporter.importArtistDataForGenre(responseBody, genre.getGenreId());
+
+                return "Success_Page";
 
             } catch (EntityNotFoundException e) {
                 model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
