@@ -60,8 +60,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         // given for the genre and the average length of a single track
         int tracksCountPerGenre = durationPerGenre / AVERAGE_TRACK_DURATION;
         int playlistDuration = 0;
-        //open session for all entities involved
-        // Session session = playlistRepository.openSession();
 
         //fill in tracks for each genre
         for (String name : namesGenre) {
