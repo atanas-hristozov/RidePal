@@ -260,17 +260,14 @@ public class UserMvcController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deleteUserProfile(HttpSession session, BindingResult bindingResult) {
+    public String deleteUserProfile(HttpSession session) {
 
-        if (bindingResult.hasErrors()) {
-            return "redirect:/user";
-        }
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
             userService.delete(user);
-            session.removeAttribute("user");
+           session.removeAttribute("user");
             session.removeAttribute("isAuthenticated");
-            return "Index";
+            return "redirect:/auth/login";
 
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";

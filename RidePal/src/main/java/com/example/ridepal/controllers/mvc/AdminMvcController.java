@@ -367,7 +367,7 @@ public class AdminMvcController {
 
                 dataImporter.importArtistDataForGenre(responseBody, genre.getGenreId());
 
-                return "Success_Page";
+                return "Admin_Mode";
 
             } catch (EntityNotFoundException e) {
                 model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
