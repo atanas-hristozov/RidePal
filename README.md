@@ -18,7 +18,7 @@ RidePal, a web app, crafts personalized playlists based on users' music tastes a
 
 ## Technologies and Principles
 - Java, Spring Boot, Spring MVC, Thymeleaf, JUnit, Mockito, HTML, CSS, LESS, JavaScript, Hibernate, MariaDB
-- DRY, KISS, YAGNI, SOLID, OOP, REST API design
+- Created well-defined layered structure following the good coding practices
 - Service layer tests have over 80% code coverage
 - Multilayered architecture
 
