@@ -72,7 +72,14 @@ public class PlaylistMvcController {
     }
 
     @GetMapping()
-    public String showPlaylistPage(@PathVariable int id, Model model, HttpSession session) {
+    public String showPlaylistPage(@PathVariable int id,
+                                   Model model, HttpSession session) {
+        try {
+            authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e){
+            return "redirect:/auth/login";
+        }
+        
         Playlist playlist = playlistService.getById(id);
         model.addAttribute("playlist", playlist);
         model.addAttribute("musicList", playlist.getTracks());
