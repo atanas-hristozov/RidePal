@@ -258,16 +258,18 @@ public class UserMvcController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deleteUserProfile(HttpSession session) {
+    public String deleteUserProfile(@ModelAttribute("user") User user, HttpSession session, BindingResult bindingResult) {
 
+        if (bindingResult.hasErrors()) {
+            return "redirect:/user";
+        }
         try {
-            User user = authenticationHelper.tryGetCurrentUser(session);
+            user = authenticationHelper.tryGetCurrentUser(session);
             userService.delete(user);
-           session.removeAttribute("user");
-            session.removeAttribute("isAuthenticated");
-            return "redirect:/auth/login";
+            session.removeAttribute("currentUser");
+
+            return "redirect:/";
 
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
