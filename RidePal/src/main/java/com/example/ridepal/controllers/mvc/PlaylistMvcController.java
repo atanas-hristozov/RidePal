@@ -79,7 +79,7 @@ public class PlaylistMvcController {
         } catch (AuthorizationException e){
             return "redirect:/auth/login";
         }
-        
+
         Playlist playlist = playlistService.getById(id);
         model.addAttribute("playlist", playlist);
         model.addAttribute("musicList", playlist.getTracks());

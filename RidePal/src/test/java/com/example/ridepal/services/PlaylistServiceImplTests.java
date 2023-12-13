@@ -58,27 +58,6 @@ public class PlaylistServiceImplTests {
         assertEquals(expectedPlaylists, actualPlaylists);
     }
 
- /*   @Test
-    void create_ShouldCreatePlaylistWithTracks() {
-        // Arrange
-        User user = UserHelpers.createMockUser();
-        Playlist playlist = new Playlist();
-        Track track = PlaylistDataHelpers.createTrack();
-        int travelDuration = 210;
-        String genreNames = "Rock";
-        when(genreBaseCrudRepository.getByField("genreName", "Rock")).thenReturn(new Genre());
-
-        // Use a unique track for the mock setup
-
-        // Act
-        playlistService.create(user, playlist, travelDuration, genreNames);
-
-        // Assert
-        assertNotNull(playlist.getTracks());
-        assertFalse(playlist.getTracks().isEmpty());
-        assertEquals(1, playlist.getTracks().size()); // Assuming one unique track is added
-    }*/
-
     @Test
     void update_ShouldUpdatePlaylist() {
         User executingUser = UserHelpers.createMockUser();

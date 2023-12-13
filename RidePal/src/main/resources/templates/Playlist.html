@@ -66,12 +66,13 @@
                                      <span></span>
                                      EDIT</a>
                                  <form th:if="${isAuthor}" th:action="@{'/playlist/' + ${playlist.getId()} + '/delete'}" th:object="${playlist}" method="post">
-                                     <input type="hidden" name="_method" value="delete" />
-                                     <button class="playlist-edit-button" type="submit">DELETE</button>
+                                     <!--<input type="hidden" name="_method" value="delete" />-->
+                                     <button class="playlist-edit-button" type="submit">DELETE
                                      <span></span>
                                      <span></span>
                                      <span></span>
                                      <span></span>
+                                     </button>
                                  </form>
                              </div>
                         </div>
